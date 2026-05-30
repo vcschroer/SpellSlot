@@ -745,15 +745,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fcdc51441396d54c947f7b062bd3265, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JackpotEffect
-  playerController: {fileID: 1493575136}
-  espadaOriginal: {fileID: 1186330742}
-  duracaoDoJackpot: 5
-  velocidadeDeRotacaoEspada: 360
-  centroDoPlayerOffset: {x: 0, y: 0}
-  raioDaOrbita: 0.2
-  prefabCaboOverride: {fileID: 8627269263969308266, guid: b1672f68e696fb840bf50c7e329cd028, type: 3}
-  prefabMeioOverride: {fileID: 9068567274452352512, guid: d0f0a795fb2692546ba6ea614175f738, type: 3}
-  prefabPontaOverride: {fileID: 8372954289619658168, guid: ae08bb500050c9644be289a4d39ae42b, type: 3}
 --- !u!1 &1876936129
 GameObject:
   m_ObjectHideFlags: 0
@@ -896,6 +887,10 @@ PrefabInstance:
     - target: {fileID: 2617373388367065717, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
       propertyPath: velocidadeAtaqueBase
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2617373388367065717, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
+      propertyPath: velocidadeGiroJackpot
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 2617373388367065717, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
       propertyPath: layerDosInimigos.m_Bits
@@ -1060,6 +1055,10 @@ PrefabInstance:
     - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
       propertyPath: chanceJackpotMelhorada
       value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
+      propertyPath: girosParaGarantirPremio
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
