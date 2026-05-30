@@ -7,7 +7,12 @@ public class StartBotão : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            SceneManager.LoadScene("SampleScene");
+            MeuTeste();
         }
+    }
+
+    void MeuTeste()
+    {
+        Debug.Log("Ta funcionando pai");
     }
 }
