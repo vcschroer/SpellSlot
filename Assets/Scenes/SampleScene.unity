@@ -1010,12 +1010,16 @@ PrefabInstance:
       value: SlotMachine
       objectReference: {fileID: 0}
     - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
+      propertyPath: gomosGrande
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
       propertyPath: anguloGrande
       value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
       propertyPath: gomosPequeno
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
       propertyPath: scriptEspada
@@ -1034,12 +1038,28 @@ PrefabInstance:
       value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
+      propertyPath: dinheiroGrande
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
+      propertyPath: dinheiroPequeno
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
       propertyPath: velAtaqueGrande
       value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
+      propertyPath: custoVidaPorGiro
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
       propertyPath: velAtaquePequeno
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
+      propertyPath: chanceJackpotMelhorada
+      value: 40
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1137,7 +1157,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: intervaloSpawnMinimo
-      value: 0.2
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
+      propertyPath: reducaoIntervaloPorMinuto
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 7982752976183520425, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: m_Name
