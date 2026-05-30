@@ -222,6 +222,7 @@ GameObject:
   - component: {fileID: 1430565290}
   - component: {fileID: 1430565289}
   - component: {fileID: 1430565288}
+  - component: {fileID: 1430565291}
   m_Layer: 0
   m_Name: "Bot\xE3o"
   m_TagString: Untagged
@@ -349,6 +350,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1430565291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430565287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02bd88e25a6d06c438f13ce9144bb66b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: "Assembly-CSharp::StartBot\xE3o"
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
