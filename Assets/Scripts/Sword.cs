@@ -233,19 +233,29 @@ public class Sword : MonoBehaviour
     {
         atacando = true;
 
+        float intervaloParaRehit = 0.5f;
+        float timerRehit = 0f;
+
         while (tempoJackpotRestante > 0)
         {
             tempoJackpotRestante -= Time.deltaTime;
+            timerRehit += Time.deltaTime;
 
+            if (timerRehit >= intervaloParaRehit)
+            {
+                inimigosAtingidosNesteGolpe.Clear();
+                timerRehit = 0f;
+            }
+
+            // Lógica de Giro
             anguloRotacaoJackpot += velocidadeGiroJackpot * Time.deltaTime;
-
             float radianos = anguloRotacaoJackpot * Mathf.Deg2Rad;
             Vector2 direcao = new Vector2(Mathf.Cos(radianos), Mathf.Sin(radianos));
 
             transform.localPosition = new Vector3(offset.x, offset.y, 0f) + (new Vector3(direcao.x, direcao.y, 0f) * raio);
             transform.localRotation = Quaternion.Euler(0, 0, anguloRotacaoJackpot - 90f);
 
-            VerificarCorteEspada(); 
+            VerificarCorteEspada();
 
             yield return null;
         }
@@ -253,6 +263,8 @@ public class Sword : MonoBehaviour
         atacando = false;
         EstaEmModoJackpot = false;
         transform.localRotation = Quaternion.identity;
+
+        inimigosAtingidosNesteGolpe.Clear();
     }
 }
 
