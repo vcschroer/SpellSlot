@@ -26,6 +26,17 @@ public class Sword : MonoBehaviour
     [SerializeField] private float larguraDoCorte = 0.8f;
     [SerializeField] private LayerMask layerDosInimigos;
 
+    [Header("Configurações de Jackpot")]
+    public bool EstaEmModoJackpot { get; private set; }
+    private float tempoJackpotRestante;
+    private float anguloRotacaoJackpot = 0f;
+
+    [Header("Configurações de Jackpot")]
+    [Tooltip("Duração em segundos do efeito")]
+    [SerializeField] public float duracaoJackpot = 5f;
+    [Tooltip("Velocidade de rotação da espada durante o jackpot")]
+    [SerializeField] public float velocidadeGiroJackpot = 360f;
+
     private bool atacando = false;
     private List<GameObject> segmentosCriados = new List<GameObject>();
     private int quantidadeAnterior;
@@ -210,4 +221,38 @@ public class Sword : MonoBehaviour
             Gizmos.DrawWireSphere(pos, larguraDoCorte / 2f);
         }
     }
+
+    public void AtivarJackpot(Vector2 offset, float raio)
+    {
+        EstaEmModoJackpot = true;
+        tempoJackpotRestante = duracaoJackpot;
+
+        StartCoroutine(RotinaJackpot(offset, raio));
+    }
+    private IEnumerator RotinaJackpot(Vector2 offset, float raio)
+    {
+        atacando = true;
+
+        while (tempoJackpotRestante > 0)
+        {
+            tempoJackpotRestante -= Time.deltaTime;
+
+            anguloRotacaoJackpot += velocidadeGiroJackpot * Time.deltaTime;
+
+            float radianos = anguloRotacaoJackpot * Mathf.Deg2Rad;
+            Vector2 direcao = new Vector2(Mathf.Cos(radianos), Mathf.Sin(radianos));
+
+            transform.localPosition = new Vector3(offset.x, offset.y, 0f) + (new Vector3(direcao.x, direcao.y, 0f) * raio);
+            transform.localRotation = Quaternion.Euler(0, 0, anguloRotacaoJackpot - 90f);
+
+            VerificarCorteEspada(); 
+
+            yield return null;
+        }
+
+        atacando = false;
+        EstaEmModoJackpot = false;
+        transform.localRotation = Quaternion.identity;
+    }
 }
+

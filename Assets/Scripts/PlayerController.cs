@@ -13,12 +13,11 @@ public class PlayerController : MonoBehaviour
 
     private SpriteRenderer spritePlayer;
 
-    [Header("Sistema de Economia (Vida/Dinheiro)")]
+    [Header("Sistema de Economia")]
     [SerializeField] public int maxDinheiro = 100;
     [SerializeField] public int dinheiroAtual = 100;
 
     public int vidaAtual => dinheiroAtual;
-    public void TomarDano(int dano) => PerderDinheiro(dano);
 
     [Header("Taxa de Sobrevivência")]
     [SerializeField] private int custoPorTempo = 5;
@@ -102,7 +101,7 @@ public class PlayerController : MonoBehaviour
     {
         if (scriptEspada == null) return;
 
-        if (scriptEspada.EstaAtacando) return;
+        if (scriptEspada.EstaAtacando || scriptEspada.EstaEmModoJackpot) return;
 
         if (Camera.main == null || Mouse.current == null) return;
 
@@ -155,6 +154,17 @@ public class PlayerController : MonoBehaviour
             Gamover();
         }
     }
+
+    public void TomarDano(int dano)
+    {
+        if (scriptEspada != null && scriptEspada.EstaEmModoJackpot)
+        {
+            return;
+        }
+
+        PerderDinheiro(dano);
+    }
+
 
     public void GanharDinheiro(int quantity)
     {

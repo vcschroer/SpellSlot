@@ -16,7 +16,9 @@ public class SlotMachine : MonoBehaviour
     [SerializeField] private int custoVidaPorGiro = 10;
     [SerializeField] private float tempoCooldown = 2.0f;
 
-    private float momentoProximoGiroPermitido = 0f; 
+    [Header("Sistema de Pity System")]
+    [SerializeField] private int girosParaGarantirPremio = 5;
+    private int contadorGirosPerdidos = 0;
 
     [Header("Configuração de Sorte Acumulada")]
     [Range(0f, 100f)]
@@ -42,6 +44,7 @@ public class SlotMachine : MonoBehaviour
     [SerializeField] private float velPlayerPequeno = 1.5f;
     [SerializeField] private float velPlayerGrande = 4f;
 
+    private float momentoProximoGiroPermitido = 0f;
     private bool menuAberto = false;
     private bool proximoGiroTemSorteGeral = false;
 
@@ -60,13 +63,13 @@ public class SlotMachine : MonoBehaviour
         if (Time.time < momentoProximoGiroPermitido)
         {
             float tempoRestante = momentoProximoGiroPermitido - Time.time;
-            Debug.Log($"[COOLDOWN]: Aguarde mais {tempoRestante:F1} segundos para roletar novamente.");
+            Debug.Log($"[COOLDOWN]: Aguarde mais {tempoRestante:F1} segundos.");
             return;
         }
 
         if (scriptPlayer.dinheiroAtual - custoVidaPorGiro < 1)
         {
-            Debug.LogWarning("Vida insuficiente para roletar! Você precisa ficar com pelo menos 1 de vida.");
+            Debug.LogWarning("Vida insuficiente!");
             return;
         }
 
@@ -74,7 +77,6 @@ public class SlotMachine : MonoBehaviour
         if (menuAberto)
         {
             momentoProximoGiroPermitido = Time.time + tempoCooldown;
-
             scriptPlayer.PerderDinheiro(custoVidaPorGiro);
             GirarCaçaNiquel();
         }
@@ -83,15 +85,22 @@ public class SlotMachine : MonoBehaviour
     private void GirarCaçaNiquel()
     {
         TipoRecompensa slot1, slot2, slot3;
-
         bool travaAtiva = girosSemJackpotRestantes > 0;
+        bool forcarVitoria = contadorGirosPerdidos >= girosParaGarantirPremio;
 
-        if (!travaAtiva && proximoGiroTemSorteGeral && Random.Range(0f, 100f) <= chanceJackpotMelhorada)
+        if (forcarVitoria)
+        {
+            TipoRecompensa premioGarantido = (TipoRecompensa)Random.Range(0, 4);
+            slot1 = premioGarantido;
+            slot2 = premioGarantido;
+            slot3 = premioGarantido;
+            Debug.Log($"[PITY SYSTEM]: Vitória forçada após {contadorGirosPerdidos} giros perdidos!");
+        }
+        else if (!travaAtiva && proximoGiroTemSorteGeral && Random.Range(0f, 100f) <= chanceJackpotMelhorada)
         {
             slot1 = (TipoRecompensa)Random.Range(0, 5);
             slot2 = slot1;
             slot3 = slot1;
-            Debug.Log("[SORTE ATIVADA]: Sorte geral facilitou o Jackpot!");
         }
         else
         {
@@ -101,42 +110,36 @@ public class SlotMachine : MonoBehaviour
 
             if (travaAtiva && slot1 == slot2 && slot2 == slot3)
             {
-                while (slot3 == slot1)
-                {
-                    slot3 = (TipoRecompensa)Random.Range(0, 5);
-                }
-                Debug.Log("[TRAVA ANTI-JACKPOT]: Evitado um Jackpot natural por estar no período de bloqueio.");
+                while (slot3 == slot1) slot3 = (TipoRecompensa)Random.Range(0, 5);
             }
         }
 
         proximoGiroTemSorteGeral = false;
+        if (travaAtiva) girosSemJackpotRestantes--;
 
-        if (travaAtiva)
-        {
-            girosSemJackpotRestantes--;
-        }
-
-        if (scriptVisual != null)
-        {
-            scriptVisual.AtualizarVisualDosSlots(slot1, slot2, slot3);
-        }
+        if (scriptVisual != null) scriptVisual.AtualizarVisualDosSlots(slot1, slot2, slot3);
 
         int qtdDinheiro = 0, qtdTamanho = 0, qtdVelAtaque = 0, qtdVelPlayer = 0;
         ContarSlot(slot1, ref qtdDinheiro, ref qtdTamanho, ref qtdVelAtaque, ref qtdVelPlayer);
         ContarSlot(slot2, ref qtdDinheiro, ref qtdTamanho, ref qtdVelAtaque, ref qtdVelPlayer);
         ContarSlot(slot3, ref qtdDinheiro, ref qtdTamanho, ref qtdVelAtaque, ref qtdVelPlayer);
 
+        bool houveVitoria = (qtdDinheiro >= 2 || qtdTamanho >= 2 || qtdVelAtaque >= 2 || qtdVelPlayer >= 2);
+        if (houveVitoria) contadorGirosPerdidos = 0;
+        else contadorGirosPerdidos++;
+
         if (qtdDinheiro == 3 || qtdTamanho == 3 || qtdVelAtaque == 3 || qtdVelPlayer == 3)
         {
             girosSemJackpotRestantes = girosBloqueadosPosJackpot;
-            Object.FindObjectOfType<JackpotEffect>().AtivarModoJackpot();
+
+            Vector2 offset = (Vector2)typeof(PlayerController).GetField("centroDoPlayerOffset", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(scriptPlayer);
+            float raio = (float)typeof(PlayerController).GetField("raioDaOrbita", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(scriptPlayer);
+
+            scriptEspada.AtivarJackpot(offset, raio);
         }
         else if (qtdDinheiro == 2 || qtdTamanho == 2 || qtdVelAtaque == 2 || qtdVelPlayer == 2)
         {
-            if (girosSemJackpotRestantes <= 0)
-            {
-                proximoGiroTemSorteGeral = true;
-            }
+            if (girosSemJackpotRestantes <= 0) proximoGiroTemSorteGeral = true;
         }
 
         AplicarRecompensaDinheiro(qtdDinheiro);
@@ -161,53 +164,28 @@ public class SlotMachine : MonoBehaviour
     private void AplicarRecompensaDinheiro(int quantidade)
     {
         if (quantidade < 2 || scriptPlayer == null) return;
-
-        int bonusGanhado = quantidade switch
-        {
-            2 => dinheiroPequeno,
-            3 => dinheiroGrande,
-            _ => 0
-        };
-        scriptPlayer.GanharDinheiro(bonusGanhado);
+        int bonus = quantidade switch { 2 => dinheiroPequeno, 3 => dinheiroGrande, _ => 0 };
+        scriptPlayer.GanharDinheiro(bonus);
     }
 
     private void AplicarRecompensaTamanho(int quantidade)
     {
         if (quantidade < 2 || scriptEspada == null) return;
-
-        int gomosParaAdicionar = quantidade switch
-        {
-            2 => gomosPequeno,
-            3 => gomosGrande,
-            _ => 0
-        };
-        int tamanhoAtual = scriptEspada.QuantidadeSegmentosMeio;
-        scriptEspada.MudarQuantidadeSegmentos(tamanhoAtual + gomosParaAdicionar);
+        int gomos = quantidade switch { 2 => gomosPequeno, 3 => gomosGrande, _ => 0 };
+        scriptEspada.MudarQuantidadeSegmentos(scriptEspada.QuantidadeSegmentosMeio + gomos);
     }
 
     private void AplicarRecompensaVelocidadeAtaque(int quantidade)
     {
         if (quantidade < 2 || scriptPlayer == null) return;
-
-        float velParaAdicionar = quantidade switch
-        {
-            2 => velAtaquePequeno,
-            3 => velAtaqueGrande,
-            _ => 0f
-        };
-        scriptPlayer.attackSpeed += velParaAdicionar;
+        float vel = quantidade switch { 2 => velAtaquePequeno, 3 => velAtaqueGrande, _ => 0f };
+        scriptPlayer.attackSpeed += vel;
     }
 
     private void AplicarRecompensaVelocidadePlayer(int quantidade)
     {
         if (quantidade < 2 || scriptPlayer == null) return;
-
-        float velParaAdicionar = quantidade switch
-        {
-            2 => velPlayerPequeno,
-            3 => velPlayerGrande,
-            _ => 0f
-        };
-        scriptPlayer.AumentarVelocidade(velParaAdicionar);
+        float vel = quantidade switch { 2 => velPlayerPequeno, 3 => velPlayerGrande, _ => 0f };
+        scriptPlayer.AumentarVelocidade(vel);
     }
 }
