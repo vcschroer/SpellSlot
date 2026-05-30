@@ -883,6 +883,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2617373388367065717, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
       propertyPath: anguloFinal
+<<<<<<< HEAD
       value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 2617373388367065717, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
@@ -900,11 +901,19 @@ PrefabInstance:
     - target: {fileID: 2617373388367065717, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
       propertyPath: layerDosInimigos.m_Bits
       value: 64
+=======
+      value: -130
+      objectReference: {fileID: 0}
+    - target: {fileID: 2617373388367065717, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
+      propertyPath: anguloInicial
+      value: -40
+>>>>>>> Zac_Zanetti
       objectReference: {fileID: 0}
     - target: {fileID: 2617373388367065717, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
       propertyPath: quantidadeSegmentosMeio
       value: 1
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 3472798885302085774, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
       propertyPath: m_SortingOrder
       value: 2
@@ -944,6 +953,11 @@ PrefabInstance:
     - target: {fileID: 5520506918430083152, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.034
+=======
+    - target: {fileID: 5365553247556749855, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
+      propertyPath: attackSpeed
+      value: 0.3
+>>>>>>> Zac_Zanetti
       objectReference: {fileID: 0}
     - target: {fileID: 8003146875235940519, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
       propertyPath: m_Name
@@ -1136,8 +1150,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
+<<<<<<< HEAD
       propertyPath: intervaloSpawnMinimo
       value: 0.2
+=======
+      propertyPath: reducaoIntervaloPorMinuto
+      value: 0.5
+>>>>>>> Zac_Zanetti
       objectReference: {fileID: 0}
     - target: {fileID: 7982752976183520425, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: m_Name
