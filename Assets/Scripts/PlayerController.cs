@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Sword scriptEspada;
 
     [Header("Scripts Auxiliares")]
-    [SerializeField] private AnimPlayer scriptAnimacao; 
+    [SerializeField] private AnimPlayer scriptAnimacao;
 
     [Header("Sistema de Economia (Vida)")]
     public int maxDinheiro = 100;
@@ -22,9 +22,21 @@ public class PlayerController : MonoBehaviour
     [Header("Atributos de Combate")]
     public float attackSpeed = 1f;
 
+    [Header("Configurações de Posição da Espada")]
+    [Tooltip("Ajuste fino para definir onde fica o peito/mão do player (o centro real da órbita)")]
+    [SerializeField] private Vector2 centroDoPlayerOffset = new Vector2(0f, 0.2f);
+
+    [Tooltip("Distância que a espada se afasta para os lados (X) ao mover-se na horizontal/diagonal")]
+    [SerializeField] private float afastamentoHorizontal = 0.2f;
+
+    [Tooltip("Distância que a espada se afasta para cima/baixo (Y) ao mover-se nas diagonais")]
+    [SerializeField] private float afastamentoVertical = 0.15f;
+
     private Rigidbody2D rb;
     private Vector2 inputsMovimento;
     private bool olhandoParaDireita = true;
+
+    private Vector2 direcaoPosicaoEspada = Vector2.right;
 
     void Start()
     {
@@ -47,6 +59,21 @@ public class PlayerController : MonoBehaviour
     public void OnMove(InputValue value)
     {
         inputsMovimento = value.Get<Vector2>();
+
+        if (inputsMovimento.sqrMagnitude > 0.01f)
+        {
+            Vector2 direcaoNormalizada = inputsMovimento.normalized;
+
+            if (Mathf.Abs(direcaoNormalizada.x) > 0.3f)
+            {
+                direcaoPosicaoEspada = direcaoNormalizada;
+            }
+            else
+            {
+                float ladoX = olhandoParaDireita ? 1f : -1f;
+                direcaoPosicaoEspada = new Vector2(ladoX, direcaoNormalizada.y).normalized;
+            }
+        }
     }
 
     public void OnAttack()
@@ -69,12 +96,35 @@ public class PlayerController : MonoBehaviour
     {
         rb.MovePosition(rb.position + inputsMovimento * velocidade * Time.fixedDeltaTime);
         VerificarFlip();
+        AtualizarPosicaoDaEspada();
 
         if (scriptAnimacao != null)
         {
             float velocidadeFisica = inputsMovimento.magnitude;
             scriptAnimacao.AtualizarMovimento(velocidadeFisica);
         }
+    }
+
+    private void AtualizarPosicaoDaEspada()
+    {
+        if (scriptEspada == null) return;
+
+        if (scriptEspada.EstaAtacando) return;
+
+        scriptEspada.transform.localRotation = Quaternion.identity;
+
+        Vector3 novaPosicao = new Vector3(
+            centroDoPlayerOffset.x + (direcaoPosicaoEspada.x * afastamentoHorizontal),
+            centroDoPlayerOffset.y + (direcaoPosicaoEspada.y * afastamentoVertical),
+            0f
+        );
+
+        if (!olhandoParaDireita)
+        {
+            novaPosicao.x = -novaPosicao.x;
+        }
+
+        scriptEspada.transform.localPosition = novaPosicao;
     }
 
     private IEnumerator RotinaPerdaDeDinheiro()
@@ -90,11 +140,6 @@ public class PlayerController : MonoBehaviour
     {
         dinheiroAtual -= quantity;
         if (dinheiroAtual < 0) dinheiroAtual = 0;
-
-        if (CameraShake.Instancia != null)
-        {
-            CameraShake.Instancia.Tremer(0.2f, 0.4f);
-        }
 
         if (dinheiroAtual <= 0)
         {
@@ -115,6 +160,8 @@ public class PlayerController : MonoBehaviour
 
     private void VerificarFlip()
     {
+        if (scriptEspada != null && scriptEspada.EstaAtacando) return;
+
         if (inputsMovimento.x < 0 && olhandoParaDireita) Flipar();
         else if (inputsMovimento.x > 0 && !olhandoParaDireita) Flipar();
     }

@@ -16,14 +16,24 @@ public class Sword : MonoBehaviour
     [SerializeField] private GameObject prefabPontaLamina;
 
     [Header("Configurações de Tamanho")]
-    [SerializeField] private int quantidadeSegmentosMeio = 3;
+    [SerializeField] public int quantidadeSegmentosMeio = 3;
     [SerializeField] private float tamanhoDoSegmentoY = 0.5f;
+
+    [Tooltip("Unidades extras para empurrar a ponta além do último gomo (Ex: 0.5 deixa colado, 0.7 deixa um espaço)")]
+    [SerializeField] private float deslocamentoDaPonta = 0.5f;
+
+    [Header("Configurações de Hitbox Global")]
+    [Tooltip("Largura da área de corte da espada")]
+    [SerializeField] private float larguraDoCorte = 0.8f;
+    [SerializeField] private LayerMask layerDosInimigos;
 
     private bool atacando = false;
     private List<GameObject> segmentosCriados = new List<GameObject>();
-    private List<Collider2D> colisoresLamina = new List<Collider2D>();
-    private int quantidadeAnterior; 
+    private int quantidadeAnterior;
 
+    private HashSet<Enemy> inimigosAtingidosNesteGolpe = new HashSet<Enemy>();
+
+    public int QuantidadeSegmentosMeio => quantidadeSegmentosMeio;
     public bool EstaAtacando => atacando;
 
     void Start()
@@ -31,6 +41,11 @@ public class Sword : MonoBehaviour
         transform.localRotation = Quaternion.Euler(0, 0, anguloInicial);
         quantidadeAnterior = quantidadeSegmentosMeio;
         ConstruirEspada();
+
+        if (layerDosInimigos == 0)
+        {
+            layerDosInimigos = LayerMask.GetMask("Default");
+        }
     }
 
     private void OnValidate()
@@ -39,6 +54,17 @@ public class Sword : MonoBehaviour
         {
             if (quantidadeSegmentosMeio < 0) quantidadeSegmentosMeio = 0;
             quantidadeAnterior = quantidadeSegmentosMeio;
+
+            UnityEditor.EditorApplication.delayCall += SolicitacaoReconstrucaoEditor;
+            ConstruirEspada();
+        }
+    }
+
+    private void SolicitacaoReconstrucaoEditor()
+    {
+        UnityEditor.EditorApplication.delayCall -= SolicitacaoReconstrucaoEditor;
+        if (this != null && Application.isPlaying)
+        {
             ConstruirEspada();
         }
     }
@@ -58,7 +84,6 @@ public class Sword : MonoBehaviour
             if (segmento != null) Destroy(segmento);
         }
         segmentosCriados.Clear();
-        colisoresLamina.Clear();
 
         float posicaoYAtual = 0f;
 
@@ -74,7 +99,6 @@ public class Sword : MonoBehaviour
         {
             GameObject meio = Instantiate(prefabMeioLamina, transform);
             meio.transform.localPosition = new Vector3(0, posicaoYAtual, 0);
-            ConfigurarColisor(meio);
             segmentosCriados.Add(meio);
             posicaoYAtual += tamanhoDoSegmentoY;
         }
@@ -82,30 +106,11 @@ public class Sword : MonoBehaviour
         if (prefabPontaLamina != null)
         {
             GameObject ponta = Instantiate(prefabPontaLamina, transform);
-            ponta.transform.localPosition = new Vector3(0, posicaoYAtual, 0);
-            ConfigurarColisor(ponta);
+
+            float baseDaPontaY = posicaoYAtual - tamanhoDoSegmentoY;
+
+            ponta.transform.localPosition = new Vector3(0, baseDaPontaY + deslocamentoDaPonta, 0);
             segmentosCriados.Add(ponta);
-        }
-
-        AlternarColisores(false);
-    }
-
-    private void ConfigurarColisor(GameObject gomo)
-    {
-        BoxCollider2D colisor = gomo.AddComponent<BoxCollider2D>();
-        colisor.isTrigger = true;
-
-        SwordCheck detector = gomo.AddComponent<SwordCheck>();
-        detector.Configurar(this);
-
-        colisoresLamina.Add(colisor);
-    }
-
-    private void AlternarColisores(bool estado)
-    {
-        foreach (Collider2D colisor in colisoresLamina)
-        {
-            if (colisor != null) colisor.enabled = estado;
         }
     }
 
@@ -120,7 +125,7 @@ public class Sword : MonoBehaviour
     private IEnumerator RotinaGolpe(float multiplicador)
     {
         atacando = true;
-        AlternarColisores(true);
+        inimigosAtingidosNesteGolpe.Clear();
 
         float velAtaqueAtual = velocidadeAtaqueBase * multiplicador;
 
@@ -129,11 +134,12 @@ public class Sword : MonoBehaviour
         {
             Quaternion rotacaoAlvo = Quaternion.Euler(0, 0, anguloFinal);
             transform.localRotation = Quaternion.RotateTowards(transform.localRotation, rotacaoAlvo, velAtaqueAtual * 100 * Time.deltaTime);
+
+            VerificarCorteEspada();
+
             yield return null;
         }
         transform.localRotation = Quaternion.Euler(0, 0, anguloFinal);
-
-        AlternarColisores(false);
 
         yield return new WaitForSeconds(0.05f / multiplicador);
 
@@ -148,5 +154,44 @@ public class Sword : MonoBehaviour
         transform.localRotation = posicaoInicialRot;
 
         atacando = false;
+    }
+
+    private void VerificarCorteEspada()
+    {
+        float comprimentoTotal = (1 + quantidadeSegmentosMeio) * tamanhoDoSegmentoY + deslocamentoDaPonta;
+        int pontosDeChecagem = Mathf.CeilToInt(comprimentoTotal / (larguraDoCorte * 0.4f));
+
+        for (int i = 0; i <= pontosDeChecagem; i++)
+        {
+            float distanciaAoLongoDaLamina = (comprimentoTotal / pontosDeChecagem) * i;
+            Vector3 posicaoPonto = transform.TransformPoint(new Vector3(0, distanciaAoLongoDaLamina, 0));
+
+            Collider2D[] colisoresEncontrados = Physics2D.OverlapCircleAll(posicaoPonto, larguraDoCorte / 2f, layerDosInimigos);
+
+            foreach (Collider2D colisor in colisoresEncontrados)
+            {
+                Enemy inimigo = colisor.GetComponent<Enemy>();
+                if (inimigo != null && !inimigosAtingidosNesteGolpe.Contains(inimigo))
+                {
+                    inimigo.TomarDano();
+                    inimigosAtingidosNesteGolpe.Add(inimigo);
+                }
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!atacando) return;
+        Gizmos.color = Color.red;
+        float comprimentoTotal = (1 + quantidadeSegmentosMeio) * tamanhoDoSegmentoY + deslocamentoDaPonta;
+        int pontosDeChecagem = Mathf.CeilToInt(comprimentoTotal / (larguraDoCorte * 0.4f));
+
+        for (int i = 0; i <= pontosDeChecagem; i++)
+        {
+            float dist = (comprimentoTotal / pontosDeChecagem) * i;
+            Vector3 pos = transform.TransformPoint(new Vector3(0, dist, 0));
+            Gizmos.DrawWireSphere(pos, larguraDoCorte / 2f);
+        }
     }
 }

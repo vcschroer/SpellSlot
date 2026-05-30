@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour
 
     [Header("Configurações de Ataque")]
     [SerializeField] private int danoNoPlayer = 20;
-    [SerializeField] private float tempoAnimacaoMorte = 0.5f; 
+    [SerializeField] private float tempoAnimacaoMorte = 0.5f;
 
     [Header("Componentes Visuais")]
     [SerializeField] private AnimEnemy scriptAnimacao;
@@ -25,7 +25,7 @@ public class Enemy : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 direcao;
     private bool olhandoParaDireita = true;
-    private bool estaMorto = false; 
+    private bool estaMorto = false;
 
     private float tempoProximoDano = 0f;
     private float intervaloInvenclibilidade = 0.1f;
@@ -62,7 +62,7 @@ public class Enemy : MonoBehaviour
     {
         if (estaMorto)
         {
-            rb.linearVelocity = Vector2.zero; 
+            rb.linearVelocity = Vector2.zero;
             return;
         }
 
@@ -83,7 +83,7 @@ public class Enemy : MonoBehaviour
 
         if (vidaAtual <= 0)
         {
-            IniciarProcessoMorte();
+            IniciarProcessoMorte(true);
         }
     }
 
@@ -95,13 +95,18 @@ public class Enemy : MonoBehaviour
 
         if (player != null)
         {
+            if (CameraShake.Instancia != null)
+            {
+                CameraShake.Instancia.Tremer(0.2f, 0.4f);
+            }
+
             player.PerderDinheiro(danoNoPlayer);
 
-            IniciarProcessoMorte();
+            IniciarProcessoMorte(false);
         }
     }
 
-    private void IniciarProcessoMorte()
+    private void IniciarProcessoMorte(bool deveDroparMoeda)
     {
         estaMorto = true;
         direcao = Vector2.zero;
@@ -114,7 +119,7 @@ public class Enemy : MonoBehaviour
             scriptAnimacao.DispararMorte();
         }
 
-        if (prefabMoeda != null)
+        if (deveDroparMoeda && prefabMoeda != null)
         {
             Instantiate(prefabMoeda, transform.position, Quaternion.identity);
         }

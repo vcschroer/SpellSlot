@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 6389529742096015501}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.004137046, w: -0.9999915}
-  m_LocalPosition: {x: 0.125, y: -0.033, z: 0}
+  m_LocalPosition: {x: 0.037, y: -0.034, z: 0}
   m_LocalScale: {x: 0.22388066, y: 0.26041037, z: 0.19871227}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -51,8 +51,13 @@ MonoBehaviour:
   prefabCabo: {fileID: 8627269263969308266, guid: b1672f68e696fb840bf50c7e329cd028, type: 3}
   prefabMeioLamina: {fileID: 9068567274452352512, guid: d0f0a795fb2692546ba6ea614175f738, type: 3}
   prefabPontaLamina: {fileID: 8372954289619658168, guid: ae08bb500050c9644be289a4d39ae42b, type: 3}
-  quantidadeSegmentosMeio: 3
+  quantidadeSegmentosMeio: 2
   tamanhoDoSegmentoY: 0.25
+  deslocamentoDaPonta: 0.63
+  larguraDoCorte: 0.8
+  layerDosInimigos:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &8003146875235940519
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,7 +144,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 2674036466266115371, guid: babed1235a6c0f049bce0d2f90d2e803, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -171,6 +176,9 @@ MonoBehaviour:
   custoPorTempo: 5
   intervaloTempo: 5
   attackSpeed: 1
+  centroDoPlayerOffset: {x: 0, y: 0}
+  afastamentoHorizontal: 0.15
+  afastamentoVertical: 0.15
 --- !u!50 &1044334382055454735
 Rigidbody2D:
   serializedVersion: 5
