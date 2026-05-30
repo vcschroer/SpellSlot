@@ -119,11 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &512156851 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8003146875235940519, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
-  m_PrefabInstance: {fileID: 1153136370960573674}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,7 +202,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -727,33 +722,12 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5365553247556749855, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
   m_PrefabInstance: {fileID: 1153136370960573674}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 512156851}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b3436be9e7d4f8d4bb37ed0e5ab3adae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
---- !u!114 &1493575144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 512156851}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fcdc51441396d54c947f7b062bd3265, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::JackpotEffect
-  playerController: {fileID: 1493575136}
-  espadaOriginal: {fileID: 1186330742}
-  duracaoDoJackpot: 5
-  velocidadeDeRotacaoEspada: 360
-  centroDoPlayerOffset: {x: 0, y: 0}
-  raioDaOrbita: 0.2
-  prefabCaboOverride: {fileID: 8627269263969308266, guid: b1672f68e696fb840bf50c7e329cd028, type: 3}
-  prefabMeioOverride: {fileID: 9068567274452352512, guid: d0f0a795fb2692546ba6ea614175f738, type: 3}
-  prefabPontaOverride: {fileID: 8372954289619658168, guid: ae08bb500050c9644be289a4d39ae42b, type: 3}
 --- !u!1 &1876936129
 GameObject:
   m_ObjectHideFlags: 0
@@ -952,10 +926,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8003146875235940519, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
-      insertIndex: 3
-      addedObject: {fileID: 1493575144}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
 --- !u!1001 &1719434651716465568
 PrefabInstance:
@@ -1162,6 +1133,18 @@ PrefabInstance:
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: reducaoIntervaloPorMinuto
       value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
+      propertyPath: listaInimigos.Array.data[0].pesoBase
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
+      propertyPath: listaInimigos.Array.data[1].pesoBase
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
+      propertyPath: listaInimigos.Array.data[0].escalarComOTempo
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7982752976183520425, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: m_Name
