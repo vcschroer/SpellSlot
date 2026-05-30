@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &512156851 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8003146875235940519, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
+  m_PrefabInstance: {fileID: 1153136370960573674}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -722,12 +727,33 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5365553247556749855, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
   m_PrefabInstance: {fileID: 1153136370960573674}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 512156851}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b3436be9e7d4f8d4bb37ed0e5ab3adae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+--- !u!114 &1493575144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 512156851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fcdc51441396d54c947f7b062bd3265, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JackpotEffect
+  playerController: {fileID: 1493575136}
+  espadaOriginal: {fileID: 1186330742}
+  duracaoDoJackpot: 5
+  velocidadeDeRotacaoEspada: 360
+  centroDoPlayerOffset: {x: 0, y: 0}
+  raioDaOrbita: 0.2
+  prefabCaboOverride: {fileID: 8627269263969308266, guid: b1672f68e696fb840bf50c7e329cd028, type: 3}
+  prefabMeioOverride: {fileID: 9068567274452352512, guid: d0f0a795fb2692546ba6ea614175f738, type: 3}
+  prefabPontaOverride: {fileID: 8372954289619658168, guid: ae08bb500050c9644be289a4d39ae42b, type: 3}
 --- !u!1 &1876936129
 GameObject:
   m_ObjectHideFlags: 0
@@ -856,8 +882,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2617373388367065717, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
+      propertyPath: anguloFinal
+      value: -200
+      objectReference: {fileID: 0}
+    - target: {fileID: 2617373388367065717, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
       propertyPath: anguloInicial
-      value: -40
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 2617373388367065717, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
       propertyPath: deslocamentoDaPonta
@@ -881,11 +911,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5365553247556749855, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
       propertyPath: attackSpeed
-      value: 0.1
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5365553247556749855, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
+      propertyPath: raioDaOrbita
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 5365553247556749855, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
       propertyPath: custoPorTempo
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5365553247556749855, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
+      propertyPath: dinheiroAtual
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5365553247556749855, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
       propertyPath: afastamentoVertical
@@ -914,7 +952,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8003146875235940519, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
+      insertIndex: 3
+      addedObject: {fileID: 1493575144}
   m_SourcePrefab: {fileID: 100100000, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
 --- !u!1001 &1719434651716465568
 PrefabInstance:
@@ -969,6 +1010,10 @@ PrefabInstance:
       value: SlotMachine
       objectReference: {fileID: 0}
     - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
+      propertyPath: anguloGrande
+      value: -10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
       propertyPath: gomosPequeno
       value: 1
       objectReference: {fileID: 0}
@@ -984,6 +1029,10 @@ PrefabInstance:
       propertyPath: scriptVisual
       value: 
       objectReference: {fileID: 1195637793}
+    - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
+      propertyPath: anguloPequeno
+      value: -5
+      objectReference: {fileID: 0}
     - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
       propertyPath: velAtaqueGrande
       value: 0.3
@@ -1046,6 +1095,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
+      propertyPath: spriteVazio
+      value: 
+      objectReference: {fileID: -5211716757872676634, guid: 4be6b35cd72c9204aa460fe94c4522ed, type: 3}
+    - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
       propertyPath: exibicaoSlot1
       value: 
       objectReference: {fileID: 1001919149}
@@ -1057,6 +1110,14 @@ PrefabInstance:
       propertyPath: exibicaoSlot3
       value: 
       objectReference: {fileID: 1357757783}
+    - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
+      propertyPath: spriteAnguloAtaque
+      value: 
+      objectReference: {fileID: 2654921165513091960, guid: df5f528c38f91a3469bffa339d046856, type: 3}
+    - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
+      propertyPath: spriteVelocidadePlayer
+      value: 
+      objectReference: {fileID: 1668105785596205350, guid: 04a6b93d4ceed694aa4c201405511d69, type: 3}
     - target: {fileID: 5381057814188957168, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
       propertyPath: m_Name
       value: SlotMachineVisual
@@ -1081,6 +1142,10 @@ PrefabInstance:
     - target: {fileID: 7982752976183520425, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: m_Name
       value: EnemySpawn
+      objectReference: {fileID: 0}
+    - target: {fileID: 7982752976183520425, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8613856545692403796, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: m_LocalPosition.x

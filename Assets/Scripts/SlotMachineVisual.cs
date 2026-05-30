@@ -12,6 +12,8 @@ public class SlotMachineVisual : MonoBehaviour
     [SerializeField] private Sprite spriteDinheiro;
     [SerializeField] private Sprite spriteTamanhoEspada;
     [SerializeField] private Sprite spriteVelocidadeAtaque;
+    [SerializeField] private Sprite spriteVelocidadePlayer;
+    [SerializeField] private Sprite spriteVazio; 
 
     public void AtualizarVisualDosSlots(SlotMachine.TipoRecompensa s1, SlotMachine.TipoRecompensa s2, SlotMachine.TipoRecompensa s3)
     {
@@ -27,6 +29,8 @@ public class SlotMachineVisual : MonoBehaviour
             SlotMachine.TipoRecompensa.Dinheiro => spriteDinheiro,
             SlotMachine.TipoRecompensa.TamanhoEspada => spriteTamanhoEspada,
             SlotMachine.TipoRecompensa.VelocidadeAtaque => spriteVelocidadeAtaque,
+            SlotMachine.TipoRecompensa.VelocidadePlayer => spriteVelocidadePlayer,
+            SlotMachine.TipoRecompensa.Vazio => spriteVazio,
             _ => null
         };
     }

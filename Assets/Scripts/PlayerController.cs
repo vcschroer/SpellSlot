@@ -11,9 +11,14 @@ public class PlayerController : MonoBehaviour
     [Header("Scripts Auxiliares")]
     [SerializeField] private AnimPlayer scriptAnimacao;
 
-    [Header("Sistema de Economia (Vida)")]
-    public int maxDinheiro = 100;
-    [SerializeField] private int dinheiroAtual = 100;
+    private SpriteRenderer spritePlayer;
+
+    [Header("Sistema de Economia (Vida/Dinheiro)")]
+    [SerializeField] public int maxDinheiro = 100;
+    [SerializeField] public int dinheiroAtual = 100;
+
+    public int vidaAtual => dinheiroAtual;
+    public void TomarDano(int dano) => PerderDinheiro(dano);
 
     [Header("Taxa de Sobrevivência")]
     [SerializeField] private int custoPorTempo = 5;
@@ -22,25 +27,26 @@ public class PlayerController : MonoBehaviour
     [Header("Atributos de Combate")]
     public float attackSpeed = 1f;
 
-    [Header("Configurações de Posição da Espada")]
-    [Tooltip("Ajuste fino para definir onde fica o peito/mão do player (o centro real da órbita)")]
+    [Header("Configurações de Órbita Livre da Espada")]
     [SerializeField] private Vector2 centroDoPlayerOffset = new Vector2(0f, 0.2f);
 
-    [Tooltip("Distância que a espada se afasta para os lados (X) ao mover-se na horizontal/diagonal")]
-    [SerializeField] private float afastamentoHorizontal = 0.2f;
-
-    [Tooltip("Distância que a espada se afasta para cima/baixo (Y) ao mover-se nas diagonais")]
-    [SerializeField] private float afastamentoVertical = 0.15f;
+    [SerializeField] private float raioDaOrbita = 1.2f;
 
     private Rigidbody2D rb;
     private Vector2 inputsMovimento;
     private bool olhandoParaDireita = true;
 
-    private Vector2 direcaoPosicaoEspada = Vector2.right;
+    private float anguloMiraMouse;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        spritePlayer = GetComponent<SpriteRenderer>();
+        if (spritePlayer == null)
+        {
+            spritePlayer = GetComponentInChildren<SpriteRenderer>();
+        }
 
         if (scriptEspada == null)
         {
@@ -59,21 +65,6 @@ public class PlayerController : MonoBehaviour
     public void OnMove(InputValue value)
     {
         inputsMovimento = value.Get<Vector2>();
-
-        if (inputsMovimento.sqrMagnitude > 0.01f)
-        {
-            Vector2 direcaoNormalizada = inputsMovimento.normalized;
-
-            if (Mathf.Abs(direcaoNormalizada.x) > 0.3f)
-            {
-                direcaoPosicaoEspada = direcaoNormalizada;
-            }
-            else
-            {
-                float ladoX = olhandoParaDireita ? 1f : -1f;
-                direcaoPosicaoEspada = new Vector2(ladoX, direcaoNormalizada.y).normalized;
-            }
-        }
     }
 
     public void OnAttack()
@@ -82,7 +73,7 @@ public class PlayerController : MonoBehaviour
         {
             if (!scriptEspada.EstaAtacando)
             {
-                scriptEspada.Atacar(attackSpeed);
+                scriptEspada.Atacar(attackSpeed, anguloMiraMouse);
 
                 if (scriptAnimacao != null)
                 {
@@ -95,13 +86,15 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         rb.MovePosition(rb.position + inputsMovimento * velocidade * Time.fixedDeltaTime);
+
         VerificarFlip();
+
         AtualizarPosicaoDaEspada();
 
         if (scriptAnimacao != null)
         {
-            float velocidadeFisica = inputsMovimento.magnitude;
-            scriptAnimacao.AtualizarMovimento(velocidadeFisica);
+            float velocidadFisica = inputsMovimento.magnitude;
+            scriptAnimacao.AtualizarMovimento(velocidadFisica);
         }
     }
 
@@ -111,20 +104,36 @@ public class PlayerController : MonoBehaviour
 
         if (scriptEspada.EstaAtacando) return;
 
-        scriptEspada.transform.localRotation = Quaternion.identity;
+        if (Camera.main == null || Mouse.current == null) return;
 
-        Vector3 novaPosicao = new Vector3(
-            centroDoPlayerOffset.x + (direcaoPosicaoEspada.x * afastamentoHorizontal),
-            centroDoPlayerOffset.y + (direcaoPosicaoEspada.y * afastamentoVertical),
-            0f
-        );
+        Vector2 posicaoMouseTela = Mouse.current.position.ReadValue();
+        Vector3 posicaoMouseMundo = Camera.main.ScreenToWorldPoint(posicaoMouseTela);
+        posicaoMouseMundo.z = 0f;
 
-        if (!olhandoParaDireita)
+        Vector3 centroRealPlayer = transform.position + new Vector3(centroDoPlayerOffset.x, centroDoPlayerOffset.y, 0f);
+
+        Vector2 direcao = (posicaoMouseMundo - centroRealPlayer).normalized;
+
+        anguloMiraMouse = Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg;
+
+        Vector3 deslocamentoOrbitaLocal = new Vector3(direcao.x, direcao.y, 0f) * raioDaOrbita;
+
+        scriptEspada.transform.localPosition = new Vector3(centroDoPlayerOffset.x, centroDoPlayerOffset.y, 0f) + deslocamentoOrbitaLocal;
+
+        if (anguloMiraMouse > 90f || anguloMiraMouse < -90f)
         {
-            novaPosicao.x = -novaPosicao.x;
+            float anguloEsquerda = anguloMiraMouse + 90f - scriptEspada.AnguloInicial;
+            scriptEspada.transform.localRotation = Quaternion.Euler(0, 0, anguloEsquerda);
+        }
+        else
+        {
+            float anguloDireita = anguloMiraMouse + 90f + scriptEspada.AnguloInicial;
+            scriptEspada.transform.localRotation = Quaternion.Euler(0, 0, anguloDireita);
         }
 
-        scriptEspada.transform.localPosition = novaPosicao;
+        Vector3 escalaEspada = scriptEspada.transform.localScale;
+        escalaEspada.y = Mathf.Abs(escalaEspada.y);
+        scriptEspada.transform.localScale = escalaEspada;
     }
 
     private IEnumerator RotinaPerdaDeDinheiro()
@@ -160,8 +169,6 @@ public class PlayerController : MonoBehaviour
 
     private void VerificarFlip()
     {
-        if (scriptEspada != null && scriptEspada.EstaAtacando) return;
-
         if (inputsMovimento.x < 0 && olhandoParaDireita) Flipar();
         else if (inputsMovimento.x > 0 && !olhandoParaDireita) Flipar();
     }
@@ -169,8 +176,20 @@ public class PlayerController : MonoBehaviour
     private void Flipar()
     {
         olhandoParaDireita = !olhandoParaDireita;
-        Vector3 rotacaoAtual = transform.eulerAngles;
-        rotacaoAtual.y = olhandoParaDireita ? 0f : 180f;
-        transform.eulerAngles = rotacaoAtual;
+
+        if (spritePlayer != null)
+        {
+            spritePlayer.flipX = !olhandoParaDireita;
+        }
+        else
+        {
+            Vector3 escalaLocal = transform.localScale;
+            escalaLocal.x = olhandoParaDireita ? Mathf.Abs(escalaLocal.x) : -Mathf.Abs(escalaLocal.x);
+        }
+    }
+
+    public void AumentarVelocidade(float quantidade)
+    {
+        velocidade += quantidade;
     }
 }

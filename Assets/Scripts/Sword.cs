@@ -19,11 +19,10 @@ public class Sword : MonoBehaviour
     [SerializeField] public int quantidadeSegmentosMeio = 3;
     [SerializeField] private float tamanhoDoSegmentoY = 0.5f;
 
-    [Tooltip("Unidades extras para empurrar a ponta além do último gomo (Ex: 0.5 deixa colado, 0.7 deixa um espaço)")]
+    [Tooltip("Unidades extras para empurrar a ponta além do último gomo")]
     [SerializeField] private float deslocamentoDaPonta = 0.5f;
 
     [Header("Configurações de Hitbox Global")]
-    [Tooltip("Largura da área de corte da espada")]
     [SerializeField] private float larguraDoCorte = 0.8f;
     [SerializeField] private LayerMask layerDosInimigos;
 
@@ -35,10 +34,10 @@ public class Sword : MonoBehaviour
 
     public int QuantidadeSegmentosMeio => quantidadeSegmentosMeio;
     public bool EstaAtacando => atacando;
+    public float AnguloInicial => anguloInicial;
 
     void Start()
     {
-        transform.localRotation = Quaternion.Euler(0, 0, anguloInicial);
         quantidadeAnterior = quantidadeSegmentosMeio;
         ConstruirEspada();
 
@@ -52,9 +51,7 @@ public class Sword : MonoBehaviour
     {
         if (Application.isPlaying && quantidadeSegmentosMeio != quantidadeAnterior)
         {
-            if (quantidadeSegmentosMeio < 0) quantidadeSegmentosMeio = 0;
             quantidadeAnterior = quantidadeSegmentosMeio;
-
             UnityEditor.EditorApplication.delayCall += SolicitacaoReconstrucaoEditor;
             ConstruirEspada();
         }
@@ -72,7 +69,7 @@ public class Sword : MonoBehaviour
     public void MudarQuantidadeSegmentos(int novaQuantidade)
     {
         quantidadeSegmentosMeio = novaQuantidade;
-        if (quantidadeSegmentosMeio < 0) quantidadeSegmentosMeio = 0;
+        quantidadeSegmentosMeio = Mathf.Max(0, quantidadeSegmentosMeio);
         quantidadeAnterior = quantidadeSegmentosMeio;
         ConstruirEspada();
     }
@@ -106,52 +103,71 @@ public class Sword : MonoBehaviour
         if (prefabPontaLamina != null)
         {
             GameObject ponta = Instantiate(prefabPontaLamina, transform);
-
             float baseDaPontaY = posicaoYAtual - tamanhoDoSegmentoY;
-
             ponta.transform.localPosition = new Vector3(0, baseDaPontaY + deslocamentoDaPonta, 0);
             segmentosCriados.Add(ponta);
         }
     }
 
-    public void Atacar(float multiplicadorVelocidade)
+    public void Atacar(float multiplicadorVelocidade, float anguloDoClique)
     {
         if (!atacando)
         {
-            StartCoroutine(RotinaGolpe(multiplicadorVelocidade));
+            StartCoroutine(RotinaGolpe(multiplicadorVelocidade, anguloDoClique));
         }
     }
 
-    private IEnumerator RotinaGolpe(float multiplicador)
+    private IEnumerator RotinaGolpe(float multiplicador, float anguloDoClique)
     {
         atacando = true;
         inimigosAtingidosNesteGolpe.Clear();
 
         float velAtaqueAtual = velocidadeAtaqueBase * multiplicador;
 
-        while (Mathf.Abs(transform.localEulerAngles.z - (anguloFinal + 360) % 360) > 1f &&
-               Mathf.Abs(transform.localEulerAngles.z - anguloFinal) > 1f)
+        bool estaNaEsquerda = anguloDoClique > 90f || anguloDoClique < -90f;
+
+        float anguloBaseAtaque = anguloDoClique + 90f;
+
+        float anguloLocalInicial;
+        float anguloLocalFinal;
+
+        if (estaNaEsquerda)
         {
-            Quaternion rotacaoAlvo = Quaternion.Euler(0, 0, anguloFinal);
-            transform.localRotation = Quaternion.RotateTowards(transform.localRotation, rotacaoAlvo, velAtaqueAtual * 100 * Time.deltaTime);
+            anguloLocalInicial = anguloBaseAtaque - anguloInicial;
+            anguloLocalFinal = anguloBaseAtaque - anguloFinal;
+        }
+        else
+        {
+            anguloLocalInicial = anguloBaseAtaque + anguloInicial;
+            anguloLocalFinal = anguloBaseAtaque + anguloFinal;
+        }
+
+        float progresso = 0f;
+
+        while (progresso < 1f)
+        {
+            progresso += velAtaqueAtual * Time.deltaTime;
+            float zAtual = Mathf.LerpAngle(anguloLocalInicial, anguloLocalFinal, progresso);
+            transform.localRotation = Quaternion.Euler(0, 0, zAtual);
 
             VerificarCorteEspada();
-
             yield return null;
         }
-        transform.localRotation = Quaternion.Euler(0, 0, anguloFinal);
+        transform.localRotation = Quaternion.Euler(0, 0, anguloLocalFinal);
 
         yield return new WaitForSeconds(0.05f / multiplicador);
 
+        progresso = 0f;
         float velRetornoAtual = velocidadeRetornoBase * multiplicador;
-        Quaternion posicaoInicialRot = Quaternion.Euler(0, 0, anguloInicial);
 
-        while (Quaternion.Angle(transform.localRotation, posicaoInicialRot) > 1f)
+        while (progresso < 1f)
         {
-            transform.localRotation = Quaternion.RotateTowards(transform.localRotation, posicaoInicialRot, velRetornoAtual * 100 * Time.deltaTime);
+            progresso += velRetornoAtual * Time.deltaTime;
+            float zAtual = Mathf.LerpAngle(anguloLocalFinal, anguloLocalInicial, progresso);
+            transform.localRotation = Quaternion.Euler(0, 0, zAtual);
             yield return null;
         }
-        transform.localRotation = posicaoInicialRot;
+        transform.localRotation = Quaternion.Euler(0, 0, anguloLocalInicial);
 
         atacando = false;
     }
