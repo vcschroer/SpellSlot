@@ -37,6 +37,7 @@ public class Sword : MonoBehaviour
     [Tooltip("Velocidade de rotação da espada durante o jackpot")]
     [SerializeField] public float velocidadeGiroJackpot = 360f;
 
+
     private bool atacando = false;
     private List<GameObject> segmentosCriados = new List<GameObject>();
     private int quantidadeAnterior;
@@ -225,6 +226,7 @@ public class Sword : MonoBehaviour
     public void AtivarJackpot(Vector2 offset, float raio)
     {
         EstaEmModoJackpot = true;
+        MusicManager.Instance.PlayJackpotSound(true);
         tempoJackpotRestante = duracaoJackpot;
 
         StartCoroutine(RotinaJackpot(offset, raio));
@@ -262,6 +264,7 @@ public class Sword : MonoBehaviour
 
         atacando = false;
         EstaEmModoJackpot = false;
+        MusicManager.Instance.PlayJackpotSound(false);
         transform.localRotation = Quaternion.identity;
 
         inimigosAtingidosNesteGolpe.Clear();
