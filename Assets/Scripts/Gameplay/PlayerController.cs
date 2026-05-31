@@ -21,6 +21,9 @@ public class PlayerController : MonoBehaviour
 
     public int vidaAtual => dinheiroAtual;
 
+    // 
+    public bool JackpotAtivo => scriptEspada != null && scriptEspada.EstaEmModoJackpot;
+
     [Header("Taxa de Sobrevivência")]
     [SerializeField] private int custoPorTempo = 5;
     [SerializeField] private float intervaloTempo = 5f;
@@ -38,7 +41,6 @@ public class PlayerController : MonoBehaviour
     private float anguloMiraMouse;
 
     private bool derrotaDisparada = false;
-
     private bool estavaEmJackpot = false;
 
     void Start()
@@ -191,13 +193,11 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-
         if (scriptEfeitos != null && dinheiroAtual > 0)
         {
             scriptEfeitos.PlayFlash(0.15f);
             scriptEfeitos.PlaySquashAndStretch(1.3f, 0.7f, 0.15f);
         }
-
 
         PerderDinheiro(dano);
     }
@@ -257,6 +257,6 @@ public class PlayerController : MonoBehaviour
 
     public void AumentarVelocidade(float quantidade)
     {
-        velocidade += quantidade; 
+        velocidade += quantidade;
     }
 }

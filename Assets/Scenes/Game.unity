@@ -320,7 +320,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 7.2
+  orthographic size: 7.08
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1004,7 +1004,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2617373388367065717, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
       propertyPath: tamanhoDoSegmentoY
-      value: 3.07
+      value: 12.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 2617373388367065717, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
+      propertyPath: deslocamentoDaPonta
+      value: 14.1
       objectReference: {fileID: 0}
     - target: {fileID: 2617373388367065717, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
       propertyPath: quantidadeSegmentosMeio
@@ -1416,6 +1420,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -399.67
       objectReference: {fileID: 0}
+    - target: {fileID: 3263191040989613399, guid: 94fab3856ff473746bec38dcd50f9c2d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0b6da2255596dfa41875fa9864b8362a, type: 3}
     - target: {fileID: 3363011823403159816, guid: 94fab3856ff473746bec38dcd50f9c2d, type: 3}
       propertyPath: m_Type
       value: 0
@@ -1600,6 +1608,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -21.38
       objectReference: {fileID: 0}
+    - target: {fileID: 7520108656831139091, guid: 94fab3856ff473746bec38dcd50f9c2d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0b6da2255596dfa41875fa9864b8362a, type: 3}
+    - target: {fileID: 8255166867823623472, guid: 94fab3856ff473746bec38dcd50f9c2d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 0b6da2255596dfa41875fa9864b8362a, type: 3}
     - target: {fileID: 8598936911119243110, guid: 94fab3856ff473746bec38dcd50f9c2d, type: 3}
       propertyPath: m_Name
       value: CanvasGame
@@ -1687,7 +1703,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: quantidadeInicial
-      value: 30
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: intervaloSpawnMinimo
@@ -1695,7 +1711,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: intervaloSpawnInicial
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: listaInimigos.Array.size
@@ -1744,6 +1760,10 @@ PrefabInstance:
     - target: {fileID: 7982752976183520425, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: m_Name
       value: EnemySpawn
+      objectReference: {fileID: 0}
+    - target: {fileID: 7982752976183520425, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8613856545692403796, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: m_LocalPosition.x

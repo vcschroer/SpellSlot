@@ -19,6 +19,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private AnimEnemy scriptAnimacao;
     [SerializeField] private SpriteEffects scriptEfeitos;
 
+    [Header("Configurações de Efeitos e Partículas")]
+    [Tooltip("Arraste aqui o Prefab da partícula de explosão")]
+    [SerializeField] private GameObject prefabExplosao;
+
     [Header("Configurações de Drops")]
     [SerializeField] private GameObject prefabMoeda;
 
@@ -41,8 +45,6 @@ public class Enemy : MonoBehaviour
 
         scriptEfeitos = GetComponent<SpriteEffects>();
         if (scriptEfeitos == null) scriptEfeitos = GetComponentInChildren<SpriteEffects>();
-
-
     }
 
     void Update()
@@ -129,6 +131,11 @@ public class Enemy : MonoBehaviour
         if (scriptAnimacao != null)
         {
             scriptAnimacao.DispararMorte();
+        }
+
+        if (prefabExplosao != null)
+        {
+            Instantiate(prefabExplosao, transform.position, Quaternion.identity);
         }
 
         if (deveDroparMoeda && prefabMoeda != null)
