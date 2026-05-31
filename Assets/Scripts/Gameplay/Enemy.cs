@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour
 
     [Header("Componentes Visuais")]
     [SerializeField] private AnimEnemy scriptAnimacao;
+    [SerializeField] private SpriteEffects scriptEfeitos;
 
     [Header("Configurações de Drops")]
     [SerializeField] private GameObject prefabMoeda;
@@ -37,6 +38,11 @@ public class Enemy : MonoBehaviour
         if (playerObj != null) alvoPlayer = playerObj.transform;
 
         if (scriptAnimacao == null) scriptAnimacao = GetComponent<AnimEnemy>();
+
+        scriptEfeitos = GetComponent<SpriteEffects>();
+        if (scriptEfeitos == null) scriptEfeitos = GetComponentInChildren<SpriteEffects>();
+
+
     }
 
     void Update()
@@ -81,6 +87,12 @@ public class Enemy : MonoBehaviour
         vidaAtual -= danoQueRecebeDaEspada;
         tempoProximoDano = Time.time + intervaloInvenclibilidade;
 
+        if (scriptEfeitos != null)
+        {
+            scriptEfeitos.PlayFlash(0.12f);
+            scriptEfeitos.PlaySquashAndStretch(1.35f, 0.65f, 0.12f);
+        }
+
         if (vidaAtual <= 0)
         {
             IniciarProcessoMorte(true);
@@ -100,7 +112,7 @@ public class Enemy : MonoBehaviour
                 CameraShake.Instancia.Tremer(0.2f, 0.4f);
             }
 
-            player.PerderDinheiro(danoNoPlayer);
+            player.TomarDano(danoNoPlayer);
 
             IniciarProcessoMorte(false);
         }

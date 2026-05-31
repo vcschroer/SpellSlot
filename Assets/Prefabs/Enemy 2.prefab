@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 9182447008866266265}
   - component: {fileID: 414965251089006741}
   - component: {fileID: 754506843404441739}
+  - component: {fileID: 5440265427876105564}
   m_Layer: 6
   m_Name: Enemy 2
   m_TagString: Enemy
@@ -178,6 +179,7 @@ MonoBehaviour:
   danoNoPlayer: 30
   tempoAnimacaoMorte: 0.5
   scriptAnimacao: {fileID: 0}
+  scriptEfeitos: {fileID: -1995383391962454561, guid: 483088ca092f5604b9ae8abae3249db1, type: 3}
   prefabMoeda: {fileID: 8150117755066198786, guid: be5a746a431d92f4cbdcaeaad3bb82c2, type: 3}
 --- !u!114 &414965251089006741
 MonoBehaviour:
@@ -213,3 +215,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5440265427876105564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5472871256757922201}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85245718b6f585441a5ce31afeb7825d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteEffects
+  spriteRenderer: {fileID: 2418604268061192910}
+  transformVisual: {fileID: 5460003986212912803}
+  materialFlashBranco: {fileID: 2100000, guid: ef3c32cf276a63a48ac9869d0b188df1, type: 2}
+  velocidadeRGB: 2

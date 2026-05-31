@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Scripts Auxiliares")]
     [SerializeField] private AnimPlayer scriptAnimacao;
+    [SerializeField] private SpriteEffects scriptEfeitos;
 
     private SpriteRenderer spritePlayer;
 
@@ -38,6 +39,8 @@ public class PlayerController : MonoBehaviour
 
     private bool derrotaDisparada = false;
 
+    private bool estavaEmJackpot = false;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -57,6 +60,9 @@ public class PlayerController : MonoBehaviour
         {
             scriptAnimacao = GetComponent<AnimPlayer>();
         }
+
+        scriptEfeitos = GetComponent<SpriteEffects>();
+        if (scriptEfeitos == null) scriptEfeitos = GetComponentInChildren<SpriteEffects>();
 
         dinheiroAtual = Mathf.Clamp(dinheiroAtual, 0, maxDinheiro);
         StartCoroutine(RotinaPerdaDeDinheiro());
@@ -106,7 +112,18 @@ public class PlayerController : MonoBehaviour
 
             if (scriptEspada != null)
             {
-                scriptAnimacao.SetarModoJackpot(scriptEspada.EstaEmModoJackpot);
+                bool jackpotAtual = scriptEspada.EstaEmModoJackpot;
+                scriptAnimacao.SetarModoJackpot(jackpotAtual);
+
+                if (jackpotAtual != estavaEmJackpot)
+                {
+                    estavaEmJackpot = jackpotAtual;
+
+                    if (scriptEfeitos != null)
+                    {
+                        scriptEfeitos.DefinirRGB(jackpotAtual);
+                    }
+                }
             }
         }
     }
@@ -174,6 +191,14 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+
+        if (scriptEfeitos != null && dinheiroAtual > 0)
+        {
+            scriptEfeitos.PlayFlash(0.15f);
+            scriptEfeitos.PlaySquashAndStretch(1.3f, 0.7f, 0.15f);
+        }
+
+
         PerderDinheiro(dano);
     }
 
@@ -194,13 +219,17 @@ public class PlayerController : MonoBehaviour
             scriptAnimacao.AtualizarMovimento(0f);
         }
 
+        if (scriptEfeitos != null)
+        {
+            scriptEfeitos.DefinirRGB(false);
+        }
+
         if (TransitionManager.Instance != null)
         {
             TransitionManager.Instance.CarregarCena("Defeat");
         }
         else
         {
-            Debug.LogWarning("[AVISO]: Prefab do TransitionManager não encontrado! Carregando derrota sem efeito.");
             SceneManager.LoadScene("Defeat");
         }
     }
@@ -228,6 +257,6 @@ public class PlayerController : MonoBehaviour
 
     public void AumentarVelocidade(float quantidade)
     {
-        velocidade += quantidade;
+        velocidade += quantidade; 
     }
 }
