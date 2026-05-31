@@ -4,6 +4,7 @@ public class CameraFollow : MonoBehaviour
 {
     private Transform alvoPlayer;
     private float offsetZ = -10f;
+    private float offsetY = -1.25f; // câmera 1.25 unidades abaixo
 
     private CameraShake scriptShake;
 
@@ -22,7 +23,11 @@ public class CameraFollow : MonoBehaviour
     {
         if (alvoPlayer == null) return;
 
-        Vector3 posicaoBase = new Vector3(alvoPlayer.position.x, alvoPlayer.position.y, offsetZ);
+        Vector3 posicaoBase = new Vector3(
+            alvoPlayer.position.x,
+            alvoPlayer.position.y + offsetY,
+            offsetZ
+        );
 
         if (scriptShake != null)
         {
