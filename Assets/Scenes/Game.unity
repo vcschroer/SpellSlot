@@ -1723,7 +1723,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: tempoLimiteSpawnSegundos
-      value: 300
+      value: 215
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: reducaoIntervaloPorMinuto
