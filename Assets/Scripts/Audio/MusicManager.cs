@@ -20,8 +20,18 @@ public class MusicManager : MonoBehaviour
     [SerializeField] private List<MusicTrack> musicList;
 
     [Header("Configurações de SFX (Efeitos)")]
-    [SerializeField] private AudioSource sfxSource; 
+    [SerializeField] private AudioSource sfxSource;
+
     [SerializeField] private AudioClip jackpotClip;
+    [SerializeField] private AudioClip derrotadoClip;
+    [SerializeField] private AudioClip jackpotVozClip;
+    [SerializeField] private AudioClip losetelaClip;
+    [SerializeField] private AudioClip magicSlotClip;
+    [SerializeField] private AudioClip menuIradoClip;
+    [SerializeField] private AudioClip trashPotClip;
+    [SerializeField] private AudioClip vitoriaDubClip;
+    [SerializeField] private AudioClip winTelaClip;
+
     [SerializeField] private AudioMixerGroup sfxGroup;
 
     private void Awake()
@@ -87,4 +97,165 @@ public class MusicManager : MonoBehaviour
             bgmSource.UnPause();
         }
     }
+
+    public void PlayDerrotadoDub(bool isPlaying)
+    {
+        if (derrotadoClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = derrotadoClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
+    public void PlayJackpotVozDub(bool isPlaying)
+    {
+        if (jackpotVozClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = jackpotVozClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
+    public void PlayLosetela(bool isPlaying)
+    {
+        if (losetelaClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = losetelaClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
+    public void PlayMagicSlot(bool isPlaying)
+    {
+        if (magicSlotClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = magicSlotClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
+    public void PlayMenuIrado(bool isPlaying)
+    {
+        if (menuIradoClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = menuIradoClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
+    public void PlayTrashPot(bool isPlaying)
+    {
+        if (trashPotClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = trashPotClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
+    public void PlayVitoriaDub(bool isPlaying)
+    {
+        if (vitoriaDubClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = vitoriaDubClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
+    public void PlayWinTela(bool isPlaying)
+    {
+        if (winTelaClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = winTelaClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
 }
