@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: 7405e6882619b184697ecf7114193d9f
+guid: 64e5205839c5c194fb87aec75a222d57
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5071271858904953041
-    second: UIalavanca_0
+      213: 6374170916409214602
+    second: roleta9_0
+  - first:
+      213: 2590740602049751480
+    second: roleta9_1
+  - first:
+      213: -6473563435434986502
+    second: roleta9_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,11 +52,11 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 9
-  spritePivot: {x: 0.2875483, y: 0.14780731}
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -100,23 +106,67 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: UIalavanca_0
+      name: roleta9_0
       rect:
         serializedVersion: 2
-        x: 55
-        y: 24
-        width: 111
-        height: 162
-      alignment: 9
-      pivot: {x: 0.080838524, y: 0.06074797}
+        x: 139
+        y: 154
+        width: 207
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1d0f67d03e6c06640800000000000000
-      internalID: 5071271858904953041
+      spriteID: a86823a3daa957850800000000000000
+      internalID: 6374170916409214602
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: roleta9_1
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 0
+        width: 204
+        height: 105
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b96b5ae9d824f320800000000000000
+      internalID: 2590740602049751480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: roleta9_2
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 0
+        width: 20
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af3b0f79a584926a0800000000000000
+      internalID: -6473563435434986502
       vertices: []
       indices: 
       edges: []
@@ -126,7 +176,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -135,7 +185,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      UIalavanca_0: 5071271858904953041
+      roleta9_0: 6374170916409214602
+      roleta9_1: 2590740602049751480
+      roleta9_2: -6473563435434986502
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

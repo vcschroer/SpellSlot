@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 7405e6882619b184697ecf7114193d9f
+guid: a59dfba068772194ab47f8ec8f605caa
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5071271858904953041
-    second: UIalavanca_0
+      213: 8781953068563878609
+    second: simbolos1_0
+  - first:
+      213: 2634766534878380657
+    second: simbolos1_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,11 +49,11 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 9
-  spritePivot: {x: 0.2875483, y: 0.14780731}
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -100,23 +103,45 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: UIalavanca_0
+      name: simbolos1_0
       rect:
         serializedVersion: 2
-        x: 55
-        y: 24
-        width: 111
-        height: 162
-      alignment: 9
-      pivot: {x: 0.080838524, y: 0.06074797}
+        x: 30
+        y: 17
+        width: 202
+        height: 185
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1d0f67d03e6c06640800000000000000
-      internalID: 5071271858904953041
+      spriteID: 1d2d6ed79c3cfd970800000000000000
+      internalID: 8781953068563878609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: simbolos1_1
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 190
+        width: 10
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17243813432909420800000000000000
+      internalID: 2634766534878380657
       vertices: []
       indices: 
       edges: []
@@ -126,7 +151,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 1537655665
+    internalID: 0
     vertices: []
     indices: 
     edges: []
@@ -135,7 +160,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      UIalavanca_0: 5071271858904953041
+      simbolos1_0: 8781953068563878609
+      simbolos1_1: 2634766534878380657
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

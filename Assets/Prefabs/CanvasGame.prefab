@@ -109,8 +109,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 541, y: -397}
-  m_SizeDelta: {x: 190.4, y: 190.4}
+  m_AnchoredPosition: {x: 524.3, y: -399.67}
+  m_SizeDelta: {x: 242.27, y: 239.38}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2341002768024030693
 CanvasRenderer:
@@ -334,8 +334,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000061035, y: -397}
-  m_SizeDelta: {x: 190.4, y: 190.4}
+  m_AnchoredPosition: {x: 0, y: -399.67}
+  m_SizeDelta: {x: 242.27, y: 239.38}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4846223646828693537
 CanvasRenderer:
@@ -498,8 +498,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -543, y: -397}
-  m_SizeDelta: {x: 190.4, y: 190.4}
+  m_AnchoredPosition: {x: -526, y: -399.67}
+  m_SizeDelta: {x: 242.27, y: 239.38}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3334993930137503549
 CanvasRenderer:
@@ -550,6 +550,7 @@ GameObject:
   - component: {fileID: 1245725961635515417}
   - component: {fileID: 6278822295701360356}
   - component: {fileID: 2569616752662624314}
+  - component: {fileID: 6799387239326612661}
   m_Layer: 5
   m_Name: alavanca
   m_TagString: Untagged
@@ -564,17 +565,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4572216314283241676}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.012890044, w: -0.999917}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5161986676265156510}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -1.477}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 867, y: -290.27}
-  m_SizeDelta: {x: 297.79, y: 297.79}
+  m_AnchoredPosition: {x: 874, y: -295.6}
+  m_SizeDelta: {x: 161.91, y: 226.28}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6278822295701360356
 CanvasRenderer:
@@ -604,7 +605,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7405e6882619b184697ecf7114193d9f, type: 3}
+  m_Sprite: {fileID: 5071271858904953041, guid: 7405e6882619b184697ecf7114193d9f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -614,6 +615,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6799387239326612661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4572216314283241676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bf4dc003a9b92942877ce4806e00e9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SlotMachineLever
+  anguloInicial: 0
+  anguloMaximo: -60
+  duracaoPuxada: 0.15
+  duracaoRetorno: 0.25
+  usarEfeitoMola: 1
+  forcaDoRebote: 8
 --- !u!1 &5235424788585447485
 GameObject:
   m_ObjectHideFlags: 0

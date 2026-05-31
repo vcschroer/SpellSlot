@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -47,6 +49,7 @@ public class SlotMachine : MonoBehaviour
     private float momentoProximoGiroPermitido = 0f;
     private bool menuAberto = false;
     private bool proximoGiroTemSorteGeral = false;
+    private bool estaProcessandoGiro = false; 
 
     void Update()
     {
@@ -58,7 +61,7 @@ public class SlotMachine : MonoBehaviour
 
     private void AlternarCaçaNiquel()
     {
-        if (scriptPlayer == null) return;
+        if (scriptPlayer == null || estaProcessandoGiro) return;
 
         if (Time.time < momentoProximoGiroPermitido)
         {
@@ -84,6 +87,8 @@ public class SlotMachine : MonoBehaviour
 
     private void GirarCaçaNiquel()
     {
+        estaProcessandoGiro = true; 
+
         TipoRecompensa slot1, slot2, slot3;
         bool travaAtiva = girosSemJackpotRestantes > 0;
         bool forcarVitoria = contadorGirosPerdidos >= girosParaGarantirPremio;
@@ -114,10 +119,24 @@ public class SlotMachine : MonoBehaviour
             }
         }
 
+        if (scriptVisual != null) scriptVisual.AtualizarVisualDosSlots(slot1, slot2, slot3);
+
+        StartCoroutine(RotinaProcessarResultado(slot1, slot2, slot3, travaAtiva));
+    }
+
+    private IEnumerator RotinaProcessarResultado(TipoRecompensa slot1, TipoRecompensa slot2, TipoRecompensa slot3, bool travaAtiva)
+    {
+        if (scriptVisual != null)
+        {
+            yield return new WaitForSeconds(scriptVisual.ObterTempoTotalGiro());
+        }
+        else
+        {
+            yield return new WaitForSeconds(2.0f); 
+        }
+
         proximoGiroTemSorteGeral = false;
         if (travaAtiva) girosSemJackpotRestantes--;
-
-        if (scriptVisual != null) scriptVisual.AtualizarVisualDosSlots(slot1, slot2, slot3);
 
         int qtdDinheiro = 0, qtdTamanho = 0, qtdVelAtaque = 0, qtdVelPlayer = 0;
         ContarSlot(slot1, ref qtdDinheiro, ref qtdTamanho, ref qtdVelAtaque, ref qtdVelPlayer);
@@ -136,6 +155,7 @@ public class SlotMachine : MonoBehaviour
             float raio = (float)typeof(PlayerController).GetField("raioDaOrbita", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(scriptPlayer);
 
             scriptEspada.AtivarJackpot(offset, raio);
+            Debug.Log("[JACKPOT] Ativado com sucesso após a parada dos slots!");
         }
         else if (qtdDinheiro == 2 || qtdTamanho == 2 || qtdVelAtaque == 2 || qtdVelPlayer == 2)
         {
@@ -148,6 +168,7 @@ public class SlotMachine : MonoBehaviour
         AplicarRecompensaVelocidadePlayer(qtdVelPlayer);
 
         menuAberto = false;
+        estaProcessandoGiro = false;
     }
 
     private void ContarSlot(TipoRecompensa slot, ref int din, ref int tam, ref int velA, ref int velP)
@@ -171,7 +192,7 @@ public class SlotMachine : MonoBehaviour
     private void AplicarRecompensaTamanho(int quantidade)
     {
         if (quantidade < 2 || scriptEspada == null) return;
-        int gomos = quantidade switch { 2 => gomosPequeno, 3 => gomosGrande, _ => 0 };
+        int gomos = quantidade switch { 2 => gomosPequeno, 3 => gomosGrande, _ => 0 }; 
         scriptEspada.MudarQuantidadeSegmentos(scriptEspada.QuantidadeSegmentosMeio + gomos);
     }
 
