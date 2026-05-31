@@ -1,13 +1,22 @@
 fileFormatVersion: 2
-guid: 0732c10d8a5af9f408732e648fe1e798
+guid: 169902358f8a61040a1fc530467b4d68
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2845085967130844360
-    second: moeda sombra_0
+      213: 2177898035875886120
+    second: 26.05.31_bauSheet_0
   - first:
-      213: 195961793315867013
-    second: moeda sombra_1
+      213: -4833065795494802799
+    second: 26.05.31_bauSheet_1
+  - first:
+      213: 5947298877719214946
+    second: 26.05.31_bauSheet_2
+  - first:
+      213: 8203095977217391886
+    second: 26.05.31_bauSheet_3
+  - first:
+      213: -5877586018106546839
+    second: 26.05.31_bauSheet_4
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -40,7 +49,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -49,12 +58,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 1300
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -75,7 +84,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -103,45 +112,89 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: moeda sombra_0
+      name: 26.05.31_bauSheet_1
       rect:
         serializedVersion: 2
-        x: 272
-        y: 155
-        width: 672
-        height: 908
+        x: 104
+        y: 65
+        width: 1106
+        height: 938
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8cc584afc96cb7720800000000000000
-      internalID: 2845085967130844360
+      spriteID: 19a017304408decb0800000000000000
+      internalID: -4833065795494802799
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: moeda sombra_1
+      name: 26.05.31_bauSheet_2
       rect:
         serializedVersion: 2
-        x: 281
-        y: 34
-        width: 654
-        height: 63
+        x: 1431
+        y: 14
+        width: 875
+        height: 1137
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5890428763238b200800000000000000
-      internalID: 195961793315867013
+      spriteID: 26b7883b1dc098250800000000000000
+      internalID: 5947298877719214946
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 26.05.31_bauSheet_3
+      rect:
+        serializedVersion: 2
+        x: 2834
+        y: 22
+        width: 815
+        height: 1150
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0d7a74545047d170800000000000000
+      internalID: 8203095977217391886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 26.05.31_bauSheet_4
+      rect:
+        serializedVersion: 2
+        x: 4099
+        y: 143
+        width: 877
+        height: 977
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 965e4f548ae9e6ea0800000000000000
+      internalID: -5877586018106546839
       vertices: []
       indices: 
       edges: []
@@ -150,7 +203,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 961c94ce0f02ae34cb1234c7978ea588
     internalID: 0
     vertices: []
     indices: 
@@ -160,8 +213,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      moeda sombra_0: 2845085967130844360
-      moeda sombra_1: 195961793315867013
+      26.05.31_bauSheet_0: 2177898035875886120
+      26.05.31_bauSheet_1: -4833065795494802799
+      26.05.31_bauSheet_2: 5947298877719214946
+      26.05.31_bauSheet_3: 8203095977217391886
+      26.05.31_bauSheet_4: -5877586018106546839
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

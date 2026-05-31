@@ -1,13 +1,19 @@
 fileFormatVersion: 2
-guid: 0732c10d8a5af9f408732e648fe1e798
+guid: b076fde6c7cc34949a1676bac7fcff6d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2845085967130844360
-    second: moeda sombra_0
+      213: 1187391177975196531
+    second: 26.05._sacolaSheet_0
   - first:
-      213: 195961793315867013
-    second: moeda sombra_1
+      213: -4282754116221581629
+    second: 26.05._sacolaSheet_1
+  - first:
+      213: 1978465117495677222
+    second: 26.05._sacolaSheet_2
+  - first:
+      213: 4934634222271729978
+    second: 26.05._sacolaSheet_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -40,7 +46,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -49,12 +55,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 1300
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -75,7 +81,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 4096
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -103,45 +109,67 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: moeda sombra_0
+      name: 26.05._sacolaSheet_0
       rect:
         serializedVersion: 2
-        x: 272
-        y: 155
-        width: 672
-        height: 908
+        x: 245
+        y: 128
+        width: 955
+        height: 982
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8cc584afc96cb7720800000000000000
-      internalID: 2845085967130844360
+      spriteID: 37be4ac3cf57a7010800000000000000
+      internalID: 1187391177975196531
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: moeda sombra_1
+      name: 26.05._sacolaSheet_1
       rect:
         serializedVersion: 2
-        x: 281
-        y: 34
-        width: 654
-        height: 63
+        x: 1544
+        y: 116
+        width: 939
+        height: 948
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5890428763238b200800000000000000
-      internalID: 195961793315867013
+      spriteID: 3c6454282d99094c0800000000000000
+      internalID: -4282754116221581629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 26.05._sacolaSheet_3
+      rect:
+        serializedVersion: 2
+        x: 2573
+        y: 75
+        width: 1084
+        height: 1044
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a311efa2ea75b7440800000000000000
+      internalID: 4934634222271729978
       vertices: []
       indices: 
       edges: []
@@ -150,7 +178,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 6f33fe83cfa2b134e82e9ba632943884
     internalID: 0
     vertices: []
     indices: 
@@ -160,8 +188,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      moeda sombra_0: 2845085967130844360
-      moeda sombra_1: 195961793315867013
+      26.05._sacolaSheet_0: 1187391177975196531
+      26.05._sacolaSheet_1: -4282754116221581629
+      26.05._sacolaSheet_2: 1978465117495677222
+      26.05._sacolaSheet_3: 4934634222271729978
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

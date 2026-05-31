@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
     private Transform alvoPlayer;
     private Rigidbody2D rb;
     private Vector2 direcao;
-    private bool olhandoParaDireita = true;
+    private bool olhandoParaDireita = false;
     private bool estaMorto = false;
 
     private float tempoProximoDano = 0f;

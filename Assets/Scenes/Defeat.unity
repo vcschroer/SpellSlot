@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 8833997}
   - component: {fileID: 8833999}
   - component: {fileID: 8833998}
+  - component: {fileID: 8834000}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -153,8 +154,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 352, y: 140.00003}
-  m_SizeDelta: {x: 771.98, y: 144.25}
+  m_AnchoredPosition: {x: 396, y: 81.58}
+  m_SizeDelta: {x: 873.17, y: 163.16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8833998
 MonoBehaviour:
@@ -176,10 +177,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: PERDEU
+  m_text: you lost!
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0b8d30047ab35d04090dad9fd57e36ba, type: 2}
+  m_sharedMaterial: {fileID: -2187532278731649238, guid: 0b8d30047ab35d04090dad9fd57e36ba, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -203,8 +204,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 137.8
-  m_fontSizeBase: 137.8
+  m_fontSize: 212.1
+  m_fontSizeBase: 212.1
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -256,6 +257,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8833996}
   m_CullTransparentMesh: 1
+--- !u!114 &8834000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8833996}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e2d9f56fa6ed14cbfaea9eb732f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIWobble
+  seMexendo: 1
+  velocidade: 2
+  anguloMaximo: 4
 --- !u!1 &132777454
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,6 +284,7 @@ GameObject:
   - component: {fileID: 132777458}
   - component: {fileID: 132777457}
   - component: {fileID: 132777456}
+  - component: {fileID: 132777459}
   m_Layer: 5
   m_Name: sair
   m_TagString: Untagged
@@ -292,7 +309,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 352, y: -95}
+  m_AnchoredPosition: {x: 396, y: -186}
   m_SizeDelta: {x: 523.84, y: 98.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &132777456
@@ -358,7 +375,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 132777454}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
@@ -389,6 +406,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 132777454}
   m_CullTransparentMesh: 1
+--- !u!114 &132777459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 132777454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 516927c0402a10748af88cd38deacda3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIButtonHoverScale
+  escalaHover: 1.12
+  duracaoTransicao: 0.1
 --- !u!1 &398487053
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,6 +431,7 @@ GameObject:
   - component: {fileID: 398487054}
   - component: {fileID: 398487056}
   - component: {fileID: 398487055}
+  - component: {fileID: 398487057}
   m_Layer: 5
   m_Name: MAGO
   m_TagString: Untagged
@@ -464,6 +496,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 398487053}
   m_CullTransparentMesh: 1
+--- !u!114 &398487057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 398487053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0e2d9f56fa6ed14cbfaea9eb732f1ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIWobble
+  seMexendo: 1
+  velocidade: 2
+  anguloMaximo: 5
 --- !u!1 &622909007
 GameObject:
   m_ObjectHideFlags: 0
@@ -674,19 +721,17 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'sair
-
-'
+  m_text: menu
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0b8d30047ab35d04090dad9fd57e36ba, type: 2}
+  m_sharedMaterial: {fileID: -2187532278731649238, guid: 0b8d30047ab35d04090dad9fd57e36ba, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -703,8 +748,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 127.3
+  m_fontSizeBase: 127.3
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
