@@ -66,11 +66,6 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 4ec6b450e9c92474f9fcfb78af80a384, type: 3}
     - {fileID: 8300000, guid: 07e3992f81021554a8b4585682617718, type: 3}
     - {fileID: 8300000, guid: 11e28f956115a754092f94943f76baf8, type: 3}
-  - sfxName: enemyexplosion
-    clips:
-    - {fileID: 8300000, guid: f2007710a1037e441acdc11e69ffdad7, type: 3}
-    - {fileID: 8300000, guid: 92ae74ab6c928f24bbcd9241bca0fdb8, type: 3}
-    - {fileID: 8300000, guid: 320a000babdbf5740bbb6308c90ffb46, type: 3}
   - sfxName: moeda in slot
     clips:
     - {fileID: 8300000, guid: 7ad41e98ce115e74987d07497f0286aa, type: 3}

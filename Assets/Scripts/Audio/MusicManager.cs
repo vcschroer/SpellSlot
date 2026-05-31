@@ -47,26 +47,35 @@ public class MusicManager : MonoBehaviour
         }
 
 
-        if (bgmSource == null) bgmSource = gameObject.AddComponent<AudioSource>();
-        bgmSource.loop = true;
-        bgmSource.playOnAwake = false;
-        if (musicGroup != null) bgmSource.outputAudioMixerGroup = musicGroup;
+        if (bgmSource == null)
+            bgmSource = CreateAudioChannel("BGM_Channel", musicGroup, true);
+        else
+            ConfigureSource(bgmSource, musicGroup, true);
 
         if (sfxSource == null || sfxSource == bgmSource)
-        {
-            sfxSource = gameObject.AddComponent<AudioSource>();
-        }
-        sfxSource.loop = false;
-        sfxSource.playOnAwake = false;
-        if (sfxGroup != null) sfxSource.outputAudioMixerGroup = sfxGroup;
+            sfxSource = CreateAudioChannel("SFX_Loop_Channel", sfxGroup, false);
+        else
+            ConfigureSource(sfxSource, sfxGroup, false);
 
-        if (sfxOneShotSource == null || sfxOneShotSource == bgmSource || sfxOneShotSource == sfxSource)
-        {
-            sfxOneShotSource = gameObject.AddComponent<AudioSource>();
-        }
-        sfxOneShotSource.loop = false;
-        sfxOneShotSource.playOnAwake = false;
-        if (sfxGroup != null) sfxOneShotSource.outputAudioMixerGroup = sfxGroup;
+        sfxOneShotSource = CreateAudioChannel("SFX_OneShot_Channel", sfxGroup, false);
+    }
+
+    private AudioSource CreateAudioChannel(string channelName, AudioMixerGroup group, bool loop)
+    {
+        GameObject child = new GameObject(channelName);
+        child.transform.SetParent(transform);
+        AudioSource source = child.AddComponent<AudioSource>();
+        ConfigureSource(source, group, loop);
+        return source;
+    }
+
+    private void ConfigureSource(AudioSource source, AudioMixerGroup group, bool loop)
+    {
+        source.loop = loop;
+        source.playOnAwake = false;
+        source.volume = 1f;
+        source.spatialBlend = 0f; 
+        if (group != null) source.outputAudioMixerGroup = group;
     }
 
     private void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
@@ -104,7 +113,11 @@ public class MusicManager : MonoBehaviour
 
     public void PlaySFX(string name)
     {
-        if (sfxList == null) return;
+        if (sfxList == null || sfxList.Count == 0)
+        {
+            Debug.LogWarning("MusicManager: A lista 'sfxList' está vazia ou nula no Inspector!");
+            return;
+        }
 
         foreach (var group in sfxList)
         {
@@ -113,12 +126,25 @@ public class MusicManager : MonoBehaviour
                 if (group.clips != null && group.clips.Count > 0)
                 {
                     int randomIndex = Random.Range(0, group.clips.Count);
+                    AudioClip clipToPlay = group.clips[randomIndex];
 
-                    sfxOneShotSource.PlayOneShot(group.clips[randomIndex]);
+                    if (clipToPlay != null)
+                    {
+                        // Mensagem de sucesso no Console para você saber que o código funcionou
+                        Debug.Log($"MusicManager: Tocando SFX '{name}' -> Clipe: {clipToPlay.name}");
+                        sfxOneShotSource.PlayOneShot(clipToPlay);
+                    }
+                    else
+                    {
+                        Debug.LogError($"MusicManager: O slot de áudio no grupo '{name}' está vazio (null)!");
+                    }
                     return;
                 }
+                Debug.LogWarning($"MusicManager: O grupo de SFX '{name}' foi encontrado, mas não contém nenhum áudio na lista.");
+                return;
             }
         }
+        Debug.LogWarning($"MusicManager: Nenhum SFX com o nome '{name}' foi encontrado na lista.");
     }
 
     public void PlayLoopingSFX(string name)
@@ -134,6 +160,7 @@ public class MusicManager : MonoBehaviour
                     sfxSource.clip = group.clips[0];
                     sfxSource.loop = true;
                     sfxSource.Play();
+                    Debug.Log($"MusicManager: Tocando SFX em Loop '{name}'");
                     return;
                 }
             }
