@@ -42,7 +42,7 @@ public class MusicManager : MonoBehaviour
     [SerializeField] private AudioClip slot2IguaisClip;
     [SerializeField] private AudioClip slotMachineSpinClip;
     [SerializeField] private AudioClip stopSlotMachineClip;
-
+    [SerializeField] private AudioClip slotParandoClip;
 
     [SerializeField] private AudioMixerGroup sfxGroup;
 
@@ -450,6 +450,24 @@ public class MusicManager : MonoBehaviour
         }
     }
 
+    public void PlaySlotParando(bool isPlaying)
+    {
+        if (slotParandoClip == null) return;
 
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = slotParandoClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
 
 }
