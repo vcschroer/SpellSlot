@@ -37,10 +37,10 @@ public class Sword : MonoBehaviour
     [Tooltip("Velocidade de rotação da espada durante o jackpot")]
     [SerializeField] public float velocidadeGiroJackpot = 360f;
 
-
     private bool atacando = false;
     private List<GameObject> segmentosCriados = new List<GameObject>();
-    private int quantidadeAnterior;
+
+    private bool deveReconstruir = false;
 
     private HashSet<Enemy> inimigosAtingidosNesteGolpe = new HashSet<Enemy>();
 
@@ -50,7 +50,6 @@ public class Sword : MonoBehaviour
 
     void Start()
     {
-        quantidadeAnterior = quantidadeSegmentosMeio;
         ConstruirEspada();
 
         if (layerDosInimigos == 0)
@@ -61,28 +60,21 @@ public class Sword : MonoBehaviour
 
     private void OnValidate()
     {
-        if (Application.isPlaying && quantidadeSegmentosMeio != quantidadeAnterior)
-        {
-            quantidadeAnterior = quantidadeSegmentosMeio;
-            UnityEditor.EditorApplication.delayCall += SolicitacaoReconstrucaoEditor;
-            ConstruirEspada();
-        }
+        deveReconstruir = true;
     }
 
-    private void SolicitacaoReconstrucaoEditor()
+    private void Update()
     {
-        UnityEditor.EditorApplication.delayCall -= SolicitacaoReconstrucaoEditor;
-        if (this != null && Application.isPlaying)
+        if (deveReconstruir)
         {
+            deveReconstruir = false;
             ConstruirEspada();
         }
     }
 
     public void MudarQuantidadeSegmentos(int novaQuantidade)
     {
-        quantidadeSegmentosMeio = novaQuantidade;
-        quantidadeSegmentosMeio = Mathf.Max(0, quantidadeSegmentosMeio);
-        quantidadeAnterior = quantidadeSegmentosMeio;
+        quantidadeSegmentosMeio = Mathf.Max(0, novaQuantidade);
         ConstruirEspada();
     }
 
@@ -90,7 +82,11 @@ public class Sword : MonoBehaviour
     {
         foreach (GameObject segmento in segmentosCriados)
         {
-            if (segmento != null) Destroy(segmento);
+            if (segmento != null)
+            {
+                if (Application.isPlaying) Destroy(segmento);
+                else DestroyImmediate(segmento);
+            }
         }
         segmentosCriados.Clear();
 
@@ -121,6 +117,7 @@ public class Sword : MonoBehaviour
         }
     }
 
+
     public void Atacar(float multiplicadorVelocidade, float anguloDoClique)
     {
         if (!atacando)
@@ -135,24 +132,11 @@ public class Sword : MonoBehaviour
         inimigosAtingidosNesteGolpe.Clear();
 
         float velAtaqueAtual = velocidadeAtaqueBase * multiplicador;
-
         bool estaNaEsquerda = anguloDoClique > 90f || anguloDoClique < -90f;
-
         float anguloBaseAtaque = anguloDoClique + 90f;
 
-        float anguloLocalInicial;
-        float anguloLocalFinal;
-
-        if (estaNaEsquerda)
-        {
-            anguloLocalInicial = anguloBaseAtaque - anguloInicial;
-            anguloLocalFinal = anguloBaseAtaque - anguloFinal;
-        }
-        else
-        {
-            anguloLocalInicial = anguloBaseAtaque + anguloInicial;
-            anguloLocalFinal = anguloBaseAtaque + anguloFinal;
-        }
+        float anguloLocalInicial = estaNaEsquerda ? (anguloBaseAtaque - anguloInicial) : (anguloBaseAtaque + anguloInicial);
+        float anguloLocalFinal = estaNaEsquerda ? (anguloBaseAtaque - anguloFinal) : (anguloBaseAtaque + anguloFinal);
 
         float progresso = 0f;
 
@@ -161,7 +145,6 @@ public class Sword : MonoBehaviour
             progresso += velAtaqueAtual * Time.deltaTime;
             float zAtual = Mathf.LerpAngle(anguloLocalInicial, anguloLocalFinal, progresso);
             transform.localRotation = Quaternion.Euler(0, 0, zAtual);
-
             VerificarCorteEspada();
             yield return null;
         }
@@ -180,7 +163,6 @@ public class Sword : MonoBehaviour
             yield return null;
         }
         transform.localRotation = Quaternion.Euler(0, 0, anguloLocalInicial);
-
         atacando = false;
     }
 
@@ -193,7 +175,6 @@ public class Sword : MonoBehaviour
         {
             float distanciaAoLongoDaLamina = (comprimentoTotal / pontosDeChecagem) * i;
             Vector3 posicaoPonto = transform.TransformPoint(new Vector3(0, distanciaAoLongoDaLamina, 0));
-
             Collider2D[] colisoresEncontrados = Physics2D.OverlapCircleAll(posicaoPonto, larguraDoCorte / 2f, layerDosInimigos);
 
             foreach (Collider2D colisor in colisoresEncontrados)
@@ -228,13 +209,12 @@ public class Sword : MonoBehaviour
         EstaEmModoJackpot = true;
         MusicManager.Instance.PlayJackpotSound(true);
         tempoJackpotRestante = duracaoJackpot;
-
         StartCoroutine(RotinaJackpot(offset, raio));
     }
+
     private IEnumerator RotinaJackpot(Vector2 offset, float raio)
     {
         atacando = true;
-
         float intervaloParaRehit = 0.5f;
         float timerRehit = 0f;
 
@@ -249,7 +229,6 @@ public class Sword : MonoBehaviour
                 timerRehit = 0f;
             }
 
-            // Lógica de Giro
             anguloRotacaoJackpot += velocidadeGiroJackpot * Time.deltaTime;
             float radianos = anguloRotacaoJackpot * Mathf.Deg2Rad;
             Vector2 direcao = new Vector2(Mathf.Cos(radianos), Mathf.Sin(radianos));
@@ -258,7 +237,6 @@ public class Sword : MonoBehaviour
             transform.localRotation = Quaternion.Euler(0, 0, anguloRotacaoJackpot - 90f);
 
             VerificarCorteEspada();
-
             yield return null;
         }
 
@@ -266,7 +244,6 @@ public class Sword : MonoBehaviour
         EstaEmModoJackpot = false;
         MusicManager.Instance.PlayJackpotSound(false);
         transform.localRotation = Quaternion.identity;
-
         inimigosAtingidosNesteGolpe.Clear();
     }
 }

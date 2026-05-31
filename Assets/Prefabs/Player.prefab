@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 6389529742096015501}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.004137046, w: -0.9999915}
-  m_LocalPosition: {x: 0.037, y: -0.034, z: 0}
+  m_LocalPosition: {x: 1.07, y: -0.03, z: 0}
   m_LocalScale: {x: 0.22388066, y: 0.26041037, z: 0.19871227}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44,20 +44,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d0328c806e84394594819c1ad985e95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sword
-  anguloInicial: 0
-  anguloFinal: -130
-  velocidadeAtaqueBase: 20
+  anguloInicial: -90
+  anguloFinal: -200
+  velocidadeAtaqueBase: 5
   velocidadeRetornoBase: 5
   prefabCabo: {fileID: 8627269263969308266, guid: b1672f68e696fb840bf50c7e329cd028, type: 3}
   prefabMeioLamina: {fileID: 9068567274452352512, guid: d0f0a795fb2692546ba6ea614175f738, type: 3}
   prefabPontaLamina: {fileID: 8372954289619658168, guid: ae08bb500050c9644be289a4d39ae42b, type: 3}
   quantidadeSegmentosMeio: 2
-  tamanhoDoSegmentoY: 0.25
-  deslocamentoDaPonta: 0.63
+  tamanhoDoSegmentoY: 3.07
+  deslocamentoDaPonta: 13.6
   larguraDoCorte: 0.8
   layerDosInimigos:
     serializedVersion: 2
     m_Bits: 64
+  duracaoJackpot: 10
+  velocidadeGiroJackpot: 1000
 --- !u!1 &8003146875235940519
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,7 +93,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.3362, y: 0.4876, z: 0}
-  m_LocalScale: {x: 5.9676843, y: 5.9676843, z: 5.9676843}
+  m_LocalScale: {x: 0.20494193, y: 0.20494193, z: 0.20494193}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5520506918430083152}
@@ -146,7 +148,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 2674036466266115371, guid: babed1235a6c0f049bce0d2f90d2e803, type: 3}
+  m_Sprite: {fileID: -144941217926558633, guid: b19550e3435b45b42890ba032ed9c4ac, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -169,16 +171,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   velocidade: 5
-  scriptEspada: {fileID: 0}
-  scriptAnimacao: {fileID: 0}
+  scriptEspada: {fileID: 2617373388367065717}
+  scriptAnimacao: {fileID: 2709040164099495859}
   maxDinheiro: 100
   dinheiroAtual: 100
   custoPorTempo: 5
   intervaloTempo: 5
-  attackSpeed: 1
+  attackSpeed: 0.5
   centroDoPlayerOffset: {x: 0, y: 0}
-  afastamentoHorizontal: 0.15
-  afastamentoVertical: 0.15
+  raioDaOrbita: 6.43
 --- !u!50 &1044334382055454735
 Rigidbody2D:
   serializedVersion: 5
@@ -252,17 +253,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.026418455, y: 0.0045945123}
+  m_Offset: {x: 0.3916129, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.23, y: 0.21}
+    oldSize: {x: 8.94, y: 11.345168}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.14771791, y: 0.19136573}
+  m_Size: {x: 5.219681, y: 11.345168}
   m_EdgeRadius: 0
 --- !u!114 &8090224322029983388
 MonoBehaviour:

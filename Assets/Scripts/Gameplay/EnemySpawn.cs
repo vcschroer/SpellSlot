@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemySpawn : MonoBehaviour
 {
@@ -20,21 +21,32 @@ public class EnemySpawn : MonoBehaviour
         public float fatorCrescimentoPorMinuto = 5f;
     }
 
-    [Header("Configurações dos Inimigos")]
+    [Header("Configurações Gerais")]
     [SerializeField] private List<DadosInimigo> listaInimigos = new List<DadosInimigo>();
+    [Tooltip("Tempo em segundos para encerrar o spawn (ex: 300 = 5 minutos)")]
+    [SerializeField] private float tempoLimiteSpawnSegundos = 300f;
+    [SerializeField] private string nomeCenaVitoria = "Win";
 
-    [Header("Ritmo de Spawn (Quantidade)")]
-    [SerializeField] private float intervaloSpawnInicial = 3f; 
-    [SerializeField] private float intervaloSpawnMinimo = 0.3f; 
+    [Header("Ritmo de Spawn (Intervalo)")]
+    [SerializeField] private float intervaloSpawnInicial = 3f;
+    [SerializeField] private float intervaloSpawnMinimo = 0.3f;
     [SerializeField] private float reducaoIntervaloPorMinuto = 0.25f;
 
-    [Header("Distância de Spawn (Fora da Tela)")]
+    [Header("Ritmo de Spawn (Quantidade)")]
+    [SerializeField] private int quantidadeInicial = 1;
+    [SerializeField] private int quantidadeMaxima = 10;
+    [SerializeField] private float aumentoQuantidadePorMinuto = 0.5f;
+
+    [Header("Área de Spawn")]
+    [SerializeField] private PolygonCollider2D areaDeSpawn;
     [SerializeField] private float raioMinimoSpawn = 12f;
     [SerializeField] private float raioMaximoSpawn = 18f;
 
     private Transform alvoPlayer;
     private float tempoDecorrido = 0f;
     private float cronometroSpawn = 0f;
+    private bool spawnEncerrado = false;
+    private float proximaChecagemVitoria = 0f;
 
     void Start()
     {
@@ -47,12 +59,38 @@ public class EnemySpawn : MonoBehaviour
         if (alvoPlayer == null) return;
 
         tempoDecorrido += Time.deltaTime;
-        cronometroSpawn += Time.deltaTime;
 
+        if (tempoDecorrido >= tempoLimiteSpawnSegundos)
+        {
+            spawnEncerrado = true;
+
+            if (Time.time >= proximaChecagemVitoria)
+            {
+                VerificarVitoria();
+                proximaChecagemVitoria = Time.time + 1f;
+            }
+            return;
+        }
+
+        cronometroSpawn += Time.deltaTime;
         if (cronometroSpawn >= CalcularIntervaloAjustado())
         {
-            SpawnarInimigoAleatorio();
+            int qtdParaSpawnar = CalcularQuantidadeAtual();
+            for (int i = 0; i < qtdParaSpawnar; i++)
+            {
+                SpawnarInimigoAleatorio();
+            }
             cronometroSpawn = 0f;
+        }
+    }
+
+    private void VerificarVitoria()
+    {
+        GameObject[] inimigosRestantes = GameObject.FindGameObjectsWithTag("Enemy");
+
+        if (inimigosRestantes.Length == 0)
+        {
+            SceneManager.LoadScene(nomeCenaVitoria);
         }
     }
 
@@ -61,6 +99,13 @@ public class EnemySpawn : MonoBehaviour
         float minutosPassados = tempoDecorrido / 60f;
         float intervaloAtual = intervaloSpawnInicial - (minutosPassados * reducaoIntervaloPorMinuto);
         return Mathf.Max(intervaloAtual, intervaloSpawnMinimo);
+    }
+
+    private int CalcularQuantidadeAtual()
+    {
+        float minutosPassados = tempoDecorrido / 60f;
+        int quantidadeCalculada = quantidadeInicial + Mathf.FloorToInt(minutosPassados * aumentoQuantidadePorMinuto);
+        return Mathf.Clamp(quantidadeCalculada, quantidadeInicial, quantidadeMaxima);
     }
 
     private void SpawnarInimigoAleatorio()
@@ -74,11 +119,8 @@ public class EnemySpawn : MonoBehaviour
         for (int i = 0; i < listaInimigos.Count; i++)
         {
             float pesoCalculado = listaInimigos[i].pesoBase;
-
             if (listaInimigos[i].escalarComOTempo)
-            {
                 pesoCalculado += minutosPassados * listaInimigos[i].fatorCrescimentoPorMinuto;
-            }
 
             pesosAtuais.Add(pesoCalculado);
             somaTotalPesos += pesoCalculado;
@@ -100,16 +142,34 @@ public class EnemySpawn : MonoBehaviour
 
         if (prefabEscolhido != null)
         {
-            Vector3 posicaoSpawn = CalcularPosicaoSpawnForaDaTela();
+            Vector3 posicaoSpawn = ObterPosicaoSpawn();
             Instantiate(prefabEscolhido, posicaoSpawn, Quaternion.identity);
         }
     }
 
-    private Vector3 CalcularPosicaoSpawnForaDaTela()
+    private Vector3 ObterPosicaoSpawn()
     {
+        if (areaDeSpawn != null)
+        {
+            Bounds bounds = areaDeSpawn.bounds;
+            Vector2 pontoAleatorio;
+            int tentativas = 0;
+
+            do
+            {
+                pontoAleatorio = new Vector2(
+                    Random.Range(bounds.min.x, bounds.max.x),
+                    Random.Range(bounds.min.y, bounds.max.y)
+                );
+                tentativas++;
+            }
+            while (!areaDeSpawn.OverlapPoint(pontoAleatorio) && tentativas < 50);
+
+            return new Vector3(pontoAleatorio.x, pontoAleatorio.y, 0f);
+        }
+
         Vector2 direcaoAleatoria = Random.insideUnitCircle.normalized;
         float distanciaAleatoria = Random.Range(raioMinimoSpawn, raioMaximoSpawn);
-        Vector3 deslocamento = new Vector3(direcaoAleatoria.x, direcaoAleatoria.y, 0f) * distanciaAleatoria;
-        return alvoPlayer.position + deslocamento;
+        return alvoPlayer.position + (Vector3)(direcaoAleatoria * distanciaAleatoria);
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections; 
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -94,6 +95,11 @@ public class PlayerController : MonoBehaviour
         {
             float velocidadFisica = inputsMovimento.magnitude;
             scriptAnimacao.AtualizarMovimento(velocidadFisica);
+
+            if (scriptEspada != null)
+            {
+                scriptAnimacao.SetarModoJackpot(scriptEspada.EstaEmModoJackpot);
+            }
         }
     }
 
@@ -174,7 +180,7 @@ public class PlayerController : MonoBehaviour
 
     private void Gamover()
     {
-        gameObject.SetActive(false);
+        SceneManager.LoadScene("Defeat");
     }
 
     private void VerificarFlip()
