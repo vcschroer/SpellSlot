@@ -8,10 +8,17 @@ public class Menu : MonoBehaviour
     [SerializeField] private GameObject painelOpcoes;
     public void IniciarJogo()
     {
-        SceneManager.LoadScene(nomeDaCenaDoJogo);
+        if (TransitionManager.Instance != null)
+        {
+            TransitionManager.Instance.CarregarCena(nomeDaCenaDoJogo);
+        }
+        else
+        {
+            SceneManager.LoadScene(nomeDaCenaDoJogo);
+        }
     }
 
-    public void SairDoJogo()
+    public void SairDoJogo() 
     {
         Application.Quit();
     }

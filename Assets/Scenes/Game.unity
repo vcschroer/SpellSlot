@@ -185,7 +185,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -100
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 3043909287567421793, guid: 9f76fd25ae854d04790c69e864864917, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a32aed04f458bb940b0dff0d0ae2ef65, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -580,7 +580,7 @@ Transform:
   m_GameObject: {fileID: 1147063083}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 9.31, z: 0}
+  m_LocalPosition: {x: 0, y: 15.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -709,7 +709,7 @@ Transform:
   m_GameObject: {fileID: 1631194818}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 5.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -761,12 +761,12 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 36.012524, y: -3.7771702}
+    - - {x: 37.981434, y: -2.4645605}
       - {x: -0.21610713, y: -25.65919}
-      - {x: -36.922398, y: -5.2167854}
-      - {x: -40.416924, y: -6.131878}
+      - {x: -39.985153, y: -3.2478724}
+      - {x: -41.182613, y: -5.256804}
       - {x: 0.73337173, y: -32.01934}
-      - {x: 39.780884, y: -6.4280167}
+      - {x: 40.218422, y: -5.881096}
   m_UseDelaunayMesh: 1
 --- !u!1 &1876936129
 GameObject:
@@ -847,6 +847,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2089488471 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6799387239326612661, guid: 94fab3856ff473746bec38dcd50f9c2d, type: 3}
+  m_PrefabInstance: {fileID: 4307609904460758837}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bf4dc003a9b92942877ce4806e00e9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SlotMachineLever
 --- !u!1001 &947446896411997032
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1169,7 +1180,7 @@ PrefabInstance:
     - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
       propertyPath: scriptAlavanca
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2089488471}
     - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
       propertyPath: spriteDinheiro
       value: 
@@ -1455,6 +1466,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6722997042782634035, guid: 94fab3856ff473746bec38dcd50f9c2d, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 3891618151023284955, guid: a04be4d57f65e5a47a0b3b99e74b9efc, type: 3}
     - target: {fileID: 6762878518055299639, guid: 94fab3856ff473746bec38dcd50f9c2d, type: 3}
       propertyPath: m_SizeDelta.x
       value: 242.27
@@ -1578,7 +1593,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1538783292215744738, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.9
+      value: 17.6
       objectReference: {fileID: 0}
     - target: {fileID: 1538783292215744738, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: m_ConstrainProportionsScale
@@ -1586,11 +1601,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3151895920875079802, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].x
-      value: -0.17023319
+      value: 0.04533401
       objectReference: {fileID: 0}
     - target: {fileID: 3151895920875079802, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].y
-      value: 2.8473768
+      value: 1.7695409
+      objectReference: {fileID: 0}
+    - target: {fileID: 3151895920875079802, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].x
+      value: -20.051023
+      objectReference: {fileID: 0}
+    - target: {fileID: 3151895920875079802, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].y
+      value: -9.603185
       objectReference: {fileID: 0}
     - target: {fileID: 3151895920875079802, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].x
@@ -1602,11 +1625,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3151895920875079802, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].x
-      value: 20.427795
+      value: 19.403849
       objectReference: {fileID: 0}
     - target: {fileID: 3151895920875079802, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].y
-      value: -9.11718
+      value: -9.70999
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: areaDeSpawn
@@ -1626,7 +1649,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: quantidadeInicial
-      value: 2
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: intervaloSpawnMinimo
@@ -1639,6 +1662,10 @@ PrefabInstance:
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: listaInimigos.Array.size
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
+      propertyPath: tempoLimiteSpawnSegundos
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: reducaoIntervaloPorMinuto

@@ -48,6 +48,9 @@ public class EnemySpawn : MonoBehaviour
     private bool spawnEncerrado = false;
     private float proximaChecagemVitoria = 0f;
 
+    // Trava para impedir que a transição seja chamada repetidamente enquanto fecha a tela
+    private bool vitoriaDisparada = false;
+
     void Start()
     {
         GameObject playerObj = GameObject.FindWithTag("Player");
@@ -56,7 +59,7 @@ public class EnemySpawn : MonoBehaviour
 
     void Update()
     {
-        if (alvoPlayer == null) return;
+        if (alvoPlayer == null || vitoriaDisparada) return;
 
         tempoDecorrido += Time.deltaTime;
 
@@ -86,11 +89,26 @@ public class EnemySpawn : MonoBehaviour
 
     private void VerificarVitoria()
     {
+        // Se a transição já começou, ignora checagens extras
+        if (vitoriaDisparada) return;
+
         GameObject[] inimigosRestantes = GameObject.FindGameObjectsWithTag("Enemy");
 
         if (inimigosRestantes.Length == 0)
         {
-            SceneManager.LoadScene(nomeCenaVitoria);
+            vitoriaDisparada = true; // Ativa a trava
+
+            if (TransitionManager.Instance != null)
+            {
+                // Inicia o círculo fechando suavemente rumo à vitória!
+                TransitionManager.Instance.CarregarCena(nomeCenaVitoria);
+            }
+            else
+            {
+                // Trava de segurança para testes rápidos sem o canvas na cena
+                Debug.LogWarning("[AVISO]: Prefab do TransitionManager não encontrado! Carregando vitória sem efeito.");
+                SceneManager.LoadScene(nomeCenaVitoria);
+            }
         }
     }
 

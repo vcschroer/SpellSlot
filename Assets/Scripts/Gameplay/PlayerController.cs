@@ -1,4 +1,4 @@
-using System.Collections; 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -29,14 +29,14 @@ public class PlayerController : MonoBehaviour
 
     [Header("Configurações de Órbita Livre da Espada")]
     [SerializeField] private Vector2 centroDoPlayerOffset = new Vector2(0f, 0.2f);
-
     [SerializeField] private float raioDaOrbita = 1.2f;
 
     private Rigidbody2D rb;
     private Vector2 inputsMovimento;
     private bool olhandoParaDireita = true;
-
     private float anguloMiraMouse;
+
+    private bool derrotaDisparada = false;
 
     void Start()
     {
@@ -64,11 +64,14 @@ public class PlayerController : MonoBehaviour
 
     public void OnMove(InputValue value)
     {
+        if (derrotaDisparada) return;
         inputsMovimento = value.Get<Vector2>();
     }
 
     public void OnAttack()
     {
+        if (derrotaDisparada) return;
+
         if (scriptEspada != null)
         {
             if (!scriptEspada.EstaAtacando)
@@ -85,10 +88,15 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (derrotaDisparada)
+        {
+            inputsMovimento = Vector2.zero;
+            return;
+        }
+
         rb.MovePosition(rb.position + inputsMovimento * velocidade * Time.fixedDeltaTime);
 
         VerificarFlip();
-
         AtualizarPosicaoDaEspada();
 
         if (scriptAnimacao != null)
@@ -106,9 +114,7 @@ public class PlayerController : MonoBehaviour
     private void AtualizarPosicaoDaEspada()
     {
         if (scriptEspada == null) return;
-
         if (scriptEspada.EstaAtacando || scriptEspada.EstaEmModoJackpot) return;
-
         if (Camera.main == null || Mouse.current == null) return;
 
         Vector2 posicaoMouseTela = Mouse.current.position.ReadValue();
@@ -116,12 +122,10 @@ public class PlayerController : MonoBehaviour
         posicaoMouseMundo.z = 0f;
 
         Vector3 centroRealPlayer = transform.position + new Vector3(centroDoPlayerOffset.x, centroDoPlayerOffset.y, 0f);
+        Vector2 irreversibleDirecao = (posicaoMouseMundo - centroRealPlayer).normalized;
 
-        Vector2 direcao = (posicaoMouseMundo - centroRealPlayer).normalized;
-
-        anguloMiraMouse = Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg;
-
-        Vector3 deslocamentoOrbitaLocal = new Vector3(direcao.x, direcao.y, 0f) * raioDaOrbita;
+        anguloMiraMouse = Mathf.Atan2(irreversibleDirecao.y, irreversibleDirecao.x) * Mathf.Rad2Deg;
+        Vector3 deslocamentoOrbitaLocal = new Vector3(irreversibleDirecao.x, irreversibleDirecao.y, 0f) * raioDaOrbita;
 
         scriptEspada.transform.localPosition = new Vector3(centroDoPlayerOffset.x, centroDoPlayerOffset.y, 0f) + deslocamentoOrbitaLocal;
 
@@ -143,7 +147,7 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator RotinaPerdaDeDinheiro()
     {
-        while (dinheiroAtual > 0)
+        while (dinheiroAtual > 0 && !derrotaDisparada)
         {
             yield return new WaitForSeconds(intervaloTempo);
             PerderDinheiro(custoPorTempo);
@@ -152,6 +156,8 @@ public class PlayerController : MonoBehaviour
 
     public void PerderDinheiro(int quantity)
     {
+        if (derrotaDisparada) return;
+
         dinheiroAtual -= quantity;
         if (dinheiroAtual < 0) dinheiroAtual = 0;
 
@@ -171,16 +177,32 @@ public class PlayerController : MonoBehaviour
         PerderDinheiro(dano);
     }
 
-
     public void GanharDinheiro(int quantity)
     {
+        if (derrotaDisparada) return;
         dinheiroAtual += quantity;
         if (dinheiroAtual > maxDinheiro) dinheiroAtual = maxDinheiro;
     }
 
     private void Gamover()
     {
-        SceneManager.LoadScene("Defeat");
+        if (derrotaDisparada) return;
+        derrotaDisparada = true;
+
+        if (scriptAnimacao != null)
+        {
+            scriptAnimacao.AtualizarMovimento(0f);
+        }
+
+        if (TransitionManager.Instance != null)
+        {
+            TransitionManager.Instance.CarregarCena("Defeat");
+        }
+        else
+        {
+            Debug.LogWarning("[AVISO]: Prefab do TransitionManager não encontrado! Carregando derrota sem efeito.");
+            SceneManager.LoadScene("Defeat");
+        }
     }
 
     private void VerificarFlip()
