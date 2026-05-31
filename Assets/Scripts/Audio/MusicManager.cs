@@ -32,6 +32,18 @@ public class MusicManager : MonoBehaviour
     [SerializeField] private AudioClip vitoriaDubClip;
     [SerializeField] private AudioClip winTelaClip;
 
+    [SerializeField] private AudioClip attackEspadaClip;
+    [SerializeField] private AudioClip enemyExplosionClip;
+    [SerializeField] private AudioClip falhaGamblingClip;
+    [SerializeField] private AudioClip gangThugClip;
+    [SerializeField] private AudioClip hitEnemyClip;
+    [SerializeField] private AudioClip jackpotSoundClip;
+    [SerializeField] private AudioClip moedaInSlotClip;
+    [SerializeField] private AudioClip slot2IguaisClip;
+    [SerializeField] private AudioClip slotMachineSpinClip;
+    [SerializeField] private AudioClip stopSlotMachineClip;
+
+
     [SerializeField] private AudioMixerGroup sfxGroup;
 
     private void Awake()
@@ -257,5 +269,187 @@ public class MusicManager : MonoBehaviour
             bgmSource.UnPause();
         }
     }
+
+    public void PlayAttackEspada(bool isPlaying)
+    {
+        if (attackEspadaClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = attackEspadaClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
+    public void PlayEnemyExplosion(bool isPlaying)
+    {
+        if (enemyExplosionClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = enemyExplosionClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
+    public void PlayFalhaGambling(bool isPlaying)
+    {
+        if (falhaGamblingClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = falhaGamblingClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
+    public void PlayGangThug(bool isPlaying)
+    {
+        if (gangThugClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = gangThugClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
+    public void PlayHitEnemy(bool isPlaying)
+    {
+        if (hitEnemyClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = hitEnemyClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
+    public void PlayMoedaInSlot(bool isPlaying)
+    {
+        if (moedaInSlotClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = moedaInSlotClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
+    public void PlaySlot2Iguais(bool isPlaying)
+    {
+        if (slot2IguaisClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = slot2IguaisClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
+    public void PlaySlotMachineSpin(bool isPlaying)
+    {
+        if (slotMachineSpinClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = slotMachineSpinClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
+    public void PlayStopSlotMachine(bool isPlaying)
+    {
+        if (stopSlotMachineClip == null) return;
+
+        if (isPlaying)
+        {
+            if (bgmSource.isPlaying) bgmSource.Pause();
+
+            sfxSource.clip = stopSlotMachineClip;
+            sfxSource.loop = true;
+            sfxSource.Play();
+        }
+        else
+        {
+            sfxSource.Stop();
+
+            bgmSource.UnPause();
+        }
+    }
+
+
 
 }
