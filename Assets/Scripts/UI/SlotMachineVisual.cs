@@ -36,7 +36,7 @@ public class SlotMachineVisual : MonoBehaviour
     [Header("Configurações do RGB (Jackpot)")]
     [SerializeField] private float velocidadeRGB = 2f;
 
-    private PlayerController player; 
+    private PlayerController player;
     private Coroutine coroutineGiroAtual;
     private bool executandoRGB = false;
 
@@ -78,7 +78,7 @@ public class SlotMachineVisual : MonoBehaviour
 
     private void DefinirRGB(bool ligado)
     {
-        if (executandoRGB == ligado) return; 
+        if (executandoRGB == ligado) return;
         executandoRGB = ligado;
 
         if (!ligado)
@@ -89,7 +89,7 @@ public class SlotMachineVisual : MonoBehaviour
         }
     }
 
-    public void UpdateOld() { } 
+    public void UpdateOld() { }
 
     public void AtualizarVisualDosSlots(SlotMachine.TipoRecompensa s1, SlotMachine.TipoRecompensa s2, SlotMachine.TipoRecompensa s3)
     {
@@ -102,9 +102,16 @@ public class SlotMachineVisual : MonoBehaviour
             if (scriptAlavanca != null) scriptAlavanca.PuxarAlavanca();
         }
 
+        if (MusicManager.Instance != null)
+        {
+            MusicManager.Instance.PlaySFX("moeda in slot");
+            MusicManager.Instance.PlayLoopingSFX("slotmachinespin");
+        }
+
         if (framesAnimacaoGiro == null || framesAnimacaoGiro.Count == 0)
         {
             ColocarSpritesFinaisDireto(s1, s2, s3);
+            if (MusicManager.Instance != null) MusicManager.Instance.StopLoopingSFX();
             return;
         }
 
@@ -150,6 +157,8 @@ public class SlotMachineVisual : MonoBehaviour
             if (slot1Girando && Time.time >= tempoParadaSlot1)
             {
                 slot1Girando = false;
+                if (MusicManager.Instance != null) MusicManager.Instance.PlaySFX("stopslotmachine");
+
                 if (exibicaoSlot1 != null)
                 {
                     exibicaoSlot1.sprite = RetornarSpriteCorrespondente(resultado1);
@@ -159,6 +168,8 @@ public class SlotMachineVisual : MonoBehaviour
             if (slot2Girando && Time.time >= tempoParadaSlot2)
             {
                 slot2Girando = false;
+                if (MusicManager.Instance != null) MusicManager.Instance.PlaySFX("stopslotmachine");
+
                 if (exibicaoSlot2 != null)
                 {
                     exibicaoSlot2.sprite = RetornarSpriteCorrespondente(resultado2);
@@ -168,6 +179,8 @@ public class SlotMachineVisual : MonoBehaviour
             if (slot3Girando && Time.time >= tempoParadaSlot3)
             {
                 slot3Girando = false;
+                if (MusicManager.Instance != null) MusicManager.Instance.PlaySFX("stopslotmachine");
+
                 if (exibicaoSlot3 != null)
                 {
                     exibicaoSlot3.sprite = RetornarSpriteCorrespondente(resultado3);
@@ -176,6 +189,12 @@ public class SlotMachineVisual : MonoBehaviour
             }
             yield return null;
         }
+
+        if (MusicManager.Instance != null)
+        {
+            MusicManager.Instance.StopLoopingSFX();
+        }
+
         coroutineGiroAtual = null;
     }
 

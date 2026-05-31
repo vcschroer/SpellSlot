@@ -89,6 +89,11 @@ public class Enemy : MonoBehaviour
         vidaAtual -= danoQueRecebeDaEspada;
         tempoProximoDano = Time.time + intervaloInvenclibilidade;
 
+        if (MusicManager.Instance != null)
+        {
+            MusicManager.Instance.PlaySFX("hitenemy");
+        }
+
         if (scriptEfeitos != null)
         {
             scriptEfeitos.PlayFlash(0.12f);
@@ -124,6 +129,11 @@ public class Enemy : MonoBehaviour
     {
         estaMorto = true;
         direcao = Vector2.zero;
+
+        if (MusicManager.Instance != null)
+        {
+            MusicManager.Instance.PlaySFX("enemyexplosion");
+        }
 
         Collider2D colisor = GetComponent<Collider2D>();
         if (colisor != null) colisor.enabled = false;
@@ -161,8 +171,8 @@ public class Enemy : MonoBehaviour
     private void Flipar()
     {
         olhandoParaDireita = !olhandoParaDireita;
-        Vector3 rotacaoAtual = transform.eulerAngles;
-        rotacaoAtual.y = olhandoParaDireita ? 0f : 180f;
-        transform.eulerAngles = rotacaoAtual;
+        Vector3 rotator = transform.eulerAngles;
+        rotator.y = olhandoParaDireita ? 0f : 180f;
+        transform.eulerAngles = rotator;
     }
 }

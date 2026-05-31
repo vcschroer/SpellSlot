@@ -21,7 +21,6 @@ public class PlayerController : MonoBehaviour
 
     public int vidaAtual => dinheiroAtual;
 
-    // 
     public bool JackpotAtivo => scriptEspada != null && scriptEspada.EstaEmModoJackpot;
 
     [Header("Taxa de Sobrevivência")]
@@ -84,6 +83,11 @@ public class PlayerController : MonoBehaviour
         {
             if (!scriptEspada.EstaAtacando)
             {
+                if (MusicManager.Instance != null)
+                {
+                    MusicManager.Instance.PlaySFX("Atack espada");
+                }
+
                 scriptEspada.Atacar(attackSpeed, anguloMiraMouse);
 
                 if (scriptAnimacao != null)
@@ -120,6 +124,11 @@ public class PlayerController : MonoBehaviour
                 if (jackpotAtual != estavaEmJackpot)
                 {
                     estavaEmJackpot = jackpotAtual;
+
+                    if (MusicManager.Instance != null)
+                    {
+                        MusicManager.Instance.PlayJackpotSound(jackpotAtual);
+                    }
 
                     if (scriptEfeitos != null)
                     {

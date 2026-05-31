@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using System.Collections.Generic;
@@ -10,19 +10,28 @@ public struct MusicTrack
     public AudioClip clip;
 }
 
+[System.Serializable]
+public struct SFXGroup
+{
+    public string sfxName;
+    public List<AudioClip> clips;
+}
+
 public class MusicManager : MonoBehaviour
 {
     public static MusicManager Instance;
 
-    [Header("Configurações de BGM (Música)")]
+    [Header("ConfiguraÃ§Ãµes de BGM (MÃºsica)")]
     [SerializeField] private AudioSource bgmSource;
     [SerializeField] private AudioMixerGroup musicGroup;
     [SerializeField] private List<MusicTrack> musicList;
 
-    [Header("Configurações de SFX (Efeitos)")]
-    [SerializeField] private AudioSource sfxSource; 
-    [SerializeField] private AudioClip jackpotClip;
+    [Header("ConfiguraÃ§Ãµes de SFX (Efeitos)")]
+    [SerializeField] private AudioSource sfxSource;
     [SerializeField] private AudioMixerGroup sfxGroup;
+    [SerializeField] private List<SFXGroup> sfxList;
+
+    private AudioSource sfxOneShotSource;
 
     private void Awake()
     {
@@ -37,15 +46,27 @@ public class MusicManager : MonoBehaviour
             return;
         }
 
+
         if (bgmSource == null) bgmSource = gameObject.AddComponent<AudioSource>();
         bgmSource.loop = true;
         bgmSource.playOnAwake = false;
         if (musicGroup != null) bgmSource.outputAudioMixerGroup = musicGroup;
 
-        if (sfxSource == null) sfxSource = gameObject.AddComponent<AudioSource>();
-        sfxSource.loop = true;
+        if (sfxSource == null || sfxSource == bgmSource)
+        {
+            sfxSource = gameObject.AddComponent<AudioSource>();
+        }
+        sfxSource.loop = false;
         sfxSource.playOnAwake = false;
         if (sfxGroup != null) sfxSource.outputAudioMixerGroup = sfxGroup;
+
+        if (sfxOneShotSource == null || sfxOneShotSource == bgmSource || sfxOneShotSource == sfxSource)
+        {
+            sfxOneShotSource = gameObject.AddComponent<AudioSource>();
+        }
+        sfxOneShotSource.loop = false;
+        sfxOneShotSource.playOnAwake = false;
+        if (sfxGroup != null) sfxOneShotSource.outputAudioMixerGroup = sfxGroup;
     }
 
     private void OnEnable() => SceneManager.sceneLoaded += OnSceneLoaded;
@@ -70,21 +91,68 @@ public class MusicManager : MonoBehaviour
 
     public void PlayJackpotSound(bool isPlaying)
     {
-        if (jackpotClip == null) return;
-
         if (isPlaying)
         {
-            if (bgmSource.isPlaying) bgmSource.Pause();
-
-            sfxSource.clip = jackpotClip;
-            sfxSource.loop = true;
-            sfxSource.Play();
+            PlaySFX("rolljackpotsound");
+            PlayMusicManual("jackpotsong");
         }
         else
         {
-            sfxSource.Stop();
+            PlayMusicForScene(SceneManager.GetActiveScene().name);
+        }
+    }
 
-            bgmSource.UnPause();
+    public void PlaySFX(string name)
+    {
+        if (sfxList == null) return;
+
+        foreach (var group in sfxList)
+        {
+            if (group.sfxName.Equals(name, System.StringComparison.OrdinalIgnoreCase))
+            {
+                if (group.clips != null && group.clips.Count > 0)
+                {
+                    int randomIndex = Random.Range(0, group.clips.Count);
+
+                    sfxOneShotSource.PlayOneShot(group.clips[randomIndex]);
+                    return;
+                }
+            }
+        }
+    }
+
+    public void PlayLoopingSFX(string name)
+    {
+        if (sfxList == null) return;
+
+        foreach (var group in sfxList)
+        {
+            if (group.sfxName.Equals(name, System.StringComparison.OrdinalIgnoreCase))
+            {
+                if (group.clips != null && group.clips.Count > 0)
+                {
+                    sfxSource.clip = group.clips[0];
+                    sfxSource.loop = true;
+                    sfxSource.Play();
+                    return;
+                }
+            }
+        }
+    }
+
+    public void StopLoopingSFX() => sfxSource.Stop();
+
+    public void PlayMusicManual(string trackIdentifier)
+    {
+        foreach (var track in musicList)
+        {
+            if (track.sceneName.Equals(trackIdentifier, System.StringComparison.OrdinalIgnoreCase))
+            {
+                if (bgmSource.clip == track.clip && bgmSource.isPlaying) return;
+                bgmSource.clip = track.clip;
+                bgmSource.Play();
+                return;
+            }
         }
     }
 }
