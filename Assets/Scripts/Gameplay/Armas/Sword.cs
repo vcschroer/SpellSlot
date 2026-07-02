@@ -1,10 +1,15 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class Sword : MonoBehaviour
+public class Sword : BaseWeapon
 {
-    [Header("Configurações Base do Ataque")]
+    [Header("ConfiguraÃ§Ãµes de Ã“rbita")]
+    [SerializeField] private Vector2 centroDoPlayerOffset = new Vector2(0f, 0.2f);
+    [SerializeField] private float raioDaOrbita = 1.2f;
+
+    [Header("ConfiguraÃ§Ãµes Base do Ataque")]
     [SerializeField] private float anguloInicial = 45f;
     [SerializeField] private float anguloFinal = -45f;
     [SerializeField] private float velocidadeAtaqueBase = 20f;
@@ -15,61 +20,89 @@ public class Sword : MonoBehaviour
     [SerializeField] private GameObject prefabMeioLamina;
     [SerializeField] private GameObject prefabPontaLamina;
 
-    [Header("Configurações de Tamanho")]
-    [SerializeField] public int quantidadeSegmentosMeio = 3;
+    [Header("ConfiguraÃ§Ãµes de Tamanho")]
+    [SerializeField] private int quantidadeSegmentosMeio = 3;
     [SerializeField] private float tamanhoDoSegmentoY = 0.5f;
-
-    [Tooltip("Unidades extras para empurrar a ponta além do último gomo")]
     [SerializeField] private float deslocamentoDaPonta = 0.5f;
 
-    [Header("Configurações de Hitbox Global")]
+    [Header("ConfiguraÃ§Ãµes de Hitbox Global")]
     [SerializeField] private float larguraDoCorte = 0.8f;
     [SerializeField] private LayerMask layerDosInimigos;
 
-    [Header("Configurações de Jackpot")]
-    public bool EstaEmModoJackpot { get; private set; }
-    private float tempoJackpotRestante;
-    private float anguloRotacaoJackpot = 0f;
-
-    [Header("Configurações de Jackpot")]
-    [Tooltip("Duração em segundos do efeito")]
+    [Header("ConfiguraÃ§Ãµes de Jackpot")]
     [SerializeField] public float duracaoJackpot = 5f;
-    [Tooltip("Velocidade de rotação da espada durante o jackpot")]
     [SerializeField] public float velocidadeGiroJackpot = 360f;
 
+    private float tempoJackpotRestante;
+    private float anguloRotacaoJackpot = 0f;
     private bool atacando = false;
+    private float anguloMiraMouse;
     private List<GameObject> segmentosCriados = new List<GameObject>();
-
     private bool deveReconstruir = false;
-
     private HashSet<Enemy> inimigosAtingidosNesteGolpe = new HashSet<Enemy>();
 
     public int QuantidadeSegmentosMeio => quantidadeSegmentosMeio;
     public bool EstaAtacando => atacando;
     public float AnguloInicial => anguloInicial;
 
-    void Start()
+    protected override void Start()
     {
+        tipoArma = TipoArma.Espada; // Garante o tipo correto
+        base.Start();
         ConstruirEspada();
 
-        if (layerDosInimigos == 0)
-        {
-            layerDosInimigos = LayerMask.GetMask("Default");
-        }
+        if (layerDosInimigos == 0) layerDosInimigos = LayerMask.GetMask("Default");
     }
 
-    private void OnValidate()
-    {
-        deveReconstruir = true;
-    }
+    private void OnValidate() => deveReconstruir = true;
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         if (deveReconstruir)
         {
             deveReconstruir = false;
             ConstruirEspada();
         }
+
+        if (!atacando && !EstaEmModoJackpot)
+        {
+            AtualizarPosicaoOrbita();
+        }
+    }
+
+    protected override void DispararAtaqueAutomatico()
+    {
+        if (!atacando && player != null)
+        {
+            if (MusicManager.Instance != null) MusicManager.Instance.PlaySFX("Atack espada");
+
+            player.DispararAnimacaoAtaqueExterno();
+
+            // ðŸŒŸ Passa o weaponAttackSpeed exclusivo da espada para a animaÃ§Ã£o do golpe!
+            StartCoroutine(RotinaGolpe(weaponAttackSpeed, anguloMiraMouse));
+        }
+    }
+
+    private void AtualizarPosicaoOrbita()
+    {
+        if (player == null || Camera.main == null || Mouse.current == null) return;
+
+        Vector2 posicaoMouseTela = Mouse.current.position.ReadValue();
+        Vector3 posicaoMouseMundo = Camera.main.ScreenToWorldPoint(posicaoMouseTela);
+        posicaoMouseMundo.z = 0f;
+
+        Vector3 centroRealPlayer = player.transform.position + (Vector3)centroDoPlayerOffset;
+        Vector2 direcao = (posicaoMouseMundo - centroRealPlayer).normalized;
+
+        anguloMiraMouse = Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg;
+        Vector3 deslocamento = (Vector3)direcao * raioDaOrbita;
+
+        transform.localPosition = (Vector3)centroDoPlayerOffset + deslocamento;
+
+        float ajusteAngulo = (anguloMiraMouse > 90f || anguloMiraMouse < -90f) ? -anguloInicial : anguloInicial;
+        transform.localRotation = Quaternion.Euler(0, 0, anguloMiraMouse + 90f + ajusteAngulo);
     }
 
     public void MudarQuantidadeSegmentos(int novaQuantidade)
@@ -80,49 +113,38 @@ public class Sword : MonoBehaviour
 
     private void ConstruirEspada()
     {
-        foreach (GameObject segmento in segmentosCriados)
+        foreach (GameObject seg in segmentosCriados)
         {
-            if (segmento != null)
+            if (seg != null)
             {
-                if (Application.isPlaying) Destroy(segmento);
-                else DestroyImmediate(segmento);
+                if (Application.isPlaying) Destroy(seg);
+                else DestroyImmediate(seg);
             }
         }
         segmentosCriados.Clear();
 
-        float posicaoYAtual = 0f;
-
+        float posY = 0f;
         if (prefabCabo != null)
         {
             GameObject cabo = Instantiate(prefabCabo, transform);
-            cabo.transform.localPosition = new Vector3(0, posicaoYAtual, 0);
+            cabo.transform.localPosition = new Vector3(0, posY, 0);
             segmentosCriados.Add(cabo);
-            posicaoYAtual += tamanhoDoSegmentoY;
+            posY += tamanhoDoSegmentoY;
         }
 
         for (int i = 0; i < quantidadeSegmentosMeio; i++)
         {
             GameObject meio = Instantiate(prefabMeioLamina, transform);
-            meio.transform.localPosition = new Vector3(0, posicaoYAtual, 0);
+            meio.transform.localPosition = new Vector3(0, posY, 0);
             segmentosCriados.Add(meio);
-            posicaoYAtual += tamanhoDoSegmentoY;
+            posY += tamanhoDoSegmentoY;
         }
 
         if (prefabPontaLamina != null)
         {
             GameObject ponta = Instantiate(prefabPontaLamina, transform);
-            float baseDaPontaY = posicaoYAtual - tamanhoDoSegmentoY;
-            ponta.transform.localPosition = new Vector3(0, baseDaPontaY + deslocamentoDaPonta, 0);
+            ponta.transform.localPosition = new Vector3(0, (posY - tamanhoDoSegmentoY) + deslocamentoDaPonta, 0);
             segmentosCriados.Add(ponta);
-        }
-    }
-
-
-    public void Atacar(float multiplicadorVelocidade, float anguloDoClique)
-    {
-        if (!atacando)
-        {
-            StartCoroutine(RotinaGolpe(multiplicadorVelocidade, anguloDoClique));
         }
     }
 
@@ -139,7 +161,6 @@ public class Sword : MonoBehaviour
         float anguloLocalFinal = estaNaEsquerda ? (anguloBaseAtaque - anguloFinal) : (anguloBaseAtaque + anguloFinal);
 
         float progresso = 0f;
-
         while (progresso < 1f)
         {
             progresso += velAtaqueAtual * Time.deltaTime;
@@ -154,7 +175,6 @@ public class Sword : MonoBehaviour
 
         progresso = 0f;
         float velRetornoAtual = velocidadeRetornoBase * multiplicador;
-
         while (progresso < 1f)
         {
             progresso += velRetornoAtual * Time.deltaTime;
@@ -173,13 +193,13 @@ public class Sword : MonoBehaviour
 
         for (int i = 0; i <= pontosDeChecagem; i++)
         {
-            float distanciaAoLongoDaLamina = (comprimentoTotal / pontosDeChecagem) * i;
-            Vector3 posicaoPonto = transform.TransformPoint(new Vector3(0, distanciaAoLongoDaLamina, 0));
-            Collider2D[] colisoresEncontrados = Physics2D.OverlapCircleAll(posicaoPonto, larguraDoCorte / 2f, layerDosInimigos);
+            float dist = (comprimentoTotal / pontosDeChecagem) * i;
+            Vector3 pos = transform.TransformPoint(new Vector3(0, dist, 0));
+            Collider2D[] colisores = Physics2D.OverlapCircleAll(pos, larguraDoCorte / 2f, layerDosInimigos);
 
-            foreach (Collider2D colisor in colisoresEncontrados)
+            foreach (Collider2D col in colisores)
             {
-                Enemy inimigo = colisor.GetComponent<Enemy>();
+                Enemy inimigo = col.GetComponent<Enemy>();
                 if (inimigo != null && !inimigosAtingidosNesteGolpe.Contains(inimigo))
                 {
                     inimigo.TomarDano();
@@ -189,25 +209,10 @@ public class Sword : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        if (!atacando) return;
-        Gizmos.color = Color.red;
-        float comprimentoTotal = (1 + quantidadeSegmentosMeio) * tamanhoDoSegmentoY + deslocamentoDaPonta;
-        int pontosDeChecagem = Mathf.CeilToInt(comprimentoTotal / (larguraDoCorte * 0.4f));
-
-        for (int i = 0; i <= pontosDeChecagem; i++)
-        {
-            float dist = (comprimentoTotal / pontosDeChecagem) * i;
-            Vector3 pos = transform.TransformPoint(new Vector3(0, dist, 0));
-            Gizmos.DrawWireSphere(pos, larguraDoCorte / 2f);
-        }
-    }
-
-    public void AtivarJackpot(Vector2 offset, float raio)
+    public override void AtivarJackpot(Vector2 offset, float raio)
     {
         EstaEmModoJackpot = true;
-        MusicManager.Instance.PlayJackpotSound(true);
+        if (MusicManager.Instance != null) MusicManager.Instance.PlayJackpotSound(true);
         tempoJackpotRestante = duracaoJackpot;
         StartCoroutine(RotinaJackpot(offset, raio));
     }
@@ -242,9 +247,23 @@ public class Sword : MonoBehaviour
 
         atacando = false;
         EstaEmModoJackpot = false;
-        MusicManager.Instance.PlayJackpotSound(false);
+        if (MusicManager.Instance != null) MusicManager.Instance.PlayJackpotSound(false);
         transform.localRotation = Quaternion.identity;
         inimigosAtingidosNesteGolpe.Clear();
     }
-}
 
+    private void OnDrawGizmos()
+    {
+        if (!atacando) return;
+        Gizmos.color = Color.red;
+        float comprimentoTotal = (1 + quantidadeSegmentosMeio) * tamanhoDoSegmentoY + deslocamentoDaPonta;
+        int pontosDeChecagem = Mathf.CeilToInt(comprimentoTotal / (larguraDoCorte * 0.4f));
+
+        for (int i = 0; i <= pontosDeChecagem; i++)
+        {
+            float dist = (comprimentoTotal / pontosDeChecagem) * i;
+            Vector3 pos = transform.TransformPoint(new Vector3(0, dist, 0));
+            Gizmos.DrawWireSphere(pos, larguraDoCorte / 2f);
+        }
+    }
+}

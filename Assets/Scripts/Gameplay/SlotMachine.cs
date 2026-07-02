@@ -7,14 +7,13 @@ public class SlotMachine : MonoBehaviour
 {
     public enum TipoRecompensa { Dinheiro, TamanhoEspada, VelocidadeAtaque, VelocidadePlayer, Vazio }
 
-    [Header("Referências do Player")]
+    [Header("Referencias do Player")]
     [SerializeField] private PlayerController scriptPlayer;
-    [SerializeField] private Sword scriptEspada;
 
-    [Header("Conexão com a Parte Visual")]
+    [Header("Conexao com a Parte Visual")]
     [SerializeField] private SlotMachineVisual scriptVisual;
 
-    [Header("Configurações do Giro")]
+    [Header("Configuracoes do Giro")]
     [SerializeField] private int custoVidaPorGiro = 10;
     [SerializeField] private float tempoCooldown = 2.0f;
 
@@ -22,7 +21,7 @@ public class SlotMachine : MonoBehaviour
     [SerializeField] private int girosParaGarantirPremio = 5;
     private int contadorGirosPerdidos = 0;
 
-    [Header("Configuração de Sorte Acumulada")]
+    [Header("Configuracao de Sorte Acumulada")]
     [Range(0f, 100f)]
     [SerializeField] private float chanceJackpotMelhorada = 40f;
 
@@ -30,37 +29,39 @@ public class SlotMachine : MonoBehaviour
     [SerializeField] private int girosBloqueadosPosJackpot = 3;
     private int girosSemJackpotRestantes = 0;
 
-    [Header("Valores dos Bônus - DINHEIRO")]
+    [Header("Valores dos Bonus - DINHEIRO")]
     [SerializeField] private int dinheiroPequeno = 50;
     [SerializeField] private int dinheiroGrande = 200;
 
-    [Header("Valores dos Bônus - TAMANHO DA ESPADA")]
+    [Header("Valores dos Bonus - TAMANHO DA ESPADA")]
     [SerializeField] private int gomosPequeno = 1;
     [SerializeField] private int gomosGrande = 3;
 
-    [Header("Valores dos Bônus - VELOCIDADE DE ATAQUE")]
+    [Header("Valores dos Bonus - VELOCIDADE DE ATAQUE")]
     [SerializeField] private float velAtaquePequeno = 0.25f;
     [SerializeField] private float velAtaqueGrande = 0.75f;
 
-    [Header("Valores dos Bônus - VELOCIDADE DO PLAYER")]
+    [Header("Valores dos Bonus - VELOCIDADE DO PLAYER")]
     [SerializeField] private float velPlayerPequeno = 1.5f;
     [SerializeField] private float velPlayerGrande = 4f;
 
     private float momentoProximoGiroPermitido = 0f;
     private bool menuAberto = false;
     private bool proximoGiroTemSorteGeral = false;
-    private bool estaProcessandoGiro = false; 
+    private bool estaProcessandoGiro = false;
 
     void Update()
     {
         if (Mouse.current.rightButton.wasPressedThisFrame)
         {
-            AlternarCaçaNiquel();
+            AlternarCacaNiquel();
         }
     }
 
-    private void AlternarCaçaNiquel()
+    private void AlternarCacaNiquel()
     {
+        if (scriptPlayer == null) scriptPlayer = Object.FindFirstObjectByType<PlayerController>();
+
         if (scriptPlayer == null || estaProcessandoGiro) return;
 
         if (Time.time < momentoProximoGiroPermitido)
@@ -81,13 +82,13 @@ public class SlotMachine : MonoBehaviour
         {
             momentoProximoGiroPermitido = Time.time + tempoCooldown;
             scriptPlayer.PerderDinheiro(custoVidaPorGiro);
-            GirarCaçaNiquel();
+            GirarCacaNiquel();
         }
     }
 
-    private void GirarCaçaNiquel()
+    private void GirarCacaNiquel()
     {
-        estaProcessandoGiro = true; 
+        estaProcessandoGiro = true;
 
         TipoRecompensa slot1, slot2, slot3;
         bool travaAtiva = girosSemJackpotRestantes > 0;
@@ -99,7 +100,7 @@ public class SlotMachine : MonoBehaviour
             slot1 = premioGarantido;
             slot2 = premioGarantido;
             slot3 = premioGarantido;
-            Debug.Log($"[PITY SYSTEM]: Vitória forçada após {contadorGirosPerdidos} giros perdidos!");
+            Debug.Log($"[PITY SYSTEM]: Vitoria forcada apos {contadorGirosPerdidos} giros perdidos!");
         }
         else if (!travaAtiva && proximoGiroTemSorteGeral && Random.Range(0f, 100f) <= chanceJackpotMelhorada)
         {
@@ -132,7 +133,7 @@ public class SlotMachine : MonoBehaviour
         }
         else
         {
-            yield return new WaitForSeconds(2.0f); 
+            yield return new WaitForSeconds(2.0f);
         }
 
         proximoGiroTemSorteGeral = false;
@@ -154,8 +155,15 @@ public class SlotMachine : MonoBehaviour
             Vector2 offset = (Vector2)typeof(PlayerController).GetField("centroDoPlayerOffset", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(scriptPlayer);
             float raio = (float)typeof(PlayerController).GetField("raioDaOrbita", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(scriptPlayer);
 
-            scriptEspada.AtivarJackpot(offset, raio);
-            Debug.Log("[JACKPOT] Ativado com sucesso após a parada dos slots!");
+            // Modificado: Ativa o Jackpot para todas as armas que o player estiver segurando no momento
+            foreach (BaseWeapon arma in scriptPlayer.armasEquipadas)
+            {
+                if (arma != null)
+                {
+                    arma.AtivarJackpot(offset, raio);
+                }
+            }
+            Debug.Log("[JACKPOT] Ativado com sucesso para as armas equipadas!");
         }
         else if (qtdDinheiro == 2 || qtdTamanho == 2 || qtdVelAtaque == 2 || qtdVelPlayer == 2)
         {
@@ -191,16 +199,30 @@ public class SlotMachine : MonoBehaviour
 
     private void AplicarRecompensaTamanho(int quantidade)
     {
-        if (quantidade < 2 || scriptEspada == null) return;
-        int gomos = quantidade switch { 2 => gomosPequeno, 3 => gomosGrande, _ => 0 }; 
-        scriptEspada.MudarQuantidadeSegmentos(scriptEspada.QuantidadeSegmentosMeio + gomos);
+        if (quantidade < 2 || scriptPlayer == null) return;
+
+        // Modificado: Encontra a espada dinamicamente para nao quebrar se o jogador for o Atirador
+        Sword espadaEquipada = scriptPlayer.ObterArmaPorTipo(TipoArma.Espada) as Sword;
+        if (espadaEquipada != null)
+        {
+            int gomos = quantidade switch { 2 => gomosPequeno, 3 => gomosGrande, _ => 0 };
+            espadaEquipada.MudarQuantidadeSegmentos(espadaEquipada.QuantidadeSegmentosMeio + gomos);
+        }
     }
 
     private void AplicarRecompensaVelocidadeAtaque(int quantidade)
     {
         if (quantidade < 2 || scriptPlayer == null) return;
         float vel = quantidade switch { 2 => velAtaquePequeno, 3 => velAtaqueGrande, _ => 0f };
-        scriptPlayer.attackSpeed += vel;
+
+        // SOLUCAO DO ERRO: Distribui o bonus para cada arma individual na lista do Player
+        foreach (BaseWeapon arma in scriptPlayer.armasEquipadas)
+        {
+            if (arma != null)
+            {
+                arma.weaponAttackSpeed += vel;
+            }
+        }
     }
 
     private void AplicarRecompensaVelocidadePlayer(int quantidade)

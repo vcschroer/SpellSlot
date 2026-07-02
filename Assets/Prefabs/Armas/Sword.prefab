@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9008489062227046977
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7580817851732810396}
+  - component: {fileID: 142559767687602361}
+  m_Layer: 0
+  m_Name: Sword
+  m_TagString: Untagged
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7580817851732810396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9008489062227046977}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0.004137046, w: -0.9999915}
+  m_LocalPosition: {x: 1.07, y: -0.03, z: 0}
+  m_LocalScale: {x: 0.22388066, y: 0.26041037, z: 0.19871227}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.474}
+--- !u!114 &142559767687602361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9008489062227046977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d0328c806e84394594819c1ad985e95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Sword
+  anguloInicial: -90
+  anguloFinal: -200
+  velocidadeAtaqueBase: 5
+  velocidadeRetornoBase: 5
+  prefabCabo: {fileID: 8627269263969308266, guid: b1672f68e696fb840bf50c7e329cd028, type: 3}
+  prefabMeioLamina: {fileID: 9068567274452352512, guid: d0f0a795fb2692546ba6ea614175f738, type: 3}
+  prefabPontaLamina: {fileID: 8372954289619658168, guid: ae08bb500050c9644be289a4d39ae42b, type: 3}
+  quantidadeSegmentosMeio: 2
+  tamanhoDoSegmentoY: 3.07
+  deslocamentoDaPonta: 13.6
+  larguraDoCorte: 0.8
+  layerDosInimigos:
+    serializedVersion: 2
+    m_Bits: 64
+  duracaoJackpot: 10
+  velocidadeGiroJackpot: 1000

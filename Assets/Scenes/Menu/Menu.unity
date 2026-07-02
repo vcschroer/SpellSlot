@@ -3211,7 +3211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aebef9e541050814a8a7946127f73b1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Menu
-  nomeDaCenaDoJogo: Game
+  nomeDaCenaDoJogo: SelectionPreGame
   painelPrincipal: {fileID: 538968027}
   painelOpcoes: {fileID: 1192887507}
   painelTutorial: {fileID: 505315326}

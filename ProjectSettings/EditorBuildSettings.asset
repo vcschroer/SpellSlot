@@ -6,19 +6,22 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Menu.unity
+    path: Assets/Scenes/Menu/Menu.unity
     guid: 87f7973930453b449a0044e18d59a5e9
   - enabled: 1
-    path: Assets/Scenes/Tutorial.unity
+    path: Assets/Scenes/Menu/SelectionPreGame.unity
+    guid: dd6bfade2a2a6704991668f782510e18
+  - enabled: 1
+    path: Assets/Scenes/Menu/Tutorial.unity
     guid: ea853043e910aeb4eb53332d1c76ffd2
   - enabled: 1
-    path: Assets/Scenes/Game.unity
+    path: Assets/Scenes/Mundos/Mundo1.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
-    path: Assets/Scenes/Defeat.unity
+    path: Assets/Scenes/Menu/Defeat.unity
     guid: c63653faef7cd784f967b21281c6f60e
   - enabled: 1
-    path: Assets/Scenes/Win.unity
+    path: Assets/Scenes/Menu/Win.unity
     guid: 83b57be8b02397248aa25844d122d714
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
