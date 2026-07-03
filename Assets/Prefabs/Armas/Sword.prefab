@@ -44,6 +44,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d0328c806e84394594819c1ad985e95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Sword
+  tipoArma: 0
+  tempoEntreAtaquesBase: 1.5
+  weaponAttackSpeed: 1
+  centroDoPlayerOffset: {x: 0, y: -2.3}
+  distanciaDireita: 5
+  distanciaEsquerda: 5
+  anguloEmRepouso: -30
   anguloInicial: -90
   anguloFinal: -200
   velocidadeAtaqueBase: 5
@@ -52,7 +59,7 @@ MonoBehaviour:
   prefabMeioLamina: {fileID: 9068567274452352512, guid: d0f0a795fb2692546ba6ea614175f738, type: 3}
   prefabPontaLamina: {fileID: 8372954289619658168, guid: ae08bb500050c9644be289a4d39ae42b, type: 3}
   quantidadeSegmentosMeio: 2
-  tamanhoDoSegmentoY: 3.07
+  tamanhoDoSegmentoY: 11.1
   deslocamentoDaPonta: 13.6
   larguraDoCorte: 0.8
   layerDosInimigos:

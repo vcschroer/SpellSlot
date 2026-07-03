@@ -1,15 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Sword : BaseWeapon
 {
-    [Header("Configurações de Órbita")]
+    [Header("Configuracoes de Posicao Fixa")]
     [SerializeField] private Vector2 centroDoPlayerOffset = new Vector2(0f, 0.2f);
-    [SerializeField] private float raioDaOrbita = 1.2f;
 
-    [Header("Configurações Base do Ataque")]
+    [Tooltip("Distancia que a espada fica quando o player olha para a DIREITA")]
+    [SerializeField] private float distanciaDireita = 0.8f;
+
+    [Tooltip("Distancia que a espada fica quando o player olha para a ESQUERDA")]
+    [SerializeField] private float distanciaEsquerda = 0.8f;
+
+    [Tooltip("O angulo que a espada fica inclinada quando nao esta atacando")]
+    [SerializeField] private float anguloEmRepouso = 0f;
+
+    [Header("Configuracoes Base do Ataque")]
     [SerializeField] private float anguloInicial = 45f;
     [SerializeField] private float anguloFinal = -45f;
     [SerializeField] private float velocidadeAtaqueBase = 20f;
@@ -20,26 +27,27 @@ public class Sword : BaseWeapon
     [SerializeField] private GameObject prefabMeioLamina;
     [SerializeField] private GameObject prefabPontaLamina;
 
-    [Header("Configurações de Tamanho")]
+    [Header("Configuracoes de Tamanho")]
     [SerializeField] private int quantidadeSegmentosMeio = 3;
     [SerializeField] private float tamanhoDoSegmentoY = 0.5f;
     [SerializeField] private float deslocamentoDaPonta = 0.5f;
 
-    [Header("Configurações de Hitbox Global")]
+    [Header("Configuracoes de Hitbox Global")]
     [SerializeField] private float larguraDoCorte = 0.8f;
     [SerializeField] private LayerMask layerDosInimigos;
 
-    [Header("Configurações de Jackpot")]
+    [Header("Configuracoes de Jackpot")]
     [SerializeField] public float duracaoJackpot = 5f;
     [SerializeField] public float velocidadeGiroJackpot = 360f;
 
     private float tempoJackpotRestante;
     private float anguloRotacaoJackpot = 0f;
     private bool atacando = false;
-    private float anguloMiraMouse;
     private List<GameObject> segmentosCriados = new List<GameObject>();
     private bool deveReconstruir = false;
     private HashSet<Enemy> inimigosAtingidosNesteGolpe = new HashSet<Enemy>();
+
+    private Vector3 escalaOriginal;
 
     public int QuantidadeSegmentosMeio => quantidadeSegmentosMeio;
     public bool EstaAtacando => atacando;
@@ -47,8 +55,11 @@ public class Sword : BaseWeapon
 
     protected override void Start()
     {
-        tipoArma = TipoArma.Espada; // Garante o tipo correto
+        tipoArma = TipoArma.Espada;
         base.Start();
+
+        escalaOriginal = transform.localScale;
+
         ConstruirEspada();
 
         if (layerDosInimigos == 0) layerDosInimigos = LayerMask.GetMask("Default");
@@ -68,7 +79,7 @@ public class Sword : BaseWeapon
 
         if (!atacando && !EstaEmModoJackpot)
         {
-            AtualizarPosicaoOrbita();
+            AtualizarPosicaoFixa();
         }
     }
 
@@ -80,29 +91,42 @@ public class Sword : BaseWeapon
 
             player.DispararAnimacaoAtaqueExterno();
 
-            // 🌟 Passa o weaponAttackSpeed exclusivo da espada para a animação do golpe!
-            StartCoroutine(RotinaGolpe(weaponAttackSpeed, anguloMiraMouse));
+            float direcaoX = ObterDirecaoOlharPlayer();
+            float anguloDirecao = direcaoX < 0 ? 180f : 0f;
+
+            StartCoroutine(RotinaGolpe(weaponAttackSpeed, anguloDirecao));
         }
     }
 
-    private void AtualizarPosicaoOrbita()
+    private void AtualizarPosicaoFixa()
     {
-        if (player == null || Camera.main == null || Mouse.current == null) return;
+        if (player == null) return;
 
-        Vector2 posicaoMouseTela = Mouse.current.position.ReadValue();
-        Vector3 posicaoMouseMundo = Camera.main.ScreenToWorldPoint(posicaoMouseTela);
-        posicaoMouseMundo.z = 0f;
+        float direcaoX = ObterDirecaoOlharPlayer();
 
-        Vector3 centroRealPlayer = player.transform.position + (Vector3)centroDoPlayerOffset;
-        Vector2 direcao = (posicaoMouseMundo - centroRealPlayer).normalized;
+        float distanciaAtual = direcaoX > 0 ? distanciaDireita : -distanciaEsquerda;
 
-        anguloMiraMouse = Mathf.Atan2(direcao.y, direcao.x) * Mathf.Rad2Deg;
-        Vector3 deslocamento = (Vector3)direcao * raioDaOrbita;
+        transform.localPosition = new Vector3(centroDoPlayerOffset.x + distanciaAtual, centroDoPlayerOffset.y, 0f);
 
-        transform.localPosition = (Vector3)centroDoPlayerOffset + deslocamento;
+        transform.localScale = new Vector3(escalaOriginal.x * direcaoX, escalaOriginal.y, escalaOriginal.z);
 
-        float ajusteAngulo = (anguloMiraMouse > 90f || anguloMiraMouse < -90f) ? -anguloInicial : anguloInicial;
-        transform.localRotation = Quaternion.Euler(0, 0, anguloMiraMouse + 90f + ajusteAngulo);
+        float anguloCalculado = direcaoX < 0 ? -anguloEmRepouso : anguloEmRepouso;
+        transform.localRotation = Quaternion.Euler(0, 0, anguloCalculado);
+    }
+
+    private float ObterDirecaoOlharPlayer()
+    {
+        if (player == null) return 1f;
+
+        SpriteRenderer sr = player.GetComponentInChildren<SpriteRenderer>();
+        if (sr != null && sr.flipX) return -1f;
+
+        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
+        if (rb != null && rb.linearVelocity.x < -0.1f) return -1f;
+
+        if (player.transform.localScale.x < 0f) return -1f;
+
+        return 1f;
     }
 
     public void MudarQuantidadeSegmentos(int novaQuantidade)
@@ -148,14 +172,15 @@ public class Sword : BaseWeapon
         }
     }
 
-    private IEnumerator RotinaGolpe(float multiplicador, float anguloDoClique)
+    private IEnumerator RotinaGolpe(float multiplicador, float anguloBaseDirecao)
     {
         atacando = true;
         inimigosAtingidosNesteGolpe.Clear();
 
         float velAtaqueAtual = velocidadeAtaqueBase * multiplicador;
-        bool estaNaEsquerda = anguloDoClique > 90f || anguloDoClique < -90f;
-        float anguloBaseAtaque = anguloDoClique + 90f;
+        float anguloBaseAtaque = anguloBaseDirecao + 90f;
+
+        bool estaNaEsquerda = anguloBaseDirecao > 90f;
 
         float anguloLocalInicial = estaNaEsquerda ? (anguloBaseAtaque - anguloInicial) : (anguloBaseAtaque + anguloInicial);
         float anguloLocalFinal = estaNaEsquerda ? (anguloBaseAtaque - anguloFinal) : (anguloBaseAtaque + anguloFinal);

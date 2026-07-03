@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2167610684955603649}
   - component: {fileID: 2407198295956532463}
+  - component: {fileID: 6090519357975346339}
   - component: {fileID: 2266588084335388751}
   - component: {fileID: 8343117181792477981}
   m_Layer: 0
@@ -93,6 +94,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &6090519357975346339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3895020279928890353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78076608be677924b9e89be88076215d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Bullet
+  ricochetesRestantes: 3
+  raioBuscaRicochete: 8
 --- !u!50 &2266588084335388751
 Rigidbody2D:
   serializedVersion: 5

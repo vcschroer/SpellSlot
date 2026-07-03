@@ -1151,17 +1151,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 0b6da2255596dfa41875fa9864b8362a, type: 3}
     - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
-      propertyPath: spriteAnguloAtaque
+      propertyPath: spritePistolBalas
       value: 
-      objectReference: {fileID: 2654921165513091960, guid: df5f528c38f91a3469bffa339d046856, type: 3}
+      objectReference: {fileID: 1519066167934113422, guid: 8c7ba7a15f42b35428017c93abb35e02, type: 3}
     - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
       propertyPath: spriteTamanhoEspada
       value: 
       objectReference: {fileID: 21300000, guid: 64a164d3a52018d4a815823df6adfb97, type: 3}
     - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
-      propertyPath: spriteVelocidadeAtaque
+      propertyPath: spritePistolRicochete
+      value: 
+      objectReference: {fileID: 1668105785596205350, guid: 04a6b93d4ceed694aa4c201405511d69, type: 3}
+    - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
+      propertyPath: spriteVelAtaqueEspada
       value: 
       objectReference: {fileID: 21300000, guid: 6a455fbfa90f4c542b4e0ada23d29d21, type: 3}
+    - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
+      propertyPath: spriteVelAtaquePistola
+      value: 
+      objectReference: {fileID: 2494944553380936020, guid: 18087a941db0ddf40b423651ad66e013, type: 3}
     - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
       propertyPath: spriteVelocidadePlayer
       value: 
@@ -1626,7 +1634,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: raioMinimoSpawn
-      value: 30
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: quantidadeInicial

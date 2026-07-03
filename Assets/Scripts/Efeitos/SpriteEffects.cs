@@ -28,6 +28,7 @@ public class SpriteEffects : MonoBehaviour
 
     void Awake()
     {
+        if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null) spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         if (transformVisual == null)
@@ -36,26 +37,25 @@ public class SpriteEffects : MonoBehaviour
             else transformVisual = transform;
         }
 
-        escalaOriginal = transformVisual.localScale;
-
-        if (spriteRenderer != null)
+        if (spriteRenderer == null)
         {
-            corOriginal = spriteRenderer.color;
-            materialOriginal = spriteRenderer.material;
+            Debug.LogError($"[SpriteEffects] ERRO: Nenhum SpriteRenderer foi encontrado em '{gameObject.name}' ou nos seus filhos!");
+            return;
         }
+
+        escalaOriginal = transformVisual.localScale;
+        corOriginal = spriteRenderer.color;
+        materialOriginal = spriteRenderer.material;
     }
 
-    void Update()
+    void LateUpdate()
     {
         if (executandoRGB && spriteRenderer != null && !aplicandoFlash)
         {
             float h = (Time.time * velocidadeRGB) % 1f;
             spriteRenderer.color = Color.HSVToRGB(h, 0.8f, 1f);
         }
-    }
 
-    void LateUpdate()
-    {
         if (aplicandoSquash && transformVisual != null)
         {
             transformVisual.localScale = escalaAtualEfeito;
@@ -70,10 +70,11 @@ public class SpriteEffects : MonoBehaviour
             }
             else
             {
-                spriteRenderer.color = Color.red; 
+                spriteRenderer.color = Color.red;
             }
         }
     }
+
     public void PlaySquashAndStretch(float forcaX, float forcaY, float duracao)
     {
         if (!gameObject.activeInHierarchy) return;
@@ -108,6 +109,7 @@ public class SpriteEffects : MonoBehaviour
         if (transformVisual != null) transformVisual.localScale = escalaOriginal;
         aplicandoSquash = false;
     }
+
     public void PlayFlash(float duracao)
     {
         if (!gameObject.activeInHierarchy) return;
@@ -133,6 +135,9 @@ public class SpriteEffects : MonoBehaviour
     public void DefinirRGB(bool ligado)
     {
         executandoRGB = ligado;
+
+        Debug.Log($"[SpriteEffects]: Estado RGB alterado para: {ligado} no objeto {gameObject.name}");
+
         if (!ligado && spriteRenderer != null)
         {
             spriteRenderer.material = materialOriginal;

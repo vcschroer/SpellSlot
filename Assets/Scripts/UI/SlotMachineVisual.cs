@@ -16,14 +16,17 @@ public class SlotMachineVisual : MonoBehaviour
     [Header("Sprites das Recompensas (Resultado Final)")]
     [SerializeField] private Sprite spriteDinheiro;
     [SerializeField] private Sprite spriteTamanhoEspada;
-    [SerializeField] private Sprite spriteVelocidadeAtaque;
+    [SerializeField] private Sprite spriteVelAtaqueEspada;   
+    [SerializeField] private Sprite spriteVelAtaquePistola;  
     [SerializeField] private Sprite spriteVelocidadePlayer;
+    [SerializeField] private Sprite spritePistolBalas;       
+    [SerializeField] private Sprite spritePistolRicochete;   
     [SerializeField] private Sprite spriteVazio;
 
-    [Header("Frames da Animação de Giro")]
+    [Header("Frames da Animacao de Giro")]
     [SerializeField] private List<Sprite> framesAnimacaoGiro = new List<Sprite>();
 
-    [Header("Configurações do Tempo de Giro")]
+    [Header("Configuracoes do Tempo de Giro")]
     [SerializeField] private float tempoGiroBase = 1.0f;
     [SerializeField] private float intervaloEntreSlots = 0.5f;
     [SerializeField] private float tempoPorFrame = 0.05f;
@@ -33,7 +36,7 @@ public class SlotMachineVisual : MonoBehaviour
     [SerializeField] private float duracaoSubida = 0.08f;
     [SerializeField] private float duracaoDescida = 0.12f;
 
-    [Header("Configurações do RGB (Jackpot)")]
+    [Header("Configuracoes do RGB (Jackpot)")]
     [SerializeField] private float velocidadeRGB = 2f;
 
     private PlayerController player;
@@ -244,8 +247,11 @@ public class SlotMachineVisual : MonoBehaviour
         {
             SlotMachine.TipoRecompensa.Dinheiro => spriteDinheiro,
             SlotMachine.TipoRecompensa.TamanhoEspada => spriteTamanhoEspada,
-            SlotMachine.TipoRecompensa.VelocidadeAtaque => spriteVelocidadeAtaque,
+            SlotMachine.TipoRecompensa.VelocidadeAtaqueEspada => spriteVelAtaqueEspada,    
+            SlotMachine.TipoRecompensa.VelocidadeAtaquePistola => spriteVelAtaquePistola,   
             SlotMachine.TipoRecompensa.VelocidadePlayer => spriteVelocidadePlayer,
+            SlotMachine.TipoRecompensa.PistolBalas => spritePistolBalas,                   
+            SlotMachine.TipoRecompensa.PistolRicochete => spritePistolRicochete,
             SlotMachine.TipoRecompensa.Vazio => spriteVazio,
             _ => null
         };

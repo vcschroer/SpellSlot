@@ -47,6 +47,30 @@ MonoBehaviour:
   exibicaoSlot1: {fileID: 0}
   exibicaoSlot2: {fileID: 0}
   exibicaoSlot3: {fileID: 0}
-  spriteDinheiro: {fileID: -4364147129148179221, guid: e96b104aa4f526c4a97e377d3b5fda2d, type: 3}
-  spriteTamanhoEspada: {fileID: 2494944553380936020, guid: 18087a941db0ddf40b423651ad66e013, type: 3}
-  spriteVelocidadeAtaque: {fileID: 1519066167934113422, guid: 8c7ba7a15f42b35428017c93abb35e02, type: 3}
+  scriptAlavanca: {fileID: 0}
+  spriteDinheiro: {fileID: 21300000, guid: 0b6da2255596dfa41875fa9864b8362a, type: 3}
+  spriteTamanhoEspada: {fileID: 21300000, guid: 64a164d3a52018d4a815823df6adfb97, type: 3}
+  spriteVelAtaqueEspada: {fileID: 0}
+  spriteVelAtaquePistola: {fileID: 0}
+  spriteVelocidadePlayer: {fileID: 21300000, guid: 904c0a98f05c72949b522c503055448a, type: 3}
+  spritePistolBalas: {fileID: 0}
+  spritePistolRicochete: {fileID: 0}
+  spriteVazio: {fileID: 21300000, guid: a59dfba068772194ab47f8ec8f605caa, type: 3}
+  framesAnimacaoGiro:
+  - {fileID: 21300000, guid: 8bfe6913e094c91459eefbb709545c6a, type: 3}
+  - {fileID: 21300000, guid: 550d723f8ad5f7d4ea2099c6b5426e97, type: 3}
+  - {fileID: 21300000, guid: 61134091af1afb54c8c2f460bc0a8365, type: 3}
+  - {fileID: 21300000, guid: 3fcb562e83da0de4b93312a6922ce711, type: 3}
+  - {fileID: 21300000, guid: 7cc900fe0cb0b834e87e95fa1da098d6, type: 3}
+  - {fileID: 21300000, guid: 6a7eac942614e2143b98d7d06bdbde52, type: 3}
+  - {fileID: 21300000, guid: 748c548cc5e22fe4f9ab7357f1397e65, type: 3}
+  - {fileID: 21300000, guid: af186bc21e116794baf8746d3c8e2cae, type: 3}
+  - {fileID: 21300000, guid: 64e5205839c5c194fb87aec75a222d57, type: 3}
+  - {fileID: 21300000, guid: d1f95451e6afe644db36a36bae4e7622, type: 3}
+  tempoGiroBase: 1
+  intervaloEntreSlots: 0.5
+  tempoPorFrame: 0.05
+  forcaDoPulo: 1.3
+  duracaoSubida: 0.08
+  duracaoDescida: 0.12
+  velocidadeRGB: 2

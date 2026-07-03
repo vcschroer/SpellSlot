@@ -11,17 +11,17 @@ public class EnemySpawn : MonoBehaviour
         public string nome;
         public GameObject prefabInimigo;
 
-        [Tooltip("O peso base de spawn desse inimigo no início do jogo")]
+        [Tooltip("O peso base de spawn desse inimigo no inicio do jogo")]
         public float pesoBase = 10f;
 
         [Tooltip("Se marcado, este inimigo vai aparecer MAIS vezes conforme o tempo passa")]
         public bool escalarComOTempo = false;
 
-        [Tooltip("O quão rápido a presença desse inimigo aumenta por minuto de jogo")]
-        public float fatorCrescimentoPorMinuto = 5f;
+        [Tooltip("O quao rapido a presenca desse inimigo aumenta por minuto de jogo")]
+        public float faktorCrescimentoPorMinuto = 5f;
     }
 
-    [Header("Configurações Gerais")]
+    [Header("Configuracoes Gerais")]
     [SerializeField] private List<DadosInimigo> listaInimigos = new List<DadosInimigo>();
     [Tooltip("Tempo em segundos para encerrar o spawn (ex: 300 = 5 minutos)")]
     [SerializeField] private float tempoLimiteSpawnSegundos = 300f;
@@ -37,7 +37,7 @@ public class EnemySpawn : MonoBehaviour
     [SerializeField] private int quantidadeMaxima = 10;
     [SerializeField] private float aumentoQuantidadePorMinuto = 0.5f;
 
-    [Header("Área de Spawn")]
+    [Header("Area de Spawn")]
     [SerializeField] private PolygonCollider2D areaDeSpawn;
     [SerializeField] private float raioMinimoSpawn = 12f;
     [SerializeField] private float raioMaximoSpawn = 18f;
@@ -52,13 +52,19 @@ public class EnemySpawn : MonoBehaviour
 
     void Start()
     {
-        GameObject playerObj = GameObject.FindWithTag("Player");
-        if (playerObj != null) alvoPlayer = playerObj.transform;
+        TentarAcharOPlayer();
     }
 
     void Update()
     {
-        if (alvoPlayer == null || vitoriaDisparada) return;
+        if (alvoPlayer == null)
+        {
+            TentarAcharOPlayer();
+
+            if (alvoPlayer == null) return;
+        }
+
+        if (vitoriaDisparada) return;
 
         tempoDecorrido += Time.deltaTime;
 
@@ -86,6 +92,15 @@ public class EnemySpawn : MonoBehaviour
         }
     }
 
+    private void TentarAcharOPlayer()
+    {
+        GameObject playerObj = GameObject.FindWithTag("Player");
+        if (playerObj != null)
+        {
+            alvoPlayer = playerObj.transform;
+        }
+    }
+
     private void VerificarVitoria()
     {
         if (vitoriaDisparada) return;
@@ -94,7 +109,7 @@ public class EnemySpawn : MonoBehaviour
 
         if (inimigosRestantes.Length == 0)
         {
-            vitoriaDisparada = true; 
+            vitoriaDisparada = true;
 
             if (TransitionManager.Instance != null)
             {
@@ -133,7 +148,7 @@ public class EnemySpawn : MonoBehaviour
         {
             float pesoCalculado = listaInimigos[i].pesoBase;
             if (listaInimigos[i].escalarComOTempo)
-                pesoCalculado += minutosPassados * listaInimigos[i].fatorCrescimentoPorMinuto;
+                pesoCalculado += minutosPassados * listaInimigos[i].faktorCrescimentoPorMinuto;
 
             pesosAtuais.Add(pesoCalculado);
             somaTotalPesos += pesoCalculado;
@@ -162,27 +177,46 @@ public class EnemySpawn : MonoBehaviour
 
     private Vector3 ObterPosicaoSpawn()
     {
-        if (areaDeSpawn != null)
+        if (areaDeSpawn != null && alvoPlayer != null)
         {
             Bounds bounds = areaDeSpawn.bounds;
-            Vector2 pontoAleatorio;
+            Vector2 pontoAleatorio = Vector2.zero;
             int tentativas = 0;
+            bool pontoValido = false;
 
-            do
+            while (!pontoValido && tentativas < 100)
             {
                 pontoAleatorio = new Vector2(
                     Random.Range(bounds.min.x, bounds.max.x),
                     Random.Range(bounds.min.y, bounds.max.y)
                 );
+
+                bool dentroDaArea = areaDeSpawn.OverlapPoint(pontoAleatorio);
+
+                bool longeDoPlayer = Vector2.Distance(pontoAleatorio, alvoPlayer.position) >= raioMinimoSpawn;
+
+                if (dentroDaArea && longeDoPlayer)
+                {
+                    pontoValido = true;
+                }
+
                 tentativas++;
             }
-            while (!areaDeSpawn.OverlapPoint(pontoAleatorio) && tentativas < 50);
 
-            return new Vector3(pontoAleatorio.x, pontoAleatorio.y, 0f);
+            if (pontoValido)
+            {
+                return new Vector3(pontoAleatorio.x, pontoAleatorio.y, 0f);
+            }
+
         }
 
-        Vector2 direcaoAleatoria = Random.insideUnitCircle.normalized;
-        float distanciaAleatoria = Random.Range(raioMinimoSpawn, raioMaximoSpawn);
-        return alvoPlayer.position + (Vector3)(direcaoAleatoria * distanciaAleatoria);
+        if (alvoPlayer != null)
+        {
+            Vector2 direcaoAleatoria = Random.insideUnitCircle.normalized;
+            float distanciaAleatoria = Random.Range(raioMinimoSpawn, raioMaximoSpawn);
+            return alvoPlayer.position + (Vector3)(direcaoAleatoria * distanciaAleatoria);
+        }
+
+        return Vector3.zero;
     }
 }

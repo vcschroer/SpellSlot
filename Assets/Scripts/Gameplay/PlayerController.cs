@@ -52,10 +52,59 @@ public class PlayerController : MonoBehaviour
         scriptAnimacao = scriptAnimacao ?? GetComponent<AnimPlayer>();
         scriptEfeitos = scriptEfeitos ?? GetComponent<SpriteEffects>() ?? GetComponentInChildren<SpriteEffects>();
 
+        if (scriptEfeitos == null)
+        {
+            Debug.LogWarning("[AVISO]: O script SpriteEffects nao foi encontrado no Player! Verifique o Inspector.");
+        }
+
         SpawnarArmaInicial();
 
         dinheiroAtual = Mathf.Clamp(dinheiroAtual, 0, maxDinheiro);
         StartCoroutine(RotinaPerdaDeDinheiro());
+    }
+
+    void Update()
+    {
+        if (derrotaDisparada) return;
+
+        bool jackpotAtual = JackpotAtivo;
+
+        if (scriptAnimacao != null)
+        {
+            scriptAnimacao.SetarModoJackpot(jackpotAtual);
+        }
+
+        if (jackpotAtual != estavaEmJackpot)
+        {
+            estavaEmJackpot = jackpotAtual;
+
+            Debug.Log($"[JACKPOT]: Mudou de estado! Ativo: {jackpotAtual}");
+
+            if (MusicManager.Instance != null) MusicManager.Instance.PlayJackpotSound(jackpotAtual);
+
+            if (scriptEfeitos != null)
+            {
+                scriptEfeitos.DefinirRGB(jackpotAtual);
+            }
+        }
+    }
+
+    void FixedUpdate()
+    {
+        if (derrotaDisparada)
+        {
+            inputsMovimento = Vector2.zero;
+            return;
+        }
+
+        rb.MovePosition(rb.position + inputsMovimento * velocidade * Time.fixedDeltaTime);
+        VerificarFlip();
+
+        if (scriptAnimacao != null)
+        {
+            float velocidadFisica = inputsMovimento.magnitude;
+            scriptAnimacao.AtualizarMovimento(velocidadFisica);
+        }
     }
 
     private void SpawnarArmaInicial()
@@ -78,16 +127,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // 🌟 FUNÇÃO CHAVE PARA A TUA ROLETA / SLOT MACHINE!
-    // Exemplo de uso no script da roleta: 
-    // player.ObterArmaPorTipo(TipoArma.Pistola).weaponAttackSpeed += 0.2f;
     public BaseWeapon ObterArmaPorTipo(TipoArma tipo)
     {
         foreach (BaseWeapon arma in armasEquipadas)
         {
             if (arma != null && arma.tipoArma == tipo) return arma;
         }
-        return null; // Caso o jogador não tenha essa arma ainda
+        return null;
     }
 
     public void AdicionarNovaArma(GameObject prefabDaNovaArma)
@@ -107,34 +153,6 @@ public class PlayerController : MonoBehaviour
     public void DispararAnimacaoAtaqueExterno()
     {
         if (scriptAnimacao != null && !derrotaDisparada) scriptAnimacao.DispararAnimacaoAtaque();
-    }
-
-    void FixedUpdate()
-    {
-        if (derrotaDisparada)
-        {
-            inputsMovimento = Vector2.zero;
-            return;
-        }
-
-        rb.MovePosition(rb.position + inputsMovimento * velocidade * Time.fixedDeltaTime);
-        VerificarFlip();
-
-        if (scriptAnimacao != null)
-        {
-            float velocidadFisica = inputsMovimento.magnitude;
-            scriptAnimacao.AtualizarMovimento(velocidadFisica);
-
-            bool jackpotAtual = JackpotAtivo;
-            scriptAnimacao.SetarModoJackpot(jackpotAtual);
-
-            if (jackpotAtual != estavaEmJackpot)
-            {
-                estavaEmJackpot = jackpotAtual;
-                if (MusicManager.Instance != null) MusicManager.Instance.PlayJackpotSound(jackpotAtual);
-                if (scriptEfeitos != null) scriptEfeitos.DefinirRGB(jackpotAtual);
-            }
-        }
     }
 
     private IEnumerator RotinaPerdaDeDinheiro()

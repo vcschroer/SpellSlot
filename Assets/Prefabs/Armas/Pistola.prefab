@@ -27,8 +27,8 @@ Transform:
   m_GameObject: {fileID: 1641512455257383215}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.371, y: 0.643, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.1187, y: -0.0709, z: 0}
+  m_LocalScale: {x: 0.7941, y: 0.7941, z: 0.7941}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4474548279491501211}
@@ -81,10 +81,10 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 4
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0.43867922, b: 0.43867922, a: 1}
+  m_Sprite: {fileID: -3625124517529033596, guid: 574701aa361fc704cadf081e55366503, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -109,8 +109,11 @@ MonoBehaviour:
   tempoEntreAtaquesBase: 1.5
   weaponAttackSpeed: 1
   prefabProjetil: {fileID: 3895020279928890353, guid: d0e244f593a468c48a4e79e3279deae3, type: 3}
-  pontoDeDisparo: {fileID: 4474548279491501211}
+  puntoDeDisparo: {fileID: 4474548279491501211}
   velocidadeProjetil: 12
+  centroDoPlayerOffset: {x: 0, y: 0.2}
+  raioPosicionamento: 0.8
+  distanciaMaximaAlvo: 8
   duracaoJackpot: 5
   velocidadeGiroJackpot: 720
   tempoEntreTirosJackpot: 0.08
@@ -139,7 +142,7 @@ Transform:
   m_GameObject: {fileID: 1865069431727333893}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.428, y: 0, z: 0}
+  m_LocalPosition: {x: 5.28, y: 0.95, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
