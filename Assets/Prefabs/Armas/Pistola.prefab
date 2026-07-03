@@ -83,7 +83,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 4
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -3625124517529033596, guid: 574701aa361fc704cadf081e55366503, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f55d96293e57e624aa342d8fb0ecbfd1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -111,12 +111,15 @@ MonoBehaviour:
   prefabProjetil: {fileID: 3895020279928890353, guid: d0e244f593a468c48a4e79e3279deae3, type: 3}
   puntoDeDisparo: {fileID: 4474548279491501211}
   velocidadeProjetil: 12
+  quantidadeBalas: 1
+  anguloConeSpread: 30
   centroDoPlayerOffset: {x: 0, y: 0.2}
   raioPosicionamento: 0.8
   distanciaMaximaAlvo: 8
   duracaoJackpot: 5
   velocidadeGiroJackpot: 720
   tempoEntreTirosJackpot: 0.08
+  quantidadeRicochetes: 0
 --- !u!1 &1865069431727333893
 GameObject:
   m_ObjectHideFlags: 0

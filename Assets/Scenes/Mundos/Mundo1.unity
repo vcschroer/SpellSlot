@@ -421,7 +421,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 18.5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1153,7 +1153,7 @@ PrefabInstance:
     - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
       propertyPath: spritePistolBalas
       value: 
-      objectReference: {fileID: 1519066167934113422, guid: 8c7ba7a15f42b35428017c93abb35e02, type: 3}
+      objectReference: {fileID: 21300000, guid: c345fd2d8a4d52743a199ec65a607974, type: 3}
     - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
       propertyPath: spriteTamanhoEspada
       value: 
@@ -1161,7 +1161,7 @@ PrefabInstance:
     - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
       propertyPath: spritePistolRicochete
       value: 
-      objectReference: {fileID: 1668105785596205350, guid: 04a6b93d4ceed694aa4c201405511d69, type: 3}
+      objectReference: {fileID: 21300000, guid: e17959b3a67a4c44bab5cc7d9b0c1a76, type: 3}
     - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
       propertyPath: spriteVelAtaqueEspada
       value: 
@@ -1169,7 +1169,7 @@ PrefabInstance:
     - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
       propertyPath: spriteVelAtaquePistola
       value: 
-      objectReference: {fileID: 2494944553380936020, guid: 18087a941db0ddf40b423651ad66e013, type: 3}
+      objectReference: {fileID: 21300000, guid: e17959b3a67a4c44bab5cc7d9b0c1a76, type: 3}
     - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
       propertyPath: spriteVelocidadePlayer
       value: 
