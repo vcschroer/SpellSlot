@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 9182447008866266265}
   - component: {fileID: 414965251089006741}
   - component: {fileID: 754506843404441739}
-  - component: {fileID: -1995383391962454561}
+  - component: {fileID: 5440265427876105564}
   m_Layer: 6
-  m_Name: Enemy 3
+  m_Name: Enemy 4
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.8, y: 3.63, z: 0}
-  m_LocalScale: {x: 0.36, y: 0.36, z: 0.36}
+  m_LocalScale: {x: 0.19264403, y: 0.19264403, z: 0.19264403}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -87,8 +87,8 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -4833065795494802799, guid: 169902358f8a61040a1fc530467b4d68, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 1187391177975196531, guid: b076fde6c7cc34949a1676bac7fcff6d, type: 3}
+  m_Color: {r: 0.29498428, g: 0.311277, b: 0.98742133, a: 1}
   m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
@@ -158,8 +158,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.2553883, y: 0}
-  m_Radius: 3.775658
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 5.5299993
 --- !u!114 &9182447008866266265
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,7 +179,7 @@ MonoBehaviour:
   danoNoPlayer: 30
   tempoAnimacaoMorte: 0.5
   scriptAnimacao: {fileID: 0}
-  scriptEfeitos: {fileID: -1995383391962454561}
+  scriptEfeitos: {fileID: -1995383391962454561, guid: 483088ca092f5604b9ae8abae3249db1, type: 3}
   prefabExplosao: {fileID: 2081506102510133842, guid: ef9dd902c3a7e2841961418e230767f9, type: 3}
   prefabMoeda: {fileID: 8150117755066198786, guid: be5a746a431d92f4cbdcaeaad3bb82c2, type: 3}
 --- !u!114 &414965251089006741
@@ -204,7 +204,7 @@ Animator:
   m_GameObject: {fileID: 5472871256757922201}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 3cf747e770477c643bc30ff0b81870d3, type: 2}
+  m_Controller: {fileID: 22100000, guid: 169c329f514a75747b171d5325e8ae05, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -216,7 +216,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-1995383391962454561
+--- !u!114 &5440265427876105564
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

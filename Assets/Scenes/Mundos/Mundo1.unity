@@ -1646,7 +1646,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: intervaloSpawnInicial
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: listaInimigos.Array.size
@@ -1665,12 +1665,16 @@ PrefabInstance:
       value: Enemy3
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
+      propertyPath: listaInimigos.Array.data[0].pesoBase
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: listaInimigos.Array.data[1].pesoBase
-      value: -20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: listaInimigos.Array.data[2].pesoBase
-      value: -80
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: listaInimigos.Array.data[2].prefabInimigo
@@ -1691,6 +1695,18 @@ PrefabInstance:
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: listaInimigos.Array.data[2].fatorCrescimentoPorMinuto
       value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
+      propertyPath: listaInimigos.Array.data[0].faktorCrescimentoPorMinuto
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
+      propertyPath: listaInimigos.Array.data[1].faktorCrescimentoPorMinuto
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
+      propertyPath: listaInimigos.Array.data[2].faktorCrescimentoPorMinuto
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7982752976183520425, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: m_Name
