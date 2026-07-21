@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3472798885302085774}
   - component: {fileID: 5365553247556749855}
   - component: {fileID: 1044334382055454735}
+  - component: {fileID: 7919058600797324275}
   - component: {fileID: 2709040164099495859}
   - component: {fileID: 7543431794561207898}
   - component: {fileID: 8090224322029983388}
@@ -110,16 +111,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   velocidade: 5
-  scriptEspada: {fileID: 0}
   scriptAnimacao: {fileID: 2709040164099495859}
   scriptEfeitos: {fileID: 0}
+  armasEquipadas: []
   maxDinheiro: 100
   dinheiroAtual: 100
   custoPorTempo: 5
   intervaloTempo: 5
-  attackSpeed: 0.5
-  centroDoPlayerOffset: {x: 0, y: 0}
-  raioDaOrbita: 6.43
 --- !u!50 &1044334382055454735
 Rigidbody2D:
   serializedVersion: 5
@@ -147,6 +145,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &7919058600797324275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8003146875235940519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85245718b6f585441a5ce31afeb7825d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteEffects
+  spriteRenderer: {fileID: 3472798885302085774}
+  transformVisual: {fileID: 2430464551256611080}
+  materialFlashBranco: {fileID: 2100000, guid: ef3c32cf276a63a48ac9869d0b188df1, type: 2}
+  velocidadeRGB: 2
 --- !u!114 &2709040164099495859
 MonoBehaviour:
   m_ObjectHideFlags: 0

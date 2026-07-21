@@ -20,6 +20,9 @@ public class Pistol : BaseWeapon
     [Tooltip("O raio do circulo ao redor do player onde a pistola vai se posicionar")]
     [SerializeField] private float raioPosicionamento = 0.8f;
 
+    [Tooltip("Multiplicador do raio de posicionamento caso o player tenha uma Espada equipada")]
+    [SerializeField] private float multiplicadorComEspada = 3f;
+
     [Tooltip("Distancia maxima que a pistola consegue detectar e atirar em um inimigo")]
     [SerializeField] private float distanciaMaximaAlvo = 7f;
 
@@ -91,7 +94,15 @@ public class Pistol : BaseWeapon
             else if (player.transform.localScale.x < 0f) direcaoMira = Vector2.left;
         }
 
-        transform.position = posCentroPlayer + (direcaoMira * raioPosicionamento);
+        float raioCalculado = raioPosicionamento;
+
+        Sword espada = FindObjectOfType<Sword>();
+        if (espada != null && espada.gameObject.activeInHierarchy)
+        {
+            raioCalculado *= multiplicadorComEspada;
+        }
+
+        transform.position = posCentroPlayer + (direcaoMira * raioCalculado);
         anguloMira = Mathf.Atan2(direcaoMira.y, direcaoMira.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, anguloMira);
     }
@@ -178,7 +189,6 @@ public class Pistol : BaseWeapon
         if (scriptBala != null)
         {
             scriptBala.RicochetesRestantes = quantidadeRicochetes;
-
         }
 
         Destroy(bala, 3f);
@@ -193,7 +203,7 @@ public class Pistol : BaseWeapon
     private IEnumerator RotinaJackpotPistola(Vector2 offset, float raio)
     {
         int quantidadeBalasOriginal = quantidadeBalas;
-        quantidadeBalas *= 2; 
+        quantidadeBalas *= 2;
 
         float tempoEsperaTiroJackpot = tempoEntreTirosJackpot / 2f;
 

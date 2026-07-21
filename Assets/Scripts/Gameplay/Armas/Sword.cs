@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Sword : BaseWeapon
 {
+    [Header("Configuracoes de Dano")]
+    [SerializeField] private int danoEspada = 15;
+
     [Header("Configuracoes de Posicao Fixa")]
     [SerializeField] private Vector2 centroDoPlayerOffset = new Vector2(0f, 0.2f);
 
@@ -91,8 +94,12 @@ public class Sword : BaseWeapon
 
             player.DispararAnimacaoAtaqueExterno();
 
-            float direcaoX = ObterDirecaoOlharPlayer();
+            float direcaoX = ObterLadoDoAlvo();
             float anguloDirecao = direcaoX < 0 ? 180f : 0f;
+
+            float distanciaAtual = direcaoX > 0 ? distanciaDireita : -distanciaEsquerda;
+            transform.localPosition = new Vector3(centroDoPlayerOffset.x + distanciaAtual, centroDoPlayerOffset.y, 0f);
+            transform.localScale = new Vector3(escalaOriginal.x * direcaoX, escalaOriginal.y, escalaOriginal.z);
 
             StartCoroutine(RotinaGolpe(weaponAttackSpeed, anguloDirecao));
         }
@@ -102,7 +109,7 @@ public class Sword : BaseWeapon
     {
         if (player == null) return;
 
-        float direcaoX = ObterDirecaoOlharPlayer();
+        float direcaoX = ObterLadoDoAlvo();
 
         float distanciaAtual = direcaoX > 0 ? distanciaDireita : -distanciaEsquerda;
 
@@ -112,6 +119,40 @@ public class Sword : BaseWeapon
 
         float anguloCalculado = direcaoX < 0 ? -anguloEmRepouso : anguloEmRepouso;
         transform.localRotation = Quaternion.Euler(0, 0, anguloCalculado);
+    }
+
+    private float ObterLadoDoAlvo()
+    {
+        Transform inimigoMaisProximo = ObterPosicaoInimigoMaisProximo();
+
+        if (inimigoMaisProximo != null)
+        {
+            return (inimigoMaisProximo.position.x < player.transform.position.x) ? -1f : 1f;
+        }
+
+        return ObterDirecaoOlharPlayer();
+    }
+
+    private Transform ObterPosicaoInimigoMaisProximo()
+    {
+        GameObject[] inimigos = GameObject.FindGameObjectsWithTag("Enemy");
+        Transform maisProximo = null;
+        float menorDistancia = float.MaxValue;
+        Vector3 posicaoPlayer = player != null ? player.transform.position : transform.position;
+
+        foreach (GameObject inimigoObj in inimigos)
+        {
+            if (inimigoObj == null) continue;
+
+            float distancia = Vector3.Distance(posicaoPlayer, inimigoObj.transform.position);
+            if (distancia < menorDistancia)
+            {
+                menorDistancia = distancia;
+                maisProximo = inimigoObj.transform;
+            }
+        }
+
+        return maisProximo;
     }
 
     private float ObterDirecaoOlharPlayer()
@@ -227,7 +268,7 @@ public class Sword : BaseWeapon
                 Enemy inimigo = col.GetComponent<Enemy>();
                 if (inimigo != null && !inimigosAtingidosNesteGolpe.Contains(inimigo))
                 {
-                    inimigo.TomarDano();
+                    inimigo.TomarDano(danoEspada);
                     inimigosAtingidosNesteGolpe.Add(inimigo);
                 }
             }

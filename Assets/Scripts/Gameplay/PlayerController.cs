@@ -26,6 +26,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public int dinheiroAtual = 100;
     public int vidaAtual => dinheiroAtual;
 
+    [Header("Invencibilidade / Cooldown de Dano")]
+    [Tooltip("Tempo em segundos que o player fica imune após receber dano")]
+    [SerializeField] private float cooldownDano = 1.5f;
+    private float tempoProximoDano = 0f;
+
     public bool JackpotAtivo
     {
         get
@@ -175,6 +180,10 @@ public class PlayerController : MonoBehaviour
     public void TomarDano(int dano)
     {
         if (JackpotAtivo) return;
+        if (Time.time < tempoProximoDano) return;
+
+        tempoProximoDano = Time.time + cooldownDano;
+
         if (scriptEfeitos != null && dinheiroAtual > 0)
         {
             scriptEfeitos.PlayFlash(0.15f);

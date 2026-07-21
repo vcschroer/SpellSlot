@@ -173,12 +173,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   vidaAtual: 40
-  danoQueRecebeDaEspada: 10
+  prefabDamagePopup: {fileID: 5873388395479054091, guid: f9d23d83ec8f6074fb810bb20f22984c, type: 3}
   velocidade: 3
   distanciaMinima: 0.5
   danoNoPlayer: 30
   tempoAnimacaoMorte: 0.5
-  scriptAnimacao: {fileID: 0}
+  scriptAnimacao: {fileID: 414965251089006741}
   scriptEfeitos: {fileID: -1995383391962454561, guid: 483088ca092f5604b9ae8abae3249db1, type: 3}
   prefabExplosao: {fileID: 2081506102510133842, guid: ef9dd902c3a7e2841961418e230767f9, type: 3}
   prefabMoeda: {fileID: 8150117755066198786, guid: be5a746a431d92f4cbdcaeaad3bb82c2, type: 3}

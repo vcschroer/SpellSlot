@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    [Header("Configuracoes de Dano")]
+    [SerializeField] private int danoBala = 5;
+
     [Header("Configuracoes de Ricochete")]
     [Tooltip("Quantas vezes a bala pode ricochetear antes de sumir.")]
     [SerializeField] private int ricochetesRestantes = 0;
@@ -34,11 +37,11 @@ public class Bullet : MonoBehaviour
 
         if (inimigoAtingido != null)
         {
-            inimigoAtingido.TomarDano();
+            inimigoAtingido.TomarDano(danoBala);
 
             if (ricochetesRestantes > 0)
             {
-                ricochetesRestantes--; 
+                ricochetesRestantes--;
 
                 bool conseguiuRicochetear = TentarRicochetear(inimigoAtingido);
 

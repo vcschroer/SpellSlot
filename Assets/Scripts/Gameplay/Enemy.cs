@@ -1,18 +1,22 @@
 using System.Collections;
 using UnityEngine;
+using static EnemySpawn;
 
 public class Enemy : MonoBehaviour
 {
     [Header("Configurações de Vida")]
-    [SerializeField] private int vidaAtual = 10;
-    [SerializeField] private int danoQueRecebeDaEspada = 10;
+    [SerializeField] protected int vidaAtual = 10;
+
+    [Header("Configurações de Feedback de Dano")]
+    [Tooltip("Prefab do TextMeshPro 2D com o script DamagePopup")]
+    [SerializeField] private GameObject prefabDamagePopup;
 
     [Header("Configurações de Movimento")]
     [SerializeField] private float velocidade = 3f;
     [SerializeField] private float distanciaMinima = 0.5f;
 
     [Header("Configurações de Ataque")]
-    [SerializeField] private int danoNoPlayer = 20;
+    [SerializeField] public int danoNoPlayer = 20;
     [SerializeField] private float tempoAnimacaoMorte = 0.5f;
 
     [Header("Componentes Visuais")]
@@ -26,16 +30,16 @@ public class Enemy : MonoBehaviour
     [Header("Configurações de Drops")]
     [SerializeField] private GameObject prefabMoeda;
 
-    private Transform alvoPlayer;
-    private Rigidbody2D rb;
-    private Vector2 direcao;
-    private bool olhandoParaDireita = false;
-    private bool estaMorto = false;
+    protected Transform alvoPlayer;
+    protected Rigidbody2D rb;
+    protected Vector2 direcao;
+    protected bool olhandoParaDireita = false;
+    protected bool estaMorto = false;
 
     private float tempoProximoDano = 0f;
     private float intervaloInvenclibilidade = 0.1f;
 
-    void Start()
+    protected virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         GameObject playerObj = GameObject.FindWithTag("Player");
@@ -82,12 +86,14 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void TomarDano()
+    public void TomarDano(int quantidadeDano)
     {
         if (estaMorto || Time.time < tempoProximoDano) return;
 
-        vidaAtual -= danoQueRecebeDaEspada;
+        vidaAtual -= quantidadeDano;
         tempoProximoDano = Time.time + intervaloInvenclibilidade;
+
+        CriarPopUpDano(quantidadeDano);
 
         if (MusicManager.Instance != null)
         {
@@ -106,26 +112,37 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void CriarPopUpDano(int quantidadeDano)
     {
-        if (estaMorto) return;
+        if (prefabDamagePopup == null) return;
 
-        PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+        Vector3 offsetAleatorio = new Vector3(Random.Range(-0.25f, 0.25f), Random.Range(0.3f, 0.6f), 0f);
+        Vector3 posCriacao = transform.position + offsetAleatorio;
 
-        if (player != null)
+        GameObject popupObj = Instantiate(prefabDamagePopup, posCriacao, Quaternion.identity);
+        DamagePopup popupScript = popupObj.GetComponent<DamagePopup>();
+
+        if (popupScript != null)
         {
-            if (CameraShake.Instancia != null)
-            {
-                CameraShake.Instancia.Tremer(0.2f, 0.4f);
-            }
-
-            player.TomarDano(danoNoPlayer);
-
-            IniciarProcessoMorte(false);
+            popupScript.Setup(quantidadeDano);
         }
     }
 
-    private void IniciarProcessoMorte(bool deveDroparMoeda)
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            PlayerController player = collision.gameObject.GetComponent<PlayerController>();
+            if (player != null)
+            {
+                player.TomarDano(danoNoPlayer); 
+            }
+
+            Destroy(gameObject);
+        }
+    }
+
+    protected virtual void IniciarProcessoMorte(bool deveDroparMoeda)
     {
         estaMorto = true;
         direcao = Vector2.zero;

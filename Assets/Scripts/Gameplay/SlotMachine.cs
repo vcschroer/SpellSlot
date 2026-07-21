@@ -87,7 +87,7 @@ public class SlotMachine : MonoBehaviour
 
         if (scriptPlayer.dinheiroAtual - custoVidaPorGiro < 1)
         {
-            Debug.LogWarning("Vida insuficiente!");
+            Debug.LogWarning("Vida (Dinheiro) insuficiente para girar!");
             return;
         }
 
@@ -204,11 +204,7 @@ public class SlotMachine : MonoBehaviour
 
                 if (playerEffects != null)
                 {
-                    playerEffects.DefinirRGB(true);
-                }
-                else
-                {
-                    Debug.LogWarning("[SlotMachine]: Player não possui o componente SpriteEffects anexado a ele ou aos seus filhos.");
+                    playerEffects.DefinirRGB(true); 
                 }
 
                 if (scriptPlayer.armasEquipadas != null)
@@ -235,6 +231,7 @@ public class SlotMachine : MonoBehaviour
 
         menuAberto = false;
         estaProcessandoGiro = false;
+
     }
 
     private void ContarSlot(TipoRecompensa slot, ref int din, ref int tam, ref int velAE, ref int velAP, ref int velP, ref int pBalas, ref int pRico)
@@ -277,12 +274,10 @@ public class SlotMachine : MonoBehaviour
         Sword espada = scriptPlayer.ObterArmaPorTipo(TipoArma.Espada) as Sword;
         if (espada != null)
         {
-            espada.weaponAttackSpeed += vel;
+            espada.weaponAttackSpeed += vel; 
             Debug.Log($"[UPGRADE] Velocidade da Espada aumentada para {espada.weaponAttackSpeed}");
         }
     }
-
-    private void AplicarRecompensaVelAtaquePistola(int Clinica, int quantidade) { }
 
     private void AplicarRecompensaVelAtaquePistola(int quantidade)
     {
@@ -301,7 +296,7 @@ public class SlotMachine : MonoBehaviour
     {
         if (quantidade < 2 || scriptPlayer == null) return;
         float vel = quantidade switch { 2 => velPlayerPequeno, 3 => velPlayerGrande, _ => 0f };
-        scriptPlayer.AumentarVelocidade(vel);
+        scriptPlayer.AumentarVelocidade(vel); 
     }
 
     private void AplicarRecompensaPistolBalas(int quantidade)
@@ -311,12 +306,10 @@ public class SlotMachine : MonoBehaviour
         if (pistola != null)
         {
             int adicionais = quantidade switch { 2 => balasAdicionaisPequeno, 3 => balasAdicionaisGrande, _ => 0 };
-            pistola.QuantidadeBalas += adicionais;
+            pistola.QuantidadeBalas += adicionais; 
             Debug.Log($"[UPGRADE] Pistola agora dispara {pistola.QuantidadeBalas} balas!");
         }
     }
-
-    private void ApplyUpgrade(Pistol p, int add) { p.QuantidadeRicochetes += add; }
 
     private void AplicarRecompensaPistolRicochete(int quantidade)
     {
@@ -325,7 +318,7 @@ public class SlotMachine : MonoBehaviour
         if (pistola != null)
         {
             int adicionais = quantidade switch { 2 => ricochetesAdicionaisPequeno, 3 => ricochetesAdicionaisGrande, _ => 0 };
-            pistola.QuantidadeRicochetes += adicionais;
+            pistola.QuantidadeRicochetes += adicionais; 
             Debug.Log($"[UPGRADE] Projetil da Pistola agora ricocheteia +{adicionais} vezes!");
         }
     }

@@ -27,6 +27,13 @@ public class EnemySpawn : MonoBehaviour
     [SerializeField] private float tempoLimiteSpawnSegundos = 300f;
     [SerializeField] private string nomeCenaVitoria = "Win";
 
+    [Header("Mini Boss")]
+    [Tooltip("Prefab do Mini Boss")]
+    [SerializeField] private GameObject prefabMiniBoss;
+
+    [Tooltip("Em qual segundo de jogo o Mini Boss deve spawnar (Ex: 150 = 2m30s)")]
+    [SerializeField] private float tempoSpawnMiniBossSegundos = 150f;
+
     [Header("Ritmo de Spawn (Intervalo)")]
     [SerializeField] private float intervaloSpawnInicial = 3f;
     [SerializeField] private float intervaloSpawnMinimo = 0.3f;
@@ -49,6 +56,7 @@ public class EnemySpawn : MonoBehaviour
     private float proximaChecagemVitoria = 0f;
 
     private bool vitoriaDisparada = false;
+    private bool miniBossSpawnado = false; 
 
     void Start()
     {
@@ -67,6 +75,11 @@ public class EnemySpawn : MonoBehaviour
         if (vitoriaDisparada) return;
 
         tempoDecorrido += Time.deltaTime;
+
+        if (!miniBossSpawnado && tempoDecorrido >= tempoSpawnMiniBossSegundos)
+        {
+            SpawnarMiniBoss();
+        }
 
         if (tempoDecorrido >= tempoLimiteSpawnSegundos)
         {
@@ -172,6 +185,17 @@ public class EnemySpawn : MonoBehaviour
         {
             Vector3 posicaoSpawn = ObterPosicaoSpawn();
             Instantiate(prefabEscolhido, posicaoSpawn, Quaternion.identity);
+        }
+    }
+
+    private void SpawnarMiniBoss()
+    {
+        miniBossSpawnado = true;
+
+        if (prefabMiniBoss != null)
+        {
+            Vector3 posicaoSpawn = ObterPosicaoSpawn();
+            Instantiate(prefabMiniBoss, posicaoSpawn, Quaternion.identity);
         }
     }
 
