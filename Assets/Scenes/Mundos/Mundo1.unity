@@ -1007,7 +1007,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: tempoSpawnMiniBossSegundos
-      value: 1
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: listaInimigos.Array.data[2].nome
@@ -1268,9 +1268,17 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
+      propertyPath: containerCanvas
+      value: 
+      objectReference: {fileID: 4307609904460758838}
+    - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
       propertyPath: dinheiroPequeno
       value: 40
       objectReference: {fileID: 0}
+    - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
+      propertyPath: prefabIconeLixo
+      value: 
+      objectReference: {fileID: 4509914940371729417, guid: 1ce6a17044261624db4ebb8ffab3b903, type: 3}
     - target: {fileID: 7234327129647007990, guid: 71ce89977e787834db3990e09be5fa0c, type: 3}
       propertyPath: velAtaqueGrande
       value: 0.3
@@ -1368,6 +1376,10 @@ PrefabInstance:
       propertyPath: spritePistolBalas
       value: 
       objectReference: {fileID: 21300000, guid: c345fd2d8a4d52743a199ec65a607974, type: 3}
+    - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
+      propertyPath: spriteAnguloEspada
+      value: 
+      objectReference: {fileID: 1519066167934113422, guid: 8c7ba7a15f42b35428017c93abb35e02, type: 3}
     - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
       propertyPath: spriteTamanhoEspada
       value: 
@@ -1774,6 +1786,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 94fab3856ff473746bec38dcd50f9c2d, type: 3}
+--- !u!224 &4307609904460758838 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5161986676265156510, guid: 94fab3856ff473746bec38dcd50f9c2d, type: 3}
+  m_PrefabInstance: {fileID: 4307609904460758837}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6761931317676593318
 PrefabInstance:
   m_ObjectHideFlags: 0

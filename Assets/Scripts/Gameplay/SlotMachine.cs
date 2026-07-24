@@ -5,13 +5,30 @@ using UnityEngine.InputSystem;
 
 public class SlotMachine : MonoBehaviour
 {
-    public enum TipoRecompensa { Dinheiro, TamanhoEspada, VelocidadeAtaqueEspada, VelocidadeAtaquePistola, VelocidadePlayer, PistolBalas, PistolRicochete, Vazio }
+    public enum TipoRecompensa
+    {
+        Dinheiro,
+        TamanhoEspada,
+        VelocidadeAtaqueEspada,
+        AnguloEspada,
+        VelocidadeAtaquePistola,
+        VelocidadePlayer,
+        PistolBalas,
+        PistolRicochete,
+        Vazio
+    }
 
     [Header("Referencias do Player")]
     [SerializeField] private PlayerController scriptPlayer;
 
     [Header("Conexao com a Parte Visual")]
     [SerializeField] private SlotMachineVisual scriptVisual;
+
+    [Header("Efeito TRASHPOT (3x Vazio)")]
+    [SerializeField] private GameObject prefabIconeLixo;
+    [SerializeField] private RectTransform containerCanvas;
+    [SerializeField] private float duracaoChuvaLixo = 4.0f;
+    [SerializeField] private int quantidadeLixosSpawns = 45;
 
     [Header("Configuracoes do Giro")]
     [SerializeField] private int custoVidaPorGiro = 10;
@@ -35,11 +52,15 @@ public class SlotMachine : MonoBehaviour
 
     [Header("Valores dos Bonus - TAMANHO DA ESPADA")]
     [SerializeField] private int gomosPequeno = 1;
-    [SerializeField] private int gomosGrande = 3;
+    [SerializeField] private int gomosGrande = 2;
 
     [Header("Valores dos Bonus - VELOCIDADE DE ATAQUE ESPADA")]
     [SerializeField] private float velAtaqueEspadaPequeno = 0.25f;
     [SerializeField] private float velAtaqueEspadaGrande = 0.75f;
+
+    [Header("Valores dos Bonus - ANGULO DA ESPADA")]
+    [SerializeField] private float anguloEspadaPequeno = 5f;
+    [SerializeField] private float anguloEspadaGrande = 15f;
 
     [Header("Valores dos Bonus - VELOCIDADE DE ATAQUE PISTOLA")]
     [SerializeField] private float velAtaquePistolaPequeno = 0.25f;
@@ -100,6 +121,30 @@ public class SlotMachine : MonoBehaviour
         }
     }
 
+    private T ObterArmaDoPlayer<T>(TipoArma tipo) where T : BaseWeapon
+    {
+        if (scriptPlayer == null) scriptPlayer = Object.FindFirstObjectByType<PlayerController>();
+        if (scriptPlayer == null) return null;
+
+        BaseWeapon arma = scriptPlayer.ObterArmaPorTipo(tipo);
+        if (arma != null && arma is T armaConvertida)
+        {
+            return armaConvertida;
+        }
+
+        T armaNosFilhos = scriptPlayer.GetComponentInChildren<T>(true);
+        if (armaNosFilhos != null)
+        {
+            if (!scriptPlayer.armasEquipadas.Contains(armaNosFilhos))
+            {
+                scriptPlayer.armasEquipadas.Add(armaNosFilhos);
+            }
+            return armaNosFilhos;
+        }
+
+        return null;
+    }
+
     private List<TipoRecompensa> GerarPoolDePremiosValidos()
     {
         List<TipoRecompensa> poolValido = new List<TipoRecompensa>
@@ -109,23 +154,21 @@ public class SlotMachine : MonoBehaviour
             TipoRecompensa.Vazio
         };
 
-        if (scriptPlayer != null)
+        bool temEspada = ObterArmaDoPlayer<Sword>(TipoArma.Espada) != null;
+        bool temPistola = ObterArmaDoPlayer<Pistol>(TipoArma.Pistola) != null;
+
+        if (temEspada)
         {
-            bool temEspada = scriptPlayer.ObterArmaPorTipo(TipoArma.Espada) != null;
-            bool temPistola = scriptPlayer.ObterArmaPorTipo(TipoArma.Pistola) != null;
+            poolValido.Add(TipoRecompensa.TamanhoEspada);
+            poolValido.Add(TipoRecompensa.VelocidadeAtaqueEspada);
+            poolValido.Add(TipoRecompensa.AnguloEspada);
+        }
 
-            if (temEspada)
-            {
-                poolValido.Add(TipoRecompensa.TamanhoEspada);
-                poolValido.Add(TipoRecompensa.VelocidadeAtaqueEspada);
-            }
-
-            if (temPistola)
-            {
-                poolValido.Add(TipoRecompensa.PistolBalas);
-                poolValido.Add(TipoRecompensa.PistolRicochete);
-                poolValido.Add(TipoRecompensa.VelocidadeAtaquePistola);
-            }
+        if (temPistola)
+        {
+            poolValido.Add(TipoRecompensa.PistolBalas);
+            poolValido.Add(TipoRecompensa.PistolRicochete);
+            poolValido.Add(TipoRecompensa.VelocidadeAtaquePistola);
         }
 
         return poolValido;
@@ -185,15 +228,21 @@ public class SlotMachine : MonoBehaviour
         proximoGiroTemSorteGeral = false;
         if (travaAtiva) girosSemJackpotRestantes--;
 
-        int din = 0, tam = 0, velAEspada = 0, velAPistola = 0, velP = 0, pBalas = 0, pRico = 0;
-        ContarSlot(slot1, ref din, ref tam, ref velAEspada, ref velAPistola, ref velP, ref pBalas, ref pRico);
-        ContarSlot(slot2, ref din, ref tam, ref velAEspada, ref velAPistola, ref velP, ref pBalas, ref pRico);
-        ContarSlot(slot3, ref din, ref tam, ref velAEspada, ref velAPistola, ref velP, ref pBalas, ref pRico);
+        if (slot1 == TipoRecompensa.Vazio && slot2 == TipoRecompensa.Vazio && slot3 == TipoRecompensa.Vazio)
+        {
+            Debug.Log("TRASHPOT! O jogador tirou 3x VAZIO!");
+            StartCoroutine(RotinaGeraChuvaDeLixo());
+        }
 
-        bool houveVitoria = (din >= 2 || tam >= 2 || velAEspada >= 2 || velAPistola >= 2 || velP >= 2 || pBalas >= 2 || pRico >= 2);
+        int din = 0, tam = 0, velAEspada = 0, angEspada = 0, velAPistola = 0, velP = 0, pBalas = 0, pRico = 0;
+        ContarSlot(slot1, ref din, ref tam, ref velAEspada, ref angEspada, ref velAPistola, ref velP, ref pBalas, ref pRico);
+        ContarSlot(slot2, ref din, ref tam, ref velAEspada, ref angEspada, ref velAPistola, ref velP, ref pBalas, ref pRico);
+        ContarSlot(slot3, ref din, ref tam, ref velAEspada, ref angEspada, ref velAPistola, ref velP, ref pBalas, ref pRico);
+
+        bool houveVitoria = (din >= 2 || tam >= 2 || velAEspada >= 2 || angEspada >= 2 || velAPistola >= 2 || velP >= 2 || pBalas >= 2 || pRico >= 2);
         contadorGirosPerdidos = houveVitoria ? 0 : contadorGirosPerdidos + 1;
 
-        if (din == 3 || tam == 3 || velAEspada == 3 || velAPistola == 3 || velP == 3 || pBalas == 3 || pRico == 3)
+        if (din == 3 || tam == 3 || velAEspada == 3 || angEspada == 3 || velAPistola == 3 || velP == 3 || pBalas == 3 || pRico == 3)
         {
             girosSemJackpotRestantes = girosBloqueadosPosJackpot;
 
@@ -202,10 +251,7 @@ public class SlotMachine : MonoBehaviour
                 SpriteEffects playerEffects = scriptPlayer.GetComponent<SpriteEffects>();
                 if (playerEffects == null) playerEffects = scriptPlayer.GetComponentInChildren<SpriteEffects>();
 
-                if (playerEffects != null)
-                {
-                    playerEffects.DefinirRGB(true); 
-                }
+                if (playerEffects != null) playerEffects.DefinirRGB(true);
 
                 if (scriptPlayer.armasEquipadas != null)
                 {
@@ -216,7 +262,7 @@ public class SlotMachine : MonoBehaviour
                 }
             }
         }
-        else if (din == 2 || tam == 2 || velAEspada == 2 || velAPistola == 2 || velP == 2 || pBalas == 2 || pRico == 2)
+        else if (din == 2 || tam == 2 || velAEspada == 2 || angEspada == 2 || velAPistola == 2 || velP == 2 || pBalas == 2 || pRico == 2)
         {
             if (girosSemJackpotRestantes <= 0) proximoGiroTemSorteGeral = true;
         }
@@ -224,6 +270,7 @@ public class SlotMachine : MonoBehaviour
         AplicarRecompensaDinheiro(din);
         AplicarRecompensaTamanho(tam);
         AplicarRecompensaVelAtaqueEspada(velAEspada);
+        AplicarRecompensaAnguloEspada(angEspada);
         AplicarRecompensaVelAtaquePistola(velAPistola);
         AplicarRecompensaVelocidadePlayer(velP);
         AplicarRecompensaPistolBalas(pBalas);
@@ -231,16 +278,69 @@ public class SlotMachine : MonoBehaviour
 
         menuAberto = false;
         estaProcessandoGiro = false;
-
     }
 
-    private void ContarSlot(TipoRecompensa slot, ref int din, ref int tam, ref int velAE, ref int velAP, ref int velP, ref int pBalas, ref int pRico)
+    private IEnumerator RotinaGeraChuvaDeLixo()
+    {
+        if (prefabIconeLixo == null || containerCanvas == null)
+        {
+            Debug.LogWarning("Prefab do Lixo ou Container Canvas nao atribuidos no Inspector!");
+            yield break;
+        }
+
+        float larguraTela = containerCanvas.rect.width;
+        float alturaTopo = containerCanvas.rect.height / 2f + 100f;
+        float intervaloEntreSpawns = duracaoChuvaLixo / quantidadeLixosSpawns;
+
+        for (int i = 0; i < quantidadeLixosSpawns; i++)
+        {
+            GameObject lixoObj = Instantiate(prefabIconeLixo, containerCanvas);
+            RectTransform rectLixo = lixoObj.GetComponent<RectTransform>();
+
+            if (rectLixo != null)
+            {
+                float posX = Random.Range(-larguraTela / 2f, larguraTela / 2f);
+                rectLixo.anchoredPosition = new Vector2(posX, alturaTopo);
+
+                float escalaAleatoria = Random.Range(0.8f, 2.2f);
+                rectLixo.localScale = Vector3.one * escalaAleatoria;
+
+                StartCoroutine(RotinaMoverLixo(rectLixo));
+            }
+
+            yield return new WaitForSeconds(intervaloEntreSpawns);
+        }
+    }
+
+    private IEnumerator RotinaMoverLixo(RectTransform rectLixo)
+    {
+        float tempoVida = 3.5f;
+        float tempoAtual = 0f;
+
+        float velY = Random.Range(350f, 750f);
+        float velX = Random.Range(-80f, 80f);
+        float velRotacao = Random.Range(-250f, 250f);
+
+        while (tempoAtual < tempoVida && rectLixo != null)
+        {
+            rectLixo.anchoredPosition += new Vector2(velX, -velY) * Time.deltaTime;
+            rectLixo.Rotate(0, 0, velRotacao * Time.deltaTime);
+
+            tempoAtual += Time.deltaTime;
+            yield return null;
+        }
+
+        if (rectLixo != null) Destroy(rectLixo.gameObject);
+    }
+
+    private void ContarSlot(TipoRecompensa slot, ref int din, ref int tam, ref int velAE, ref int angE, ref int velAP, ref int velP, ref int pBalas, ref int pRico)
     {
         switch (slot)
         {
             case TipoRecompensa.Dinheiro: din++; break;
             case TipoRecompensa.TamanhoEspada: tam++; break;
             case TipoRecompensa.VelocidadeAtaqueEspada: velAE++; break;
+            case TipoRecompensa.AnguloEspada: angE++; break;
             case TipoRecompensa.VelocidadeAtaquePistola: velAP++; break;
             case TipoRecompensa.VelocidadePlayer: velP++; break;
             case TipoRecompensa.PistolBalas: pBalas++; break;
@@ -257,8 +357,8 @@ public class SlotMachine : MonoBehaviour
 
     private void AplicarRecompensaTamanho(int quantidade)
     {
-        if (quantidade < 2 || scriptPlayer == null) return;
-        Sword espadaEquipada = scriptPlayer.ObterArmaPorTipo(TipoArma.Espada) as Sword;
+        if (quantidade < 2) return;
+        Sword espadaEquipada = ObterArmaDoPlayer<Sword>(TipoArma.Espada);
         if (espadaEquipada != null)
         {
             int gomos = quantidade switch { 2 => gomosPequeno, 3 => gomosGrande, _ => 0 };
@@ -268,27 +368,37 @@ public class SlotMachine : MonoBehaviour
 
     private void AplicarRecompensaVelAtaqueEspada(int quantidade)
     {
-        if (quantidade < 2 || scriptPlayer == null) return;
+        if (quantidade < 2) return;
         float vel = quantidade switch { 2 => velAtaqueEspadaPequeno, 3 => velAtaqueEspadaGrande, _ => 0f };
 
-        Sword espada = scriptPlayer.ObterArmaPorTipo(TipoArma.Espada) as Sword;
+        Sword espada = ObterArmaDoPlayer<Sword>(TipoArma.Espada);
         if (espada != null)
         {
-            espada.weaponAttackSpeed += vel; 
-            Debug.Log($"[UPGRADE] Velocidade da Espada aumentada para {espada.weaponAttackSpeed}");
+            espada.weaponAttackSpeed += vel;
+        }
+    }
+
+    private void AplicarRecompensaAnguloEspada(int quantidade)
+    {
+        if (quantidade < 2) return;
+        float bonus = quantidade switch { 2 => anguloEspadaPequeno, 3 => anguloEspadaGrande, _ => 0f };
+
+        Sword espada = ObterArmaDoPlayer<Sword>(TipoArma.Espada);
+        if (espada != null)
+        {
+            espada.AumentarAnguloCorte(-bonus);
         }
     }
 
     private void AplicarRecompensaVelAtaquePistola(int quantidade)
     {
-        if (quantidade < 2 || scriptPlayer == null) return;
+        if (quantidade < 2) return;
         float vel = quantidade switch { 2 => velAtaquePistolaPequeno, 3 => velAtaquePistolaGrande, _ => 0f };
 
-        Pistol pistola = scriptPlayer.ObterArmaPorTipo(TipoArma.Pistola) as Pistol;
+        Pistol pistola = ObterArmaDoPlayer<Pistol>(TipoArma.Pistola);
         if (pistola != null)
         {
             pistola.weaponAttackSpeed += vel;
-            Debug.Log($"[UPGRADE] Velocidade da Pistola aumentada para {pistola.weaponAttackSpeed}");
         }
     }
 
@@ -296,30 +406,28 @@ public class SlotMachine : MonoBehaviour
     {
         if (quantidade < 2 || scriptPlayer == null) return;
         float vel = quantidade switch { 2 => velPlayerPequeno, 3 => velPlayerGrande, _ => 0f };
-        scriptPlayer.AumentarVelocidade(vel); 
+        scriptPlayer.AumentarVelocidade(vel);
     }
 
     private void AplicarRecompensaPistolBalas(int quantidade)
     {
-        if (quantidade < 2 || scriptPlayer == null) return;
-        Pistol pistola = scriptPlayer.ObterArmaPorTipo(TipoArma.Pistola) as Pistol;
+        if (quantidade < 2) return;
+        Pistol pistola = ObterArmaDoPlayer<Pistol>(TipoArma.Pistola);
         if (pistola != null)
         {
             int adicionais = quantidade switch { 2 => balasAdicionaisPequeno, 3 => balasAdicionaisGrande, _ => 0 };
-            pistola.QuantidadeBalas += adicionais; 
-            Debug.Log($"[UPGRADE] Pistola agora dispara {pistola.QuantidadeBalas} balas!");
+            pistola.QuantidadeBalas += adicionais;
         }
     }
 
     private void AplicarRecompensaPistolRicochete(int quantidade)
     {
-        if (quantidade < 2 || scriptPlayer == null) return;
-        Pistol pistola = scriptPlayer.ObterArmaPorTipo(TipoArma.Pistola) as Pistol;
+        if (quantidade < 2) return;
+        Pistol pistola = ObterArmaDoPlayer<Pistol>(TipoArma.Pistola);
         if (pistola != null)
         {
             int adicionais = quantidade switch { 2 => ricochetesAdicionaisPequeno, 3 => ricochetesAdicionaisGrande, _ => 0 };
-            pistola.QuantidadeRicochetes += adicionais; 
-            Debug.Log($"[UPGRADE] Projetil da Pistola agora ricocheteia +{adicionais} vezes!");
+            pistola.QuantidadeRicochetes += adicionais;
         }
     }
 }

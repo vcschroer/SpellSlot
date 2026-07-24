@@ -116,6 +116,7 @@ MonoBehaviour:
   armasEquipadas: []
   maxDinheiro: 100
   dinheiroAtual: 100
+  cooldownDano: 1.5
   custoPorTempo: 5
   intervaloTempo: 5
 --- !u!50 &1044334382055454735

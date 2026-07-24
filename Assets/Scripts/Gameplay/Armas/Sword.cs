@@ -24,6 +24,7 @@ public class Sword : BaseWeapon
     [SerializeField] private float anguloFinal = -45f;
     [SerializeField] private float velocidadeAtaqueBase = 20f;
     [SerializeField] private float velocidadeRetornoBase = 5f;
+    [SerializeField] private float anguloInicialMaximo = 260f; 
 
     [Header("Prefabs dos Segmentos")]
     [SerializeField] private GameObject prefabCabo;
@@ -331,5 +332,12 @@ public class Sword : BaseWeapon
             Vector3 pos = transform.TransformPoint(new Vector3(0, dist, 0));
             Gizmos.DrawWireSphere(pos, larguraDoCorte / 2f);
         }
+    }
+
+    public void AumentarAnguloCorte(float incremento)
+    {
+        anguloInicial = Mathf.Min(anguloInicial + incremento, anguloInicialMaximo);
+
+        anguloFinal = -anguloInicial;
     }
 }

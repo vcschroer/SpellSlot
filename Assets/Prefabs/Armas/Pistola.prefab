@@ -115,8 +115,9 @@ MonoBehaviour:
   anguloConeSpread: 30
   centroDoPlayerOffset: {x: 0, y: 0.2}
   raioPosicionamento: 0.8
+  multiplicadorComEspada: 2
   distanciaMaximaAlvo: 8
-  duracaoJackpot: 5
+  duracaoJackpot: 10
   velocidadeGiroJackpot: 720
   tempoEntreTirosJackpot: 0.08
   quantidadeRicochetes: 0
