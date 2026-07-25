@@ -1379,7 +1379,7 @@ PrefabInstance:
     - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
       propertyPath: spriteAnguloEspada
       value: 
-      objectReference: {fileID: 1519066167934113422, guid: 8c7ba7a15f42b35428017c93abb35e02, type: 3}
+      objectReference: {fileID: 21300000, guid: 8c57502a68a30e140875734293f7ccf5, type: 3}
     - target: {fileID: 5001859692770182307, guid: 66b4c77553288b446b294ba672f5eaaa, type: 3}
       propertyPath: spriteTamanhoEspada
       value: 
@@ -1873,7 +1873,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: quantidadeInicial
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: intervaloSpawnMinimo
@@ -1897,7 +1897,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: tempoSpawnMiniBossSegundos
-      value: 100
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 5562728388813886420, guid: 5f0a044b4afcfee44a0da1fe2bdb1f6f, type: 3}
       propertyPath: listaInimigos.Array.data[2].nome

@@ -47,6 +47,7 @@ MonoBehaviour:
   tipoArma: 0
   tempoEntreAtaquesBase: 1.5
   weaponAttackSpeed: 1
+  danoEspada: 15
   centroDoPlayerOffset: {x: 0, y: -2.3}
   distanciaDireita: 5
   distanciaEsquerda: 5
@@ -55,6 +56,7 @@ MonoBehaviour:
   anguloFinal: -200
   velocidadeAtaqueBase: 5
   velocidadeRetornoBase: 5
+  anguloInicialMaximo: 360
   prefabCabo: {fileID: 8627269263969308266, guid: b1672f68e696fb840bf50c7e329cd028, type: 3}
   prefabMeioLamina: {fileID: 9068567274452352512, guid: d0f0a795fb2692546ba6ea614175f738, type: 3}
   prefabPontaLamina: {fileID: 8372954289619658168, guid: ae08bb500050c9644be289a4d39ae42b, type: 3}
