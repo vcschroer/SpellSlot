@@ -32,7 +32,7 @@ public abstract class BaseWeapon : MonoBehaviour
     {
         if (player == null || EstaEmModoJackpot) return;
 
-        timerAtaque += Time.deltaTime;
+        timerAtaque += UnityEngine.Time.deltaTime;
 
         float cooldownAtual = tempoEntreAtaquesBase / weaponAttackSpeed;
 

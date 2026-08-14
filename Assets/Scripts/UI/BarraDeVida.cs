@@ -40,7 +40,7 @@ public class BarraDeVida : MonoBehaviour
         {
             if (imagemPreenchimento != null)
             {
-                float h = (Time.time * velocidadeRGB) % 1f;
+                float h = (UnityEngine.Time.time * velocidadeRGB) % 1f;
                 imagemPreenchimento.color = Color.HSVToRGB(h, 0.75f, 1f);
             }
         }

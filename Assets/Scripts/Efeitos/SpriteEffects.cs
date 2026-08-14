@@ -52,7 +52,7 @@ public class SpriteEffects : MonoBehaviour
     {
         if (executandoRGB && spriteRenderer != null && !aplicandoFlash)
         {
-            float h = (Time.time * velocidadeRGB) % 1f;
+            float h = (UnityEngine.Time.time * velocidadeRGB) % 1f;
             spriteRenderer.color = Color.HSVToRGB(h, 0.8f, 1f);
         }
 
@@ -92,7 +92,7 @@ public class SpriteEffects : MonoBehaviour
         float tempo = 0f;
         while (tempo < metadeDuracao)
         {
-            tempo += Time.deltaTime;
+            tempo += UnityEngine.Time.deltaTime;
             escalaAtualEfeito = Vector3.Lerp(escalaOriginal, escalaDeformada, tempo / metadeDuracao);
             yield return null;
         }
@@ -100,7 +100,7 @@ public class SpriteEffects : MonoBehaviour
         tempo = 0f;
         while (tempo < metadeDuracao)
         {
-            tempo += Time.deltaTime;
+            tempo += UnityEngine.Time.deltaTime;
             escalaAtualEfeito = Vector3.Lerp(escalaDeformada, escalaOriginal, tempo / metadeDuracao);
             yield return null;
         }

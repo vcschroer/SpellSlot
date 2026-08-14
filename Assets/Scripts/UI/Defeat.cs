@@ -24,13 +24,13 @@ public class Defeat : MonoBehaviour
 
     public void VoltarAoMenu()
     {
-        Time.timeScale = 1f;
+        UnityEngine.Time.timeScale = 1f;
         SceneManager.LoadScene("Menu");
     }
 
     public void ReiniciarFase()
     {
-        Time.timeScale = 1f;
+        UnityEngine.Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

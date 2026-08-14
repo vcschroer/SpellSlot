@@ -42,20 +42,20 @@ public class DamagePopup : MonoBehaviour
         float tempo = 0f;
         while (tempo < duracaoPopIn)
         {
-            tempo += Time.deltaTime;
+            tempo += UnityEngine.Time.deltaTime;
             float t = tempo / duracaoPopIn;
             transform.localScale = Vector3.Lerp(Vector3.zero, escalaPico, t);
-            transform.position += Vector3.up * (velocidadeSubida * Time.deltaTime);
+            transform.position += Vector3.up * (velocidadeSubida * UnityEngine.Time.deltaTime);
             yield return null;
         }
 
         tempo = 0f;
         while (tempo < duracaoPopOut)
         {
-            tempo += Time.deltaTime;
+            tempo += UnityEngine.Time.deltaTime;
             float t = tempo / duracaoPopOut;
             transform.localScale = Vector3.Lerp(escalaPico, escalaFinal, t);
-            transform.position += Vector3.up * (velocidadeSubida * Time.deltaTime);
+            transform.position += Vector3.up * (velocidadeSubida * UnityEngine.Time.deltaTime);
             yield return null;
         }
 
@@ -64,10 +64,10 @@ public class DamagePopup : MonoBehaviour
 
         while (tempo < duracaoFadeOut)
         {
-            tempo += Time.deltaTime;
+            tempo += UnityEngine.Time.deltaTime;
             float t = tempo / duracaoFadeOut;
 
-            transform.position += Vector3.up * (velocidadeSubida * 0.4f * Time.deltaTime);
+            transform.position += Vector3.up * (velocidadeSubida * 0.4f * UnityEngine.Time.deltaTime);
 
             corAtual.a = Mathf.Lerp(1f, 0f, t);
             textMesh.color = corAtual;

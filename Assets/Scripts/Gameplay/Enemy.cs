@@ -78,7 +78,7 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        rb.MovePosition(rb.position + direcao * velocidade * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + direcao * velocidade * UnityEngine.Time.fixedDeltaTime);
 
         if (scriptAnimacao != null)
         {
@@ -88,10 +88,10 @@ public class Enemy : MonoBehaviour
 
     public void TomarDano(int quantidadeDano)
     {
-        if (estaMorto || Time.time < tempoProximoDano) return;
+        if (estaMorto || UnityEngine.Time.time < tempoProximoDano) return;
 
         vidaAtual -= quantidadeDano;
-        tempoProximoDano = Time.time + intervaloInvenclibilidade;
+        tempoProximoDano = UnityEngine.Time.time + intervaloInvenclibilidade;
 
         CriarPopUpDano(quantidadeDano);
 

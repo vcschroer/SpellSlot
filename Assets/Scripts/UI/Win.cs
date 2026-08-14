@@ -20,7 +20,7 @@ public class Win : MonoBehaviour
     {
         if (rolando && containerCreditos != null)
         {
-            containerCreditos.anchoredPosition += Vector2.up * velocidadeScroll * Time.deltaTime;
+            containerCreditos.anchoredPosition += Vector2.up * velocidadeScroll * UnityEngine.Time.deltaTime;
 
             if (containerCreditos.anchoredPosition.y >= limiteDeParadaY)
             {
@@ -39,7 +39,7 @@ public class Win : MonoBehaviour
 
     public void VoltarAoMenu()
     {
-        Time.timeScale = 1f;
+        UnityEngine.Time.timeScale = 1f;
         SceneManager.LoadScene(nomeDaCenaMenu);
     }
 }

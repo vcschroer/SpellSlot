@@ -35,7 +35,7 @@ public class CameraShake : MonoBehaviour
 
             deslocamentoTremor = new Vector3(x, y, 0f);
 
-            tempoPassado += Time.deltaTime;
+            tempoPassado += UnityEngine.Time.deltaTime;
             yield return null; 
         }
 

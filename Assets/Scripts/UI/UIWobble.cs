@@ -26,12 +26,12 @@ public class UIWobble : MonoBehaviour
     {
         if (seMexendo)
         {
-            float angulo = Mathf.Sin(Time.time * velocidade) * anguloMaximo;
+            float angulo = Mathf.Sin(UnityEngine.Time.time * velocidade) * anguloMaximo;
             rectTransform.localRotation = Quaternion.Euler(0f, 0f, angulo);
         }
         else
         {
-            rectTransform.localRotation = Quaternion.Lerp(rectTransform.localRotation, rotacaoInicial, Time.deltaTime * 10f);
+            rectTransform.localRotation = Quaternion.Lerp(rectTransform.localRotation, rotacaoInicial, UnityEngine.Time.deltaTime * 10f);
         }
     }
 }

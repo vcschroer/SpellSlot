@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        rb.MovePosition(rb.position + inputsMovimento * velocidade * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + inputsMovimento * velocidade * UnityEngine.Time.fixedDeltaTime);
         VerificarFlip();
 
         if (scriptAnimacao != null)
@@ -180,9 +180,9 @@ public class PlayerController : MonoBehaviour
     public void TomarDano(int dano)
     {
         if (JackpotAtivo) return;
-        if (Time.time < tempoProximoDano) return;
+        if (UnityEngine.Time.time < tempoProximoDano) return;
 
-        tempoProximoDano = Time.time + cooldownDano;
+        tempoProximoDano = UnityEngine.Time.time + cooldownDano;
 
         if (scriptEfeitos != null && dinheiroAtual > 0)
         {

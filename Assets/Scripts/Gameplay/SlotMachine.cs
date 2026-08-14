@@ -99,9 +99,9 @@ public class SlotMachine : MonoBehaviour
 
         if (scriptPlayer == null || estaProcessandoGiro) return;
 
-        if (Time.time < momentoProximoGiroPermitido)
+        if (UnityEngine.Time.time < momentoProximoGiroPermitido)
         {
-            float tempoRestante = momentoProximoGiroPermitido - Time.time;
+            float tempoRestante = momentoProximoGiroPermitido - UnityEngine.Time.time;
             Debug.Log($"[COOLDOWN]: Aguarde mais {tempoRestante:F1} segundos.");
             return;
         }
@@ -115,7 +115,7 @@ public class SlotMachine : MonoBehaviour
         menuAberto = !menuAberto;
         if (menuAberto)
         {
-            momentoProximoGiroPermitido = Time.time + tempoCooldown;
+            momentoProximoGiroPermitido = UnityEngine.Time.time + tempoCooldown;
             scriptPlayer.PerderDinheiro(custoVidaPorGiro);
             GirarCacaNiquel();
         }
@@ -323,10 +323,10 @@ public class SlotMachine : MonoBehaviour
 
         while (tempoAtual < tempoVida && rectLixo != null)
         {
-            rectLixo.anchoredPosition += new Vector2(velX, -velY) * Time.deltaTime;
-            rectLixo.Rotate(0, 0, velRotacao * Time.deltaTime);
+            rectLixo.anchoredPosition += new Vector2(velX, -velY) * UnityEngine.Time.deltaTime;
+            rectLixo.Rotate(0, 0, velRotacao * UnityEngine.Time.deltaTime);
 
-            tempoAtual += Time.deltaTime;
+            tempoAtual += UnityEngine.Time.deltaTime;
             yield return null;
         }
 

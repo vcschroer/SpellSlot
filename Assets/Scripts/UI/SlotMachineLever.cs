@@ -44,7 +44,7 @@ public class SlotMachineLever : MonoBehaviour
         float tempo = 0f;
         while (tempo < duracaoPuxada)
         {
-            tempo += Time.deltaTime;
+            tempo += UnityEngine.Time.deltaTime;
             float anguloAtual = Mathf.Lerp(anguloInicial, anguloMaximo, tempo / duracaoPuxada);
             rectTransform.localRotation = Quaternion.Euler(0f, 0f, anguloAtual);
             yield return null;
@@ -56,7 +56,7 @@ public class SlotMachineLever : MonoBehaviour
         tempo = 0f;
         while (tempo < duracaoRetorno)
         {
-            tempo += Time.deltaTime;
+            tempo += UnityEngine.Time.deltaTime;
             float anguloAtual = Mathf.Lerp(anguloMaximo, anguloInicial, tempo / duracaoRetorno);
             rectTransform.localRotation = Quaternion.Euler(0f, 0f, anguloAtual);
             yield return null;
@@ -71,7 +71,7 @@ public class SlotMachineLever : MonoBehaviour
 
             while (tempo < duracaoRebote)
             {
-                tempo += Time.deltaTime;
+                tempo += UnityEngine.Time.deltaTime;
                 float anguloAtual = Mathf.Lerp(anguloInicial, direcaoRebote, tempo / duracaoRebote);
                 rectTransform.localRotation = Quaternion.Euler(0f, 0f, anguloAtual);
                 yield return null;
@@ -79,7 +79,7 @@ public class SlotMachineLever : MonoBehaviour
             tempo = 0f;
             while (tempo < duracaoRebote)
             {
-                tempo += Time.deltaTime;
+                tempo += UnityEngine.Time.deltaTime;
                 float anguloAtual = Mathf.Lerp(direcaoRebote, anguloInicial, tempo / duracaoRebote);
                 rectTransform.localRotation = Quaternion.Euler(0f, 0f, anguloAtual);
                 yield return null;

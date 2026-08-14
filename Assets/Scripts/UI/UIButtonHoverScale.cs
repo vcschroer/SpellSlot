@@ -43,7 +43,7 @@ public class UIButtonHoverScale : MonoBehaviour, IPointerEnterHandler, IPointerE
 
         while (tempo < duracaoTransicao)
         {
-            tempo += Time.deltaTime;
+            tempo += UnityEngine.Time.deltaTime;
             transform.localScale = Vector3.Lerp(escalaInicial, escalaAlvo, tempo / duracaoTransicao);
             yield return null;
         }

@@ -71,7 +71,7 @@ public class SlotMachineVisual : MonoBehaviour
 
         if (executandoRGB)
         {
-            float h = (Time.time * velocidadeRGB) % 1f;
+            float h = (UnityEngine.Time.time * velocidadeRGB) % 1f;
             Color corRainbow = Color.HSVToRGB(h, 0.75f, 1f);
 
             if (exibicaoSlot1 != null) exibicaoSlot1.color = corRainbow;
@@ -124,7 +124,7 @@ public class SlotMachineVisual : MonoBehaviour
 
     private IEnumerator RotinaGirarComFrames(SlotMachine.TipoRecompensa resultado1, SlotMachine.TipoRecompensa resultado2, SlotMachine.TipoRecompensa resultado3)
     {
-        float tempoParadaSlot1 = Time.time + tempoGiroBase;
+        float tempoParadaSlot1 = UnityEngine.Time.time + tempoGiroBase;
         float tempoParadaSlot2 = tempoParadaSlot1 + intervaloEntreSlots;
         float tempoParadaSlot3 = tempoParadaSlot2 + intervaloEntreSlots;
 
@@ -156,9 +156,9 @@ public class SlotMachineVisual : MonoBehaviour
                 cronometroFrame = tempoPorFrame;
             }
 
-            cronometroFrame -= Time.deltaTime;
+            cronometroFrame -= UnityEngine.Time.deltaTime;
 
-            if (slot1Girando && Time.time >= tempoParadaSlot1)
+            if (slot1Girando && UnityEngine.Time.time >= tempoParadaSlot1)
             {
                 slot1Girando = false;
                 if (MusicManager.Instance != null) MusicManager.Instance.PlaySFX("stopslotmachine");
@@ -169,7 +169,7 @@ public class SlotMachineVisual : MonoBehaviour
                     StartCoroutine(RotinaPulandoIcone(exibicaoSlot1));
                 }
             }
-            if (slot2Girando && Time.time >= tempoParadaSlot2)
+            if (slot2Girando && UnityEngine.Time.time >= tempoParadaSlot2)
             {
                 slot2Girando = false;
                 if (MusicManager.Instance != null) MusicManager.Instance.PlaySFX("stopslotmachine");
@@ -180,7 +180,7 @@ public class SlotMachineVisual : MonoBehaviour
                     StartCoroutine(RotinaPulandoIcone(exibicaoSlot2));
                 }
             }
-            if (slot3Girando && Time.time >= tempoParadaSlot3)
+            if (slot3Girando && UnityEngine.Time.time >= tempoParadaSlot3)
             {
                 slot3Girando = false;
                 if (MusicManager.Instance != null) MusicManager.Instance.PlaySFX("stopslotmachine");
@@ -214,14 +214,14 @@ public class SlotMachineVisual : MonoBehaviour
         float tempoMudar = 0f;
         while (tempoMudar < duracaoSubida)
         {
-            tempoMudar += Time.deltaTime;
+            tempoMudar += UnityEngine.Time.deltaTime;
             transformIcone.localScale = Vector3.Lerp(escalaOriginal, escalaMaxima, tempoMudar / duracaoSubida);
             yield return null;
         }
         tempoMudar = 0f;
         while (tempoMudar < duracaoDescida)
         {
-            tempoMudar += Time.deltaTime;
+            tempoMudar += UnityEngine.Time.deltaTime;
             transformIcone.localScale = Vector3.Lerp(escalaMaxima, escalaOriginal, tempoMudar / duracaoDescida);
             yield return null;
         }

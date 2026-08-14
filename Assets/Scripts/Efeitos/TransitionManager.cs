@@ -54,7 +54,7 @@ public class TransitionManager : MonoBehaviour
 
         while (tempo < duracaoTransicao)
         {
-            tempo += Time.deltaTime;
+            tempo += UnityEngine.Time.deltaTime;
             circuloPreto.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, tempo / duracaoTransicao);
             yield return null;
         }
@@ -83,7 +83,7 @@ public class TransitionManager : MonoBehaviour
 
         while (tempo < duracaoTransicao)
         {
-            tempo += Time.deltaTime;
+            tempo += UnityEngine.Time.deltaTime;
             circuloPreto.localScale = Vector3.Lerp(escalaInicial, Vector3.zero, tempo / duracaoTransicao);
             yield return null;
         }

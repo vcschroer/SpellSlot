@@ -213,10 +213,10 @@ public class Pistol : BaseWeapon
 
         while (timerJackpot > 0)
         {
-            timerJackpot -= Time.deltaTime;
-            timerTiro += Time.deltaTime;
+            timerJackpot -= UnityEngine.Time.deltaTime;
+            timerTiro += UnityEngine.Time.deltaTime;
 
-            anguloGiro += velocidadeGiroJackpot * Time.deltaTime;
+            anguloGiro += velocidadeGiroJackpot * UnityEngine.Time.deltaTime;
             float radianos = anguloGiro * Mathf.Deg2Rad;
             Vector2 direcaoOrbita = new Vector2(Mathf.Cos(radianos), Mathf.Sin(radianos));
 

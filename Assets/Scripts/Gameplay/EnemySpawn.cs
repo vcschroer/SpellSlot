@@ -74,7 +74,7 @@ public class EnemySpawn : MonoBehaviour
 
         if (vitoriaDisparada) return;
 
-        tempoDecorrido += Time.deltaTime;
+        tempoDecorrido += UnityEngine.Time.deltaTime;
 
         if (!miniBossSpawnado && tempoDecorrido >= tempoSpawnMiniBossSegundos)
         {
@@ -85,15 +85,15 @@ public class EnemySpawn : MonoBehaviour
         {
             spawnEncerrado = true;
 
-            if (Time.time >= proximaChecagemVitoria)
+            if (UnityEngine.Time.time >= proximaChecagemVitoria)
             {
                 VerificarVitoria();
-                proximaChecagemVitoria = Time.time + 1f;
+                proximaChecagemVitoria = UnityEngine.Time.time + 1f;
             }
             return;
         }
 
-        cronometroSpawn += Time.deltaTime;
+        cronometroSpawn += UnityEngine.Time.deltaTime;
         if (cronometroSpawn >= CalcularIntervaloAjustado())
         {
             int qtdParaSpawnar = CalcularQuantidadeAtual();

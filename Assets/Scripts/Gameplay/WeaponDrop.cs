@@ -44,7 +44,7 @@ public class WeaponDrop : MonoBehaviour
 
     private void Update()
     {
-        float novoY = posicaoInicial.y + Mathf.Sin(Time.time * velocidadeFlutuar) * alturaFlutuar;
+        float novoY = posicaoInicial.y + Mathf.Sin(UnityEngine.Time.time * velocidadeFlutuar) * alturaFlutuar;
         transform.position = new Vector3(transform.position.x, novoY, transform.position.z);
     }
 

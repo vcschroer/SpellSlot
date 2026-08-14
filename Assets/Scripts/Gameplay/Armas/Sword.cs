@@ -230,7 +230,7 @@ public class Sword : BaseWeapon
         float progresso = 0f;
         while (progresso < 1f)
         {
-            progresso += velAtaqueAtual * Time.deltaTime;
+            progresso += velAtaqueAtual * UnityEngine.Time.deltaTime;
             float zAtual = Mathf.LerpAngle(anguloLocalInicial, anguloLocalFinal, progresso);
             transform.localRotation = Quaternion.Euler(0, 0, zAtual);
             VerificarCorteEspada();
@@ -244,7 +244,7 @@ public class Sword : BaseWeapon
         float velRetornoAtual = velocidadeRetornoBase * multiplicador;
         while (progresso < 1f)
         {
-            progresso += velRetornoAtual * Time.deltaTime;
+            progresso += velRetornoAtual * UnityEngine.Time.deltaTime;
             float zAtual = Mathf.LerpAngle(anguloLocalFinal, anguloLocalInicial, progresso);
             transform.localRotation = Quaternion.Euler(0, 0, zAtual);
             yield return null;
@@ -292,8 +292,8 @@ public class Sword : BaseWeapon
 
         while (tempoJackpotRestante > 0)
         {
-            tempoJackpotRestante -= Time.deltaTime;
-            timerRehit += Time.deltaTime;
+            tempoJackpotRestante -= UnityEngine.Time.deltaTime;
+            timerRehit += UnityEngine.Time.deltaTime;
 
             if (timerRehit >= intervaloParaRehit)
             {
@@ -301,7 +301,7 @@ public class Sword : BaseWeapon
                 timerRehit = 0f;
             }
 
-            anguloRotacaoJackpot += velocidadeGiroJackpot * Time.deltaTime;
+            anguloRotacaoJackpot += velocidadeGiroJackpot * UnityEngine.Time.deltaTime;
             float radianos = anguloRotacaoJackpot * Mathf.Deg2Rad;
             Vector2 direcao = new Vector2(Mathf.Cos(radianos), Mathf.Sin(radianos));
 
