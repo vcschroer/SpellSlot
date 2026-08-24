@@ -2,15 +2,13 @@
 
 public abstract class BaseWeapon : MonoBehaviour
 {
-    [Header("Identificacao (Para a Roleta)")]
+    [Header("Identificacao")]
     public TipoArma tipoArma;
 
     [Header("Configuracoes Globais da Arma")]
-    [Tooltip("Tempo base em segundos entre cada ataque automatico")]
     [SerializeField] protected float tempoEntreAtaquesBase = 1.5f;
 
     [Header("Status Modificaveis pela Roleta")]
-    [Tooltip("A velocidade de ataque PROPRIA desta arma (Modificada pela roleta)")]
     public float weaponAttackSpeed = 1f;
 
     protected PlayerController player;

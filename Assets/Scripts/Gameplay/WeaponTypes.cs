@@ -1,5 +1,8 @@
 public enum TipoArma
 {
     Espada,
-    Pistola
+    Pistola,
+    Bomba,
+    Orbita,
+    Zona
 }

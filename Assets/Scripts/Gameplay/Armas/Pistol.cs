@@ -8,22 +8,15 @@ public class Pistol : BaseWeapon
     [SerializeField] private Transform puntoDeDisparo;
     [SerializeField] private float velocidadeProjetil = 12f;
 
-    [Header("Configuracoes de Upgrade (Leque/Cone)")]
-    [Tooltip("Quantidade de balas disparadas por clique/ataque. Pode ser aumentado via script/roleta.")]
+    [Header("Configuracoes de Upgrade")]
     [SerializeField] private int quantidadeBalas = 1;
 
-    [Tooltip("A abertura total (em graus) do cone de tiros quando houver mais de 1 bala.")]
     [SerializeField] private float anguloConeSpread = 30f;
 
     [Header("Configuracoes de Posicionamento e Auto-Mira")]
     [SerializeField] private Vector2 centroDoPlayerOffset = new Vector2(0f, 0.2f);
-    [Tooltip("O raio do circulo ao redor do player onde a pistola vai se posicionar")]
     [SerializeField] private float raioPosicionamento = 0.8f;
-
-    [Tooltip("Multiplicador do raio de posicionamento caso o player tenha uma Espada equipada")]
     [SerializeField] private float multiplicadorComEspada = 3f;
-
-    [Tooltip("Distancia maxima que a pistola consegue detectar e atirar em um inimigo")]
     [SerializeField] private float distanciaMaximaAlvo = 7f;
 
     [Header("Configuracoes de Jackpot")]

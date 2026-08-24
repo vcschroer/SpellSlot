@@ -6,10 +6,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] private int danoBala = 5;
 
     [Header("Configuracoes de Ricochete")]
-    [Tooltip("Quantas vezes a bala pode ricochetear antes de sumir.")]
     [SerializeField] private int ricochetesRestantes = 0;
-
-    [Tooltip("Distancia maxima que a bala consegue 'enxergar' outro inimigo para ricochetear.")]
     [SerializeField] private float raioBuscaRicochete = 8f;
 
     private Rigidbody2D rb;
