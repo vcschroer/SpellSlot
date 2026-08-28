@@ -27,7 +27,6 @@ public class PlayerController : MonoBehaviour
     public int vidaAtual => dinheiroAtual;
 
     [Header("Invencibilidade / Cooldown de Dano")]
-    [Tooltip("Tempo em segundos que o player fica imune após receber dano")]
     [SerializeField] private float cooldownDano = 1.5f;
     private float tempoProximoDano = 0f;
 
@@ -189,6 +188,13 @@ public class PlayerController : MonoBehaviour
             scriptEfeitos.PlayFlash(0.15f);
             scriptEfeitos.PlaySquashAndStretch(1.3f, 0.7f, 0.15f);
         }
+
+        SlotMachineVisual slotVisual = Object.FindAnyObjectByType<SlotMachineVisual>();
+        if (slotVisual != null)
+        {
+            slotVisual.AtivarShakeDano();
+        }
+
         PerderDinheiro(dano);
     }
 

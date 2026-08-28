@@ -4,7 +4,7 @@ public class CameraFollow : MonoBehaviour
 {
     private Transform alvoPlayer;
     private float offsetZ = -10f;
-    private float offsetY = -1.25f; // câmera 1.25 unidades abaixo
+    private float offsetY = -1.25f;
 
     private CameraShake scriptShake;
 

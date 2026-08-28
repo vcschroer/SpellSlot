@@ -1,0 +1,495 @@
+fileFormatVersion: 2
+guid: 590eb367f6b5cb746ab5cc4e3462aeb5
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1104159692308346384
+    second: tile set cenario spell slot_0
+  - first:
+      213: -2366465638357511213
+    second: tile set cenario spell slot_1
+  - first:
+      213: -1156352827313284979
+    second: tile set cenario spell slot_2
+  - first:
+      213: -3657008794872074824
+    second: tile set cenario spell slot_3
+  - first:
+      213: 1867761225342527521
+    second: tile set cenario spell slot_4
+  - first:
+      213: 1757581061909321205
+    second: tile set cenario spell slot_5
+  - first:
+      213: 7263157468334053954
+    second: tile set cenario spell slot_6
+  - first:
+      213: 2370504051544172850
+    second: tile set cenario spell slot_7
+  - first:
+      213: 2010542355889123146
+    second: tile set cenario spell slot_8
+  - first:
+      213: -7757577194984576142
+    second: tile set cenario spell slot_9
+  - first:
+      213: -5898275809393075020
+    second: tile set cenario spell slot_10
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: tile set cenario spell slot_0
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 265
+        width: 424
+        height: 1075
+      alignment: 9
+      pivot: {x: 0.37343112, y: 0.12412299}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f908a42c9c3da0f0800000000000000
+      internalID: -1104159692308346384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tile set cenario spell slot_1
+      rect:
+        serializedVersion: 2
+        x: 670
+        y: 265
+        width: 424
+        height: 1075
+      alignment: 9
+      pivot: {x: 0.5930657, y: 0.110908575}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d3588c3a00a82fd0800000000000000
+      internalID: -2366465638357511213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tile set cenario spell slot_2
+      rect:
+        serializedVersion: 2
+        x: 1207
+        y: 1120
+        width: 340
+        height: 200
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8819fcea3fc3ffe0800000000000000
+      internalID: -1156352827313284979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tile set cenario spell slot_3
+      rect:
+        serializedVersion: 2
+        x: 1617
+        y: 1120
+        width: 342
+        height: 200
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8bdab2170e1bf3dc0800000000000000
+      internalID: -3657008794872074824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tile set cenario spell slot_4
+      rect:
+        serializedVersion: 2
+        x: 2014
+        y: 1050
+        width: 161
+        height: 289
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1282ac940fe9be910800000000000000
+      internalID: 1867761225342527521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tile set cenario spell slot_5
+      rect:
+        serializedVersion: 2
+        x: 2281
+        y: 1133
+        width: 54
+        height: 182
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f51f0be9ae246810800000000000000
+      internalID: 1757581061909321205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tile set cenario spell slot_6
+      rect:
+        serializedVersion: 2
+        x: 2455
+        y: 1133
+        width: 54
+        height: 182
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 24ad6cf4c3bebc460800000000000000
+      internalID: 7263157468334053954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tile set cenario spell slot_7
+      rect:
+        serializedVersion: 2
+        x: 1269
+        y: 969
+        width: 67
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2392aea10e8b5e020800000000000000
+      internalID: 2370504051544172850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tile set cenario spell slot_8
+      rect:
+        serializedVersion: 2
+        x: 1403
+        y: 967
+        width: 42
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4fe5a0de91e6eb10800000000000000
+      internalID: 2010542355889123146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tile set cenario spell slot_9
+      rect:
+        serializedVersion: 2
+        x: 1515
+        y: 958
+        width: 66
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 27be54f74ac875490800000000000000
+      internalID: -7757577194984576142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tile set cenario spell slot_10
+      rect:
+        serializedVersion: 2
+        x: 1635
+        y: 962
+        width: 42
+        height: 68
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4bc98d9d66d152ea0800000000000000
+      internalID: -5898275809393075020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tile set cenario spell slot_11
+      rect:
+        serializedVersion: 2
+        x: 1207
+        y: 1222
+        width: 177
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3709d76de29c91342a77e467b170e661
+      internalID: 913794240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tile set cenario spell slot_12
+      rect:
+        serializedVersion: 2
+        x: 1207
+        y: 1122
+        width: 177
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ab4f86e8537cc749b3a33dce1fe1cd8
+      internalID: 530011641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tile set cenario spell slot_13
+      rect:
+        serializedVersion: 2
+        x: 1384
+        y: 1222
+        width: 163
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e2580a6275215745bc86310351824ff
+      internalID: 565634700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tile set cenario spell slot_14
+      rect:
+        serializedVersion: 2
+        x: 1384
+        y: 1120
+        width: 163
+        height: 102
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d3dd00dcc9f82246a5f8477cdd1bd97
+      internalID: -1452376021
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: d113e020cc13216458860d1229d68920
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      tile set cenario spell slot_0: -1104159692308346384
+      tile set cenario spell slot_1: -2366465638357511213
+      tile set cenario spell slot_10: -5898275809393075020
+      tile set cenario spell slot_11: 913794240
+      tile set cenario spell slot_12: 530011641
+      tile set cenario spell slot_13: 565634700
+      tile set cenario spell slot_14: -1452376021
+      tile set cenario spell slot_2: -1156352827313284979
+      tile set cenario spell slot_3: -3657008794872074824
+      tile set cenario spell slot_4: 1867761225342527521
+      tile set cenario spell slot_5: 1757581061909321205
+      tile set cenario spell slot_6: 7263157468334053954
+      tile set cenario spell slot_7: 2370504051544172850
+      tile set cenario spell slot_8: 2010542355889123146
+      tile set cenario spell slot_9: -7757577194984576142
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

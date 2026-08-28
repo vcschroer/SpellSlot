@@ -8,7 +8,6 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected int vidaAtual = 10;
 
     [Header("Configurações de Feedback de Dano")]
-    [Tooltip("Prefab do TextMeshPro 2D com o script DamagePopup")]
     [SerializeField] private GameObject prefabDamagePopup;
 
     [Header("Configurações de Movimento")]
@@ -24,7 +23,6 @@ public class Enemy : MonoBehaviour
     [SerializeField] private SpriteEffects scriptEfeitos;
 
     [Header("Configurações de Efeitos e Partículas")]
-    [Tooltip("Arraste aqui o Prefab da partícula de explosão")]
     [SerializeField] private GameObject prefabExplosao;
 
     [Header("Configurações de Drops")]
@@ -135,7 +133,7 @@ public class Enemy : MonoBehaviour
             PlayerController player = collision.gameObject.GetComponent<PlayerController>();
             if (player != null)
             {
-                player.TomarDano(danoNoPlayer); 
+                player.TomarDano(danoNoPlayer);
             }
 
             Destroy(gameObject);
@@ -175,7 +173,27 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator RotinaDestruição()
     {
-        yield return new WaitForSeconds(tempoAnimacaoMorte);
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (sr == null) sr = GetComponentInChildren<SpriteRenderer>();
+
+        if (sr != null)
+        {
+            Color corInicial = sr.color;
+            float tempo = 0f;
+
+            while (tempo < tempoAnimacaoMorte)
+            {
+                tempo += UnityEngine.Time.deltaTime;
+                float alpha = Mathf.Lerp(corInicial.a, 0f, tempo / tempoAnimacaoMorte);
+                sr.color = new Color(corInicial.r, corInicial.g, corInicial.b, alpha);
+                yield return null;
+            }
+        }
+        else
+        {
+            yield return new WaitForSeconds(tempoAnimacaoMorte);
+        }
+
         Destroy(gameObject);
     }
 

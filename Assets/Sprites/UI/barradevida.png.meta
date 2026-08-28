@@ -121,6 +121,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: barradevida_1
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 19
+        width: 76
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9043806b95739644960be85df8ec145
+      internalID: -1843167408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -136,6 +158,7 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       barradevida_0: -8707033934458525024
+      barradevida_1: -1843167408
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

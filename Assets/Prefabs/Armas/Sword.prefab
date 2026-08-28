@@ -52,6 +52,12 @@ MonoBehaviour:
   distanciaDireita: 5
   distanciaEsquerda: 5
   anguloEmRepouso: -30
+  velocidadeSuavizacaoPosicao: 10
+  velocidadeSuavizacaoRotacao: 12
+  amplitudeFlutuacao: 0.12
+  velocidadeFlutuacao: 3
+  stretchAtaqueY: 0.8
+  squashAtaqueX: 0.7
   anguloInicial: -90
   anguloFinal: -200
   velocidadeAtaqueBase: 5
@@ -61,7 +67,7 @@ MonoBehaviour:
   prefabMeioLamina: {fileID: 9068567274452352512, guid: d0f0a795fb2692546ba6ea614175f738, type: 3}
   prefabPontaLamina: {fileID: 8372954289619658168, guid: ae08bb500050c9644be289a4d39ae42b, type: 3}
   quantidadeSegmentosMeio: 2
-  tamanhoDoSegmentoY: 11.1
+  tamanhoDoSegmentoY: 8.5
   deslocamentoDaPonta: 13.6
   larguraDoCorte: 0.8
   layerDosInimigos:

@@ -4,10 +4,8 @@ using UnityEngine;
 public class SlotMachineLever : MonoBehaviour
 {
     [Header("Configurações de Rotação")]
-    [Tooltip("Ângulo inicial da alavanca (normalmente 0)")]
     [SerializeField] private float anguloInicial = 0f;
 
-    [Tooltip("Ângulo máximo para baixo. Se ela girar para o lado errado, mude o sinal do número (ex: se -60 foi para trás, use 60)")]
     [SerializeField] private float anguloMaximo = -60f;
 
     [Header("Tempos da Animação")]

@@ -9,22 +9,31 @@ public class Sword : BaseWeapon
 
     [Header("Configuracoes de Posicao Fixa")]
     [SerializeField] private Vector2 centroDoPlayerOffset = new Vector2(0f, 0.2f);
-
-    [Tooltip("Distancia que a espada fica quando o player olha para a DIREITA")]
     [SerializeField] private float distanciaDireita = 0.8f;
-
-    [Tooltip("Distancia que a espada fica quando o player olha para a ESQUERDA")]
     [SerializeField] private float distanciaEsquerda = 0.8f;
-
-    [Tooltip("O angulo que a espada fica inclinada quando nao esta atacando")]
     [SerializeField] private float anguloEmRepouso = 0f;
+
+    [Header("Configuracoes de Suavizacao e Flutuacao")]
+    [SerializeField] private float velocidadeSuavizacaoPosicao = 10f;
+    [SerializeField] private float velocidadeSuavizacaoRotacao = 12f;
+    [SerializeField] private float amplitudeFlutuacao = 0.12f;
+    [SerializeField] private float velocidadeFlutuacao = 3f;
+
+    [Header("Efeito Squash & Stretch no Ataque")]
+    [SerializeField] private float stretchAtaqueY = 1.35f;
+    [SerializeField] private float squashAtaqueX = 0.7f;
 
     [Header("Configuracoes Base do Ataque")]
     [SerializeField] private float anguloInicial = 45f;
     [SerializeField] private float anguloFinal = -45f;
     [SerializeField] private float velocidadeAtaqueBase = 20f;
     [SerializeField] private float velocidadeRetornoBase = 5f;
-    [SerializeField] private float anguloInicialMaximo = 260f; 
+    [SerializeField] private float anguloInicialMaximo = 260f;
+
+    [Header("Efeito de Rastro (Trail)")]
+    [SerializeField] private TrailRenderer rastroEspada;
+    [SerializeField] private float larguraBaseTrail = 0.4f;
+    [SerializeField] private float incrementoLarguraPorSegmento = 0.25f;
 
     [Header("Prefabs dos Segmentos")]
     [SerializeField] private GameObject prefabCabo;
@@ -66,6 +75,11 @@ public class Sword : BaseWeapon
 
         ConstruirEspada();
 
+        if (rastroEspada != null)
+        {
+            rastroEspada.emitting = false;
+        }
+
         if (layerDosInimigos == 0) layerDosInimigos = LayerMask.GetMask("Default");
     }
 
@@ -102,7 +116,7 @@ public class Sword : BaseWeapon
             transform.localPosition = new Vector3(centroDoPlayerOffset.x + distanciaAtual, centroDoPlayerOffset.y, 0f);
             transform.localScale = new Vector3(escalaOriginal.x * direcaoX, escalaOriginal.y, escalaOriginal.z);
 
-            StartCoroutine(RotinaGolpe(weaponAttackSpeed, anguloDirecao));
+            StartCoroutine(RotinaGolpe(weaponAttackSpeed, anguloDirecao, direcaoX));
         }
     }
 
@@ -111,15 +125,24 @@ public class Sword : BaseWeapon
         if (player == null) return;
 
         float direcaoX = ObterLadoDoAlvo();
-
         float distanciaAtual = direcaoX > 0 ? distanciaDireita : -distanciaEsquerda;
 
-        transform.localPosition = new Vector3(centroDoPlayerOffset.x + distanciaAtual, centroDoPlayerOffset.y, 0f);
+        float deslocamentoFlutuanteY = Mathf.Sin(UnityEngine.Time.time * velocidadeFlutuacao) * amplitudeFlutuacao;
+        float inclinacaoFlutuanteZ = Mathf.Cos(UnityEngine.Time.time * velocidadeFlutuacao * 0.5f) * 3f;
 
-        transform.localScale = new Vector3(escalaOriginal.x * direcaoX, escalaOriginal.y, escalaOriginal.z);
+        Vector3 posAlvo = new Vector3(
+            centroDoPlayerOffset.x + distanciaAtual,
+            centroDoPlayerOffset.y + deslocamentoFlutuanteY,
+            0f
+        );
+        transform.localPosition = Vector3.Lerp(transform.localPosition, posAlvo, UnityEngine.Time.deltaTime * velocidadeSuavizacaoPosicao);
 
-        float anguloCalculado = direcaoX < 0 ? -anguloEmRepouso : anguloEmRepouso;
-        transform.localRotation = Quaternion.Euler(0, 0, anguloCalculado);
+        Vector3 escalaAlvo = new Vector3(escalaOriginal.x * direcaoX, escalaOriginal.y, escalaOriginal.z);
+        transform.localScale = Vector3.Lerp(transform.localScale, escalaAlvo, UnityEngine.Time.deltaTime * velocidadeSuavizacaoPosicao);
+
+        float anguloCalculado = (direcaoX < 0 ? -anguloEmRepouso : anguloEmRepouso) + inclinacaoFlutuanteZ;
+        Quaternion rotAlvo = Quaternion.Euler(0, 0, anguloCalculado);
+        transform.localRotation = Quaternion.Lerp(transform.localRotation, rotAlvo, UnityEngine.Time.deltaTime * velocidadeSuavizacaoRotacao);
     }
 
     private float ObterLadoDoAlvo()
@@ -211,10 +234,28 @@ public class Sword : BaseWeapon
             GameObject ponta = Instantiate(prefabPontaLamina, transform);
             ponta.transform.localPosition = new Vector3(0, (posY - tamanhoDoSegmentoY) + deslocamentoDaPonta, 0);
             segmentosCriados.Add(ponta);
+
+            TrailRenderer trailNaPonta = ponta.GetComponentInChildren<TrailRenderer>();
+            if (trailNaPonta != null)
+            {
+                rastroEspada = trailNaPonta;
+                rastroEspada.emitting = false;
+            }
+        }
+
+        AtualizarLarguraDoRastro();
+    }
+
+    private void AtualizarLarguraDoRastro()
+    {
+        if (rastroEspada != null)
+        {
+            float larguraCalculada = larguraBaseTrail + (quantidadeSegmentosMeio * incrementoLarguraPorSegmento);
+            rastroEspada.widthMultiplier = larguraCalculada;
         }
     }
 
-    private IEnumerator RotinaGolpe(float multiplicador, float anguloBaseDirecao)
+    private IEnumerator RotinaGolpe(float multiplicador, float anguloBaseDirecao, float direcaoX)
     {
         atacando = true;
         inimigosAtingidosNesteGolpe.Clear();
@@ -227,16 +268,36 @@ public class Sword : BaseWeapon
         float anguloLocalInicial = estaNaEsquerda ? (anguloBaseAtaque - anguloInicial) : (anguloBaseAtaque + anguloInicial);
         float anguloLocalFinal = estaNaEsquerda ? (anguloBaseAtaque - anguloFinal) : (anguloBaseAtaque + anguloFinal);
 
+        if (rastroEspada != null)
+        {
+            rastroEspada.Clear();
+            rastroEspada.emitting = true;
+        }
+
         float progresso = 0f;
         while (progresso < 1f)
         {
             progresso += velAtaqueAtual * UnityEngine.Time.deltaTime;
+
             float zAtual = Mathf.LerpAngle(anguloLocalInicial, anguloLocalFinal, progresso);
             transform.localRotation = Quaternion.Euler(0, 0, zAtual);
+
+            float fatorCurva = Mathf.Sin(progresso * Mathf.PI);
+            float novoX = Mathf.Lerp(escalaOriginal.x, escalaOriginal.x * squashAtaqueX, fatorCurva) * direcaoX;
+            float novoY = Mathf.Lerp(escalaOriginal.y, escalaOriginal.y * stretchAtaqueY, fatorCurva);
+            transform.localScale = new Vector3(novoX, novoY, escalaOriginal.z);
+
             VerificarCorteEspada();
             yield return null;
         }
+
         transform.localRotation = Quaternion.Euler(0, 0, anguloLocalFinal);
+        transform.localScale = new Vector3(escalaOriginal.x * direcaoX, escalaOriginal.y, escalaOriginal.z);
+
+        if (rastroEspada != null)
+        {
+            rastroEspada.emitting = false;
+        }
 
         yield return new WaitForSeconds(0.05f / multiplicador);
 
@@ -245,11 +306,15 @@ public class Sword : BaseWeapon
         while (progresso < 1f)
         {
             progresso += velRetornoAtual * UnityEngine.Time.deltaTime;
+
             float zAtual = Mathf.LerpAngle(anguloLocalFinal, anguloLocalInicial, progresso);
             transform.localRotation = Quaternion.Euler(0, 0, zAtual);
+
             yield return null;
         }
+
         transform.localRotation = Quaternion.Euler(0, 0, anguloLocalInicial);
+        transform.localScale = new Vector3(escalaOriginal.x * direcaoX, escalaOriginal.y, escalaOriginal.z);
         atacando = false;
     }
 
@@ -290,6 +355,12 @@ public class Sword : BaseWeapon
         float intervaloParaRehit = 0.5f;
         float timerRehit = 0f;
 
+        if (rastroEspada != null)
+        {
+            rastroEspada.Clear();
+            rastroEspada.emitting = true;
+        }
+
         while (tempoJackpotRestante > 0)
         {
             tempoJackpotRestante -= UnityEngine.Time.deltaTime;
@@ -312,10 +383,16 @@ public class Sword : BaseWeapon
             yield return null;
         }
 
+        if (rastroEspada != null)
+        {
+            rastroEspada.emitting = false;
+        }
+
         atacando = false;
         EstaEmModoJackpot = false;
         if (MusicManager.Instance != null) MusicManager.Instance.PlayJackpotSound(false);
         transform.localRotation = Quaternion.identity;
+        transform.localScale = escalaOriginal;
         inimigosAtingidosNesteGolpe.Clear();
     }
 
@@ -337,7 +414,6 @@ public class Sword : BaseWeapon
     public void AumentarAnguloCorte(float incremento)
     {
         anguloInicial = Mathf.Min(anguloInicial + incremento, anguloInicialMaximo);
-
         anguloFinal = -anguloInicial;
     }
 }

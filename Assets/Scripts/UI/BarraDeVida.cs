@@ -1,19 +1,43 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class BarraDeVida : MonoBehaviour
 {
-    [Header("Configuracoes")]
-    [SerializeField] private Slider slider;
+    [Header("Configurações das Barras")]
+    [SerializeField] private Slider sliderPrincipal;
+    [SerializeField] private Slider sliderFantasma;
     [SerializeField] private PlayerController player;
 
-    [Header("Configuracoes RGB (Jackpot)")]
-    [Tooltip("Arraste aqui a imagem de preenchimento (Fill) do Slider.")]
-    [SerializeField] private Image imagemPreenchimento;
-    [SerializeField] private float velocidadeRGB = 2f;
+    [Header("Efeito Fantasma (Perda de Vida)")]
+    [SerializeField] private float tempoEsperaAtraso = 0.4f;
+    [SerializeField] private float velocidadeSuavizacaoDano = 5f;
 
-    private Color corOriginalFill = Color.red;
-    private bool corOriginalSalva = false;
+    [Header("Efeito de Ganho de Vida")]
+    [SerializeField] private float velocidadeGanhoVida = 5f;
+
+    [Header("Efeito de Dano (Shake)")]
+    [SerializeField] private RectTransform containerBarra;
+    [SerializeField] private float forcaShake = 8f;
+    [SerializeField] private float duracaoShake = 0.2f;
+
+    private float dinheiroAnterior;
+    private Coroutine coroutineAtrasoBarra;
+    private Coroutine coroutineShake;
+    private Vector2 posicaoOriginalBarra;
+
+    void Awake()
+    {
+        if (containerBarra == null)
+        {
+            containerBarra = GetComponent<RectTransform>();
+        }
+
+        if (containerBarra != null)
+        {
+            posicaoOriginalBarra = containerBarra.anchoredPosition;
+        }
+    }
 
     void Start()
     {
@@ -31,56 +55,112 @@ public class BarraDeVida : MonoBehaviour
             }
         }
 
-        if (player == null || slider == null) return;
+        if (player == null || sliderPrincipal == null) return;
 
-        slider.maxValue = player.maxDinheiro;
-        slider.value = player.dinheiroAtual;
+        sliderPrincipal.maxValue = player.maxDinheiro;
+        if (sliderFantasma != null) sliderFantasma.maxValue = player.maxDinheiro;
 
-        if (player.JackpotAtivo)
+        if (player.dinheiroAtual < dinheiroAnterior)
         {
-            if (imagemPreenchimento != null)
-            {
-                float h = (UnityEngine.Time.time * velocidadeRGB) % 1f;
-                imagemPreenchimento.color = Color.HSVToRGB(h, 0.75f, 1f);
-            }
+            sliderPrincipal.value = player.dinheiroAtual;
+
+            AtivarShake();
+
+            IniciarAtrasoBarraFantasma();
+
+            dinheiroAnterior = player.dinheiroAtual;
         }
-        else
+        else if (player.dinheiroAtual > dinheiroAnterior)
         {
-            if (imagemPreenchimento != null && corOriginalSalva && imagemPreenchimento.color != corOriginalFill)
+            if (coroutineAtrasoBarra != null) StopCoroutine(coroutineAtrasoBarra);
+
+            dinheiroAnterior = player.dinheiroAtual;
+        }
+
+        if (sliderPrincipal.value < player.dinheiroAtual)
+        {
+            sliderPrincipal.value = Mathf.Lerp(sliderPrincipal.value, player.dinheiroAtual, UnityEngine.Time.deltaTime * velocidadeGanhoVida);
+
+            if (Mathf.Abs(sliderPrincipal.value - player.dinheiroAtual) < 0.05f)
             {
-                imagemPreenchimento.color = corOriginalFill;
+                sliderPrincipal.value = player.dinheiroAtual;
+            }
+
+            if (sliderFantasma != null)
+            {
+                sliderFantasma.value = sliderPrincipal.value;
             }
         }
     }
 
+    private void IniciarAtrasoBarraFantasma()
+    {
+        if (coroutineAtrasoBarra != null) StopCoroutine(coroutineAtrasoBarra);
+        coroutineAtrasoBarra = StartCoroutine(RotinaAtrasoBarraFantasma());
+    }
+
+    private IEnumerator RotinaAtrasoBarraFantasma()
+    {
+        yield return new WaitForSeconds(tempoEsperaAtraso);
+
+        if (sliderFantasma != null)
+        {
+            while (Mathf.Abs(sliderFantasma.value - sliderPrincipal.value) > 0.01f)
+            {
+                sliderFantasma.value = Mathf.Lerp(sliderFantasma.value, sliderPrincipal.value, UnityEngine.Time.deltaTime * velocidadeSuavizacaoDano);
+                yield return null;
+            }
+            sliderFantasma.value = sliderPrincipal.value;
+        }
+    }
+
+    public void AtivarShake()
+    {
+        if (coroutineShake != null) StopCoroutine(coroutineShake);
+        coroutineShake = StartCoroutine(RotinaShake());
+    }
+
+    private IEnumerator RotinaShake()
+    {
+        if (containerBarra == null) yield break;
+
+        float tempo = 0f;
+        while (tempo < duracaoShake)
+        {
+            tempo += UnityEngine.Time.deltaTime;
+            Vector2 deslocamento = Random.insideUnitCircle * forcaShake;
+            containerBarra.anchoredPosition = posicaoOriginalBarra + deslocamento;
+            yield return null;
+        }
+
+        containerBarra.anchoredPosition = posicaoOriginalBarra;
+    }
+
     private void ConfigurarComponentes()
     {
-        if (slider == null) slider = GetComponent<Slider>();
+        if (sliderPrincipal == null) sliderPrincipal = GetComponent<Slider>();
         if (player == null) player = Object.FindAnyObjectByType<PlayerController>();
 
         if (player != null)
         {
             SincronizarValoresIniciais();
         }
-
-        if (imagemPreenchimento == null && slider != null && slider.fillRect != null)
-        {
-            imagemPreenchimento = slider.fillRect.GetComponent<Image>();
-        }
-
-        if (imagemPreenchimento != null)
-        {
-            corOriginalFill = imagemPreenchimento.color;
-            corOriginalSalva = true;
-        }
     }
 
     private void SincronizarValoresIniciais()
     {
-        if (slider != null)
+        dinheiroAnterior = player.dinheiroAtual;
+
+        if (sliderPrincipal != null)
         {
-            slider.maxValue = player.maxDinheiro;
-            slider.value = player.dinheiroAtual;
+            sliderPrincipal.maxValue = player.maxDinheiro;
+            sliderPrincipal.value = player.dinheiroAtual;
+        }
+
+        if (sliderFantasma != null)
+        {
+            sliderFantasma.maxValue = player.maxDinheiro;
+            sliderFantasma.value = player.dinheiroAtual;
         }
     }
 }

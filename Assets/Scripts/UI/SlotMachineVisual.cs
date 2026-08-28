@@ -32,68 +32,47 @@ public class SlotMachineVisual : MonoBehaviour
     [SerializeField] private float intervaloEntreSlots = 0.5f;
     [SerializeField] private float tempoPorFrame = 0.05f;
 
-    [Header("Efeito de Pulo (Juice/Feedback)")]
-    [SerializeField] private float forcaDoPulo = 1.3f;
-    [SerializeField] private float duracaoSubida = 0.08f;
-    [SerializeField] private float duracaoDescida = 0.12f;
+    [Header("Efeito de Pulo do Icone (Aparicao da Recompensa)")]
+    [SerializeField] private float forcaDoPuloIcone = 1.3f;
+    [SerializeField] private float duracaoSubidaIcone = 0.08f;
+    [SerializeField] private float duracaoDescidaIcone = 0.12f;
 
-    [Header("Configuracoes do RGB (Jackpot)")]
-    [SerializeField] private float velocidadeRGB = 2f;
+    [Header("Efeito de Pulo Cartoon da Maquina (Juice)")]
+    [SerializeField] private RectTransform containerMaquina;
+    [SerializeField] private float alturaPuloMaquina = 40f;
+    [SerializeField] private float duracaoSubidaMaquina = 0.1f;
+    [SerializeField] private float duracaoDescidaMaquina = 0.15f;
+    [SerializeField] private Vector3 esticamentoPulo = new Vector3(0.85f, 1.2f, 1f);
+    [SerializeField] private Vector3 achatamentoImpacto = new Vector3(1.15f, 0.85f, 1f);
 
-    private PlayerController player;
+    [Header("Efeito de Dano (Shake)")]
+    [SerializeField] private float forcaShake = 15f;
+    [SerializeField] private float duracaoShake = 0.2f;
+
     private Coroutine coroutineGiroAtual;
-    private bool executandoRGB = false;
+    private Vector2 posicaoOriginalMaquina;
+    private Vector3 escalaOriginalMaquina = Vector3.one;
 
-    private Color corOriginalSlot1 = Color.white;
-    private Color corOriginalSlot2 = Color.white;
-    private Color corOriginalSlot3 = Color.white;
+    private bool estaAnimandoEspecial = false;
 
     void Awake()
     {
-        if (exibicaoSlot1 != null) corOriginalSlot1 = exibicaoSlot1.color;
-        if (exibicaoSlot2 != null) corOriginalSlot2 = exibicaoSlot2.color;
-        if (exibicaoSlot3 != null) corOriginalSlot3 = exibicaoSlot3.color;
-    }
-
-    void Start()
-    {
-        player = Object.FindAnyObjectByType<PlayerController>();
-    }
-
-    public void Update()
-    {
-        if (player == null) player = Object.FindAnyObjectByType<PlayerController>();
-
-        if (player != null)
+        if (containerMaquina == null)
         {
-            DefinirRGB(player.JackpotAtivo);
+            containerMaquina = GetComponent<RectTransform>();
         }
 
-        if (executandoRGB)
+        if (containerMaquina != null)
         {
-            float h = (UnityEngine.Time.time * velocidadeRGB) % 1f;
-            Color corRainbow = Color.HSVToRGB(h, 0.75f, 1f);
-
-            if (exibicaoSlot1 != null) exibicaoSlot1.color = corRainbow;
-            if (exibicaoSlot2 != null) exibicaoSlot2.color = corRainbow;
-            if (exibicaoSlot3 != null) exibicaoSlot3.color = corRainbow;
+            posicaoOriginalMaquina = containerMaquina.anchoredPosition;
+            escalaOriginalMaquina = containerMaquina.localScale;
         }
     }
 
-    private void DefinirRGB(bool ligado)
+    void Update()
     {
-        if (executandoRGB == ligado) return;
-        executandoRGB = ligado;
-
-        if (!ligado)
-        {
-            if (exibicaoSlot1 != null) exibicaoSlot1.color = corOriginalSlot1;
-            if (exibicaoSlot2 != null) exibicaoSlot2.color = corOriginalSlot2;
-            if (exibicaoSlot3 != null) exibicaoSlot3.color = corOriginalSlot3;
-        }
     }
 
-    public void UpdateOld() { }
 
     public void AtualizarVisualDosSlots(SlotMachine.TipoRecompensa s1, SlotMachine.TipoRecompensa s2, SlotMachine.TipoRecompensa s3)
     {
@@ -102,24 +81,75 @@ public class SlotMachineVisual : MonoBehaviour
         if (coroutineGiroAtual != null)
         {
             StopAllCoroutines();
+            ResetarEstadoMaquina();
             ResetarEscalaDosSlots();
             if (scriptAlavanca != null) scriptAlavanca.PuxarAlavanca();
         }
 
+        if (framesAnimacaoGiro == null || framesAnimacaoGiro.Count == 0)
+        {
+            ColocarSpritesFinaisDireto(s1, s2, s3);
+            return;
+        }
+
+        coroutineGiroAtual = StartCoroutine(RotinaSequenciaGiro(s1, s2, s3));
+    }
+
+    private IEnumerator RotinaSequenciaGiro(SlotMachine.TipoRecompensa s1, SlotMachine.TipoRecompensa s2, SlotMachine.TipoRecompensa s3)
+    {
         if (MusicManager.Instance != null)
         {
             MusicManager.Instance.PlaySFX("moeda in slot");
             MusicManager.Instance.PlayLoopingSFX("slotmachinespin");
         }
 
-        if (framesAnimacaoGiro == null || framesAnimacaoGiro.Count == 0)
+        StartCoroutine(RotinaPuloMaquinaCartoon());
+
+        yield return StartCoroutine(RotinaGirarComFrames(s1, s2, s3));
+    }
+
+    private IEnumerator RotinaPuloMaquinaCartoon()
+    {
+        if (containerMaquina == null) yield break;
+
+        estaAnimandoEspecial = true;
+
+        float tempo = 0f;
+        Vector2 posAlvoPulo = posicaoOriginalMaquina + new Vector2(0f, alturaPuloMaquina);
+
+        while (tempo < duracaoSubidaMaquina)
         {
-            ColocarSpritesFinaisDireto(s1, s2, s3);
-            if (MusicManager.Instance != null) MusicManager.Instance.StopLoopingSFX();
-            return;
+            tempo += UnityEngine.Time.deltaTime;
+            float t = tempo / duracaoSubidaMaquina;
+
+            containerMaquina.anchoredPosition = Vector2.Lerp(posicaoOriginalMaquina, posAlvoPulo, t);
+            containerMaquina.localScale = Vector3.Lerp(escalaOriginalMaquina, esticamentoPulo, t);
+            yield return null;
         }
 
-        coroutineGiroAtual = StartCoroutine(RotinaGirarComFrames(s1, s2, s3));
+        tempo = 0f;
+        while (tempo < duracaoDescidaMaquina)
+        {
+            tempo += UnityEngine.Time.deltaTime;
+            float t = tempo / duracaoDescidaMaquina;
+
+            containerMaquina.anchoredPosition = Vector2.Lerp(posAlvoPulo, posicaoOriginalMaquina, t);
+            containerMaquina.localScale = Vector3.Lerp(esticamentoPulo, achatamentoImpacto, t);
+            yield return null;
+        }
+
+        tempo = 0f;
+        float duracaoRetorno = 0.08f;
+        while (tempo < duracaoRetorno)
+        {
+            tempo += UnityEngine.Time.deltaTime;
+            float t = tempo / duracaoRetorno;
+
+            containerMaquina.localScale = Vector3.Lerp(achatamentoImpacto, escalaOriginalMaquina, t);
+            yield return null;
+        }
+
+        ResetarEstadoMaquina();
     }
 
     private IEnumerator RotinaGirarComFrames(SlotMachine.TipoRecompensa resultado1, SlotMachine.TipoRecompensa resultado2, SlotMachine.TipoRecompensa resultado3)
@@ -202,30 +232,40 @@ public class SlotMachineVisual : MonoBehaviour
         coroutineGiroAtual = null;
     }
 
-    public float ObterTempoTotalGiro() => tempoGiroBase + (intervaloEntreSlots * 2f) + duracaoSubida + duracaoDescida;
+    public float ObterTempoTotalGiro() => tempoGiroBase + (intervaloEntreSlots * 2f) + duracaoSubidaIcone + duracaoDescidaIcone;
 
     private IEnumerator RotinaPulandoIcone(Image imagem)
     {
         if (imagem == null) yield break;
         Transform transformIcone = imagem.transform;
         Vector3 escalaOriginal = Vector3.one;
-        Vector3 escalaMaxima = escalaOriginal * forcaDoPulo;
+        Vector3 escalaMaxima = escalaOriginal * forcaDoPuloIcone;
 
         float tempoMudar = 0f;
-        while (tempoMudar < duracaoSubida)
+        while (tempoMudar < duracaoSubidaIcone)
         {
             tempoMudar += UnityEngine.Time.deltaTime;
-            transformIcone.localScale = Vector3.Lerp(escalaOriginal, escalaMaxima, tempoMudar / duracaoSubida);
+            transformIcone.localScale = Vector3.Lerp(escalaOriginal, escalaMaxima, tempoMudar / duracaoSubidaIcone);
             yield return null;
         }
         tempoMudar = 0f;
-        while (tempoMudar < duracaoDescida)
+        while (tempoMudar < duracaoDescidaIcone)
         {
             tempoMudar += UnityEngine.Time.deltaTime;
-            transformIcone.localScale = Vector3.Lerp(escalaMaxima, escalaOriginal, tempoMudar / duracaoDescida);
+            transformIcone.localScale = Vector3.Lerp(escalaMaxima, escalaOriginal, tempoMudar / duracaoDescidaIcone);
             yield return null;
         }
         transformIcone.localScale = escalaOriginal;
+    }
+
+    private void ResetarEstadoMaquina()
+    {
+        estaAnimandoEspecial = false;
+        if (containerMaquina != null)
+        {
+            containerMaquina.anchoredPosition = posicaoOriginalMaquina;
+            containerMaquina.localScale = escalaOriginalMaquina;
+        }
     }
 
     private void ResetarEscalaDosSlots()
@@ -257,5 +297,28 @@ public class SlotMachineVisual : MonoBehaviour
             SlotMachine.TipoRecompensa.Vazio => spriteVazio,
             _ => null
         };
+    }
+
+    public void AtivarShakeDano()
+    {
+        StartCoroutine(RotinaShakeDano());
+    }
+
+    private IEnumerator RotinaShakeDano()
+    {
+        if (containerMaquina == null) yield break;
+
+        estaAnimandoEspecial = true;
+
+        float tempo = 0f;
+        while (tempo < duracaoShake)
+        {
+            tempo += UnityEngine.Time.deltaTime;
+            Vector2 deslocamento = Random.insideUnitCircle * forcaShake;
+            containerMaquina.anchoredPosition = posicaoOriginalMaquina + deslocamento;
+            yield return null;
+        }
+
+        ResetarEstadoMaquina();
     }
 }
