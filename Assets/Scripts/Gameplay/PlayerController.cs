@@ -34,6 +34,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float cooldownDano = 1.5f;
     private float tempoProximoDano = 0f;
 
+    [Header("Efeitos Jackpot (RGB e Rastro)")]
+    [SerializeField] private TrailRenderer rastroRGB;
+    [SerializeField] private float velocidadeTrocaCorRGB = 3f;
+    [Range(0f, 1f)]
+    [Tooltip("Controla o tom pastel. 1 = cor forte, 0 = branco. 0.55 é um bom tom pastel.")]
+    [SerializeField] private float saturacaoRGB = 0.55f;
+    [Tooltip("Multiplica a cor para ativar o Bloom (Glow). Teste valores entre 2 e 5.")]
+    [SerializeField] private float intensidadeBrilho = 3f;
+
     public bool JackpotAtivo
     {
         get
@@ -60,10 +69,8 @@ public class PlayerController : MonoBehaviour
         scriptAnimacao = scriptAnimacao ?? GetComponent<AnimPlayer>();
         scriptEfeitos = scriptEfeitos ?? GetComponent<SpriteEffects>() ?? GetComponentInChildren<SpriteEffects>();
 
-        if (scriptEfeitos == null)
-        {
-            Debug.LogWarning("[AVISO]: O script SpriteEffects nao foi encontrado no Player! Verifique o Inspector.");
-        }
+        if (rastroRGB == null) rastroRGB = GetComponent<TrailRenderer>();
+        if (rastroRGB != null) rastroRGB.emitting = false;
 
         SpawnarArmaInicial();
 
@@ -77,23 +84,40 @@ public class PlayerController : MonoBehaviour
 
         bool jackpotAtual = JackpotAtivo;
 
-        if (scriptAnimacao != null)
-        {
-            scriptAnimacao.SetarModoJackpot(jackpotAtual);
-        }
-
         if (jackpotAtual != estavaEmJackpot)
         {
             estavaEmJackpot = jackpotAtual;
 
-            Debug.Log($"[JACKPOT]: Mudou de estado! Ativo: {jackpotAtual}");
-
-            if (MusicManager.Instance != null) MusicManager.Instance.PlayJackpotSound(jackpotAtual);
-
-            if (scriptEfeitos != null)
+            if (scriptAnimacao != null)
             {
-                scriptEfeitos.DefinirRGB(jackpotAtual);
+                scriptAnimacao.SetarModoJackpot(jackpotAtual);
+                if (!jackpotAtual) scriptAnimacao.AtualizarMovimento(inputsMovimento.magnitude);
             }
+
+            if (MusicManager.Instance != null)
+            {
+                MusicManager.Instance.PlayJackpotSound(jackpotAtual);
+            }
+
+            if (rastroRGB != null)
+            {
+                rastroRGB.emitting = jackpotAtual;
+                if (!jackpotAtual) rastroRGB.Clear();
+            }
+        }
+
+        // --- SISTEMA DE COR PASTEL E BRILHO (HDR) ---
+        if (estavaEmJackpot && rastroRGB != null)
+        {
+            // O segundo parâmetro (saturacaoRGB) é o que deixa a cor pastel
+            Color corBase = Color.HSVToRGB(Mathf.Repeat(UnityEngine.Time.time * velocidadeTrocaCorRGB, 1f), saturacaoRGB, 1f);
+
+            // Multiplicamos a cor pela intensidade para gerar o efeito de HDR/Emissão
+            Color corHDR = corBase * intensidadeBrilho;
+
+            rastroRGB.startColor = corHDR;
+            // No final do trail, a cor perde o alpha (fica transparente)
+            rastroRGB.endColor = new Color(corHDR.r, corHDR.g, corHDR.b, 0f);
         }
     }
 
@@ -101,7 +125,9 @@ public class PlayerController : MonoBehaviour
     {
         if (derrotaDisparada || estaEmKnockback) return;
 
-        rb.MovePosition(rb.position + inputsMovimento * velocidade * UnityEngine.Time.fixedDeltaTime);
+        float velocidadeAtual = estavaEmJackpot ? (velocidade * 2f) : velocidade;
+
+        rb.MovePosition(rb.position + inputsMovimento * velocidadeAtual * UnityEngine.Time.fixedDeltaTime);
         VerificarFlip();
 
         if (scriptAnimacao != null)
@@ -152,11 +178,6 @@ public class PlayerController : MonoBehaviour
     {
         if (derrotaDisparada) return;
         inputsMovimento = value.Get<Vector2>();
-    }
-
-    public void DispararAnimacaoAtaqueExterno()
-    {
-        if (scriptAnimacao != null && !derrotaDisparada) scriptAnimacao.DispararAnimacaoAtaque();
     }
 
     private IEnumerator RotinaPerdaDeDinheiro()
@@ -211,7 +232,7 @@ public class PlayerController : MonoBehaviour
     private IEnumerator RotinaKnockback(Vector2 direcao, float forca)
     {
         estaEmKnockback = true;
-        rb.linearVelocity = Vector2.zero; 
+        rb.linearVelocity = Vector2.zero;
         rb.AddForce(direcao * forca, ForceMode2D.Impulse);
 
         yield return new WaitForSeconds(duracaoKnockback);
@@ -231,7 +252,6 @@ public class PlayerController : MonoBehaviour
         if (derrotaDisparada) return;
         derrotaDisparada = true;
         if (scriptAnimacao != null) scriptAnimacao.AtualizarMovimento(0f);
-        if (scriptEfeitos != null) scriptEfeitos.DefinirRGB(false);
         if (TransitionManager.Instance != null) TransitionManager.Instance.CarregarCena("Defeat");
         else SceneManager.LoadScene("Defeat");
     }

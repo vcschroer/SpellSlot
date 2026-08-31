@@ -76,6 +76,13 @@ public class SlotMachine : MonoBehaviour
     [SerializeField] private int ricochetesAdicionaisPequeno = 1;
     [SerializeField] private int ricochetesAdicionaisGrande = 2;
 
+    private int totalTamanhoEspadaGanho = 0;
+    private float totalVelAtaqueEspadaGanho = 0f;
+    private float totalAnguloEspadaGanho = 0f;
+    private float totalVelAtaquePistolaGanho = 0f;
+    private int totalPistolBalasGanho = 0;
+    private int totalPistolRicocheteGanho = 0;
+
     private float momentoProximoGiroPermitido = 0f;
     private bool menuAberto = false;
     private bool proximoGiroTemSorteGeral = false;
@@ -153,18 +160,29 @@ public class SlotMachine : MonoBehaviour
         bool temEspada = ObterArmaDoPlayer<Sword>(TipoArma.Espada) != null;
         bool temPistola = ObterArmaDoPlayer<Pistol>(TipoArma.Pistola) != null;
 
+
         if (temEspada)
         {
-            poolValido.Add(TipoRecompensa.TamanhoEspada);
-            poolValido.Add(TipoRecompensa.VelocidadeAtaqueEspada);
-            poolValido.Add(TipoRecompensa.AnguloEspada);
+            if (totalTamanhoEspadaGanho < (gomosGrande * 3))
+                poolValido.Add(TipoRecompensa.TamanhoEspada);
+
+            if (totalVelAtaqueEspadaGanho < (velAtaqueEspadaGrande * 3f) - 0.001f)
+                poolValido.Add(TipoRecompensa.VelocidadeAtaqueEspada);
+
+            if (totalAnguloEspadaGanho < (anguloEspadaGrande * 3f) - 0.001f)
+                poolValido.Add(TipoRecompensa.AnguloEspada);
         }
 
         if (temPistola)
         {
-            poolValido.Add(TipoRecompensa.PistolBalas);
-            poolValido.Add(TipoRecompensa.PistolRicochete);
-            poolValido.Add(TipoRecompensa.VelocidadeAtaquePistola);
+            if (totalPistolBalasGanho < (balasAdicionaisGrande * 3))
+                poolValido.Add(TipoRecompensa.PistolBalas);
+
+            if (totalPistolRicocheteGanho < (ricochetesAdicionaisGrande * 3))
+                poolValido.Add(TipoRecompensa.PistolRicochete);
+
+            if (totalVelAtaquePistolaGanho < (velAtaquePistolaGrande * 3f) - 0.001f)
+                poolValido.Add(TipoRecompensa.VelocidadeAtaquePistola);
         }
 
         return poolValido;
@@ -242,19 +260,11 @@ public class SlotMachine : MonoBehaviour
         {
             girosSemJackpotRestantes = girosBloqueadosPosJackpot;
 
-            if (scriptPlayer != null)
+            if (scriptPlayer != null && scriptPlayer.armasEquipadas != null)
             {
-                SpriteEffects playerEffects = scriptPlayer.GetComponent<SpriteEffects>();
-                if (playerEffects == null) playerEffects = scriptPlayer.GetComponentInChildren<SpriteEffects>();
-
-                if (playerEffects != null) playerEffects.DefinirRGB(true);
-
-                if (scriptPlayer.armasEquipadas != null)
+                foreach (BaseWeapon arma in scriptPlayer.armasEquipadas)
                 {
-                    foreach (BaseWeapon arma in scriptPlayer.armasEquipadas)
-                    {
-                        if (arma != null) arma.AtivarJackpot(Vector2.zero, 0f);
-                    }
+                    if (arma != null) arma.AtivarJackpot(Vector2.zero, 0f);
                 }
             }
         }
@@ -358,6 +368,7 @@ public class SlotMachine : MonoBehaviour
         if (espadaEquipada != null)
         {
             int gomos = quantidade switch { 2 => gomosPequeno, 3 => gomosGrande, _ => 0 };
+            totalTamanhoEspadaGanho += gomos; 
             espadaEquipada.MudarQuantidadeSegmentos(espadaEquipada.QuantidadeSegmentosMeio + gomos);
         }
     }
@@ -370,6 +381,7 @@ public class SlotMachine : MonoBehaviour
         Sword espada = ObterArmaDoPlayer<Sword>(TipoArma.Espada);
         if (espada != null)
         {
+            totalVelAtaqueEspadaGanho += vel;
             espada.weaponAttackSpeed += vel;
         }
     }
@@ -382,6 +394,7 @@ public class SlotMachine : MonoBehaviour
         Sword espada = ObterArmaDoPlayer<Sword>(TipoArma.Espada);
         if (espada != null)
         {
+            totalAnguloEspadaGanho += bonus;
             espada.AumentarAnguloCorte(-bonus);
         }
     }
@@ -394,6 +407,7 @@ public class SlotMachine : MonoBehaviour
         Pistol pistola = ObterArmaDoPlayer<Pistol>(TipoArma.Pistola);
         if (pistola != null)
         {
+            totalVelAtaquePistolaGanho += vel; 
             pistola.weaponAttackSpeed += vel;
         }
     }
@@ -412,6 +426,7 @@ public class SlotMachine : MonoBehaviour
         if (pistola != null)
         {
             int adicionais = quantidade switch { 2 => balasAdicionaisPequeno, 3 => balasAdicionaisGrande, _ => 0 };
+            totalPistolBalasGanho += adicionais; 
             pistola.QuantidadeBalas += adicionais;
         }
     }
@@ -423,6 +438,7 @@ public class SlotMachine : MonoBehaviour
         if (pistola != null)
         {
             int adicionais = quantidade switch { 2 => ricochetesAdicionaisPequeno, 3 => ricochetesAdicionaisGrande, _ => 0 };
+            totalPistolRicocheteGanho += adicionais; 
             pistola.QuantidadeRicochetes += adicionais;
         }
     }

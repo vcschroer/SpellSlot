@@ -69,7 +69,7 @@ MonoBehaviour:
   prefabCabo: {fileID: 8627269263969308266, guid: b1672f68e696fb840bf50c7e329cd028, type: 3}
   prefabMeioLamina: {fileID: 9068567274452352512, guid: d0f0a795fb2692546ba6ea614175f738, type: 3}
   prefabPontaLamina: {fileID: 8372954289619658168, guid: ae08bb500050c9644be289a4d39ae42b, type: 3}
-  quantidadeSegmentosMeio: 1
+  quantidadeSegmentosMeio: 2
   tamanhoDoSegmentoY: 3.73
   deslocamentoDaPonta: 4.4
   incrementoEngrossamentoPorSegmento: 0.05

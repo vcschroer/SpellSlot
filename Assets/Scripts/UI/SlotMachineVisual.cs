@@ -49,6 +49,11 @@ public class SlotMachineVisual : MonoBehaviour
     [SerializeField] private float forcaShake = 15f;
     [SerializeField] private float duracaoShake = 0.2f;
 
+    [Header("Efeito Ondular (Wave / Respiro)")]
+    [SerializeField] private bool ativarEfeitoOndular = true;
+    [SerializeField] private float forcaoOnda = 3f;
+    [SerializeField] private float velocidadeOnda = 1.5f;
+
     private Coroutine coroutineGiroAtual;
     private Vector2 posicaoOriginalMaquina;
     private Vector3 escalaOriginalMaquina = Vector3.one;
@@ -71,8 +76,20 @@ public class SlotMachineVisual : MonoBehaviour
 
     void Update()
     {
+        AplicarEfeitoOndular();
     }
 
+    private void AplicarEfeitoOndular()
+    {
+        if (!ativarEfeitoOndular || containerMaquina == null || estaAnimandoEspecial) return;
+
+        float deslocamentoY = Mathf.Sin(UnityEngine.Time.time * velocidadeOnda) * forcaoOnda;
+
+        containerMaquina.anchoredPosition = new Vector2(
+            posicaoOriginalMaquina.x,
+            posicaoOriginalMaquina.y + deslocamentoY
+        );
+    }
 
     public void AtualizarVisualDosSlots(SlotMachine.TipoRecompensa s1, SlotMachine.TipoRecompensa s2, SlotMachine.TipoRecompensa s3)
     {

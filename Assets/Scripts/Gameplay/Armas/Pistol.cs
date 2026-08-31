@@ -10,24 +10,33 @@ public class Pistol : BaseWeapon
 
     [Header("Configuracoes de Upgrade")]
     [SerializeField] private int quantidadeBalas = 1;
-
     [SerializeField] private float anguloConeSpread = 30f;
 
     [Header("Configuracoes de Posicionamento e Auto-Mira")]
     [SerializeField] private Vector2 centroDoPlayerOffset = new Vector2(0f, 0.2f);
     [SerializeField] private float raioPosicionamento = 0.8f;
-    [SerializeField] private float multiplicadorComEspada = 3f;
     [SerializeField] private float distanciaMaximaAlvo = 7f;
 
+    [Header("Anti-Sobreposicao com a Espada")]
+    [SerializeField] private float anguloMinimoSeparacaoEspada = 90f;
+
+    [Header("Configuracoes de Suavizacao e Flutuacao")]
+    [SerializeField] private float velocidadeSuavizacaoPosicao = 10f;
+    [SerializeField] private float velocidadeSuavizacaoRotacao = 12f;
+    [SerializeField] private float amplitudeFlutuacao = 0.08f;
+    [SerializeField] private float velocidadeFlutuacao = 2.5f;
+
     [Header("Configuracoes de Jackpot")]
+    [SerializeField] private bool testarJackpotNoInspector = false;
     [SerializeField] private float duracaoJackpot = 5f;
     [SerializeField] private float velocidadeGiroJackpot = 720f;
     [SerializeField] private float tempoEntreTirosJackpot = 0.08f;
+    [SerializeField] private Vector2 offsetJackpot = new Vector2(0f, 1f);
+    [SerializeField] private float raioGiroJackpot = 1.5f;
 
     [Header("Configuracao de Ricochete Base")]
     [SerializeField] private int quantidadeRicochetes = 0;
 
-    private float anguloMira;
     private SpriteRenderer spriteRenderer;
 
     public int QuantidadeBalas
@@ -53,9 +62,17 @@ public class Pistol : BaseWeapon
     {
         base.Update();
 
+        if (Application.isPlaying)
+        {
+            if (testarJackpotNoInspector && !EstaEmModoJackpot)
+            {
+                AtivarJackpot(offsetJackpot, raioGiroJackpot);
+            }
+        }
+
         if (!EstaEmModoJackpot && player != null)
         {
-            ConfigurarMiraEPosicaoAutomatica();
+            ConfigurarMiraEPosicaoSuave();
         }
 
         AjustarFlipDoSprite();
@@ -69,35 +86,51 @@ public class Pistol : BaseWeapon
         }
     }
 
-    private void ConfigurarMiraEPosicaoAutomatica()
+    private void ConfigurarMiraEPosicaoSuave()
     {
         Vector2 posCentroPlayer = (Vector2)player.transform.position + centroDoPlayerOffset;
         Enemy inimigoAlvo = ObterInimigoMaisProximo();
-        Vector2 direcaoMira;
+        Vector2 direcaoAlvo;
 
         if (inimigoAlvo != null)
         {
-            direcaoMira = ((Vector2)inimigoAlvo.transform.position - posCentroPlayer).normalized;
+            direcaoAlvo = ((Vector2)inimigoAlvo.transform.position - posCentroPlayer).normalized;
         }
         else
         {
-            direcaoMira = Vector2.right;
+            direcaoAlvo = Vector2.right;
             SpriteRenderer sr = player.GetComponentInChildren<SpriteRenderer>();
-            if (sr != null && sr.flipX) direcaoMira = Vector2.left;
-            else if (player.transform.localScale.x < 0f) direcaoMira = Vector2.left;
+            if (sr != null && sr.flipX) direcaoAlvo = Vector2.left;
+            else if (player.transform.localScale.x < 0f) direcaoAlvo = Vector2.left;
         }
 
-        float raioCalculado = raioPosicionamento;
+        float anguloAlvo = Mathf.Atan2(direcaoAlvo.y, direcaoAlvo.x) * Mathf.Rad2Deg;
 
         Sword espada = FindObjectOfType<Sword>();
         if (espada != null && espada.gameObject.activeInHierarchy)
         {
-            raioCalculado *= multiplicadorComEspada;
+            Vector2 posEspadaRelativa = (Vector2)espada.transform.position - posCentroPlayer;
+            float anguloEspada = Mathf.Atan2(posEspadaRelativa.y, posEspadaRelativa.x) * Mathf.Rad2Deg;
+
+            float diferencaAngulo = Mathf.DeltaAngle(anguloEspada, anguloAlvo);
+
+            if (Mathf.Abs(diferencaAngulo) < anguloMinimoSeparacaoEspada)
+            {
+                float direcaoDesvio = diferencaAngulo >= 0 ? 1f : -1f;
+                anguloAlvo = anguloEspada + (anguloMinimoSeparacaoEspada * direcaoDesvio);
+            }
         }
 
-        transform.position = posCentroPlayer + (direcaoMira * raioCalculado);
-        anguloMira = Mathf.Atan2(direcaoMira.y, direcaoMira.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, anguloMira);
+        float radianoAlvo = anguloAlvo * Mathf.Deg2Rad;
+        Vector2 direcaoOrbitaFinal = new Vector2(Mathf.Cos(radianoAlvo), Mathf.Sin(radianoAlvo));
+
+        float flutuacaoY = Mathf.Sin(UnityEngine.Time.time * velocidadeFlutuacao) * amplitudeFlutuacao;
+        Vector3 posAlvo = posCentroPlayer + (direcaoOrbitaFinal * raioPosicionamento) + new Vector2(0f, flutuacaoY);
+
+        transform.position = Vector3.Lerp(transform.position, posAlvo, UnityEngine.Time.deltaTime * velocidadeSuavizacaoPosicao);
+
+        Quaternion rotAlvo = Quaternion.Euler(0, 0, anguloAlvo);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotAlvo, UnityEngine.Time.deltaTime * velocidadeSuavizacaoRotacao);
     }
 
     private void AjustarFlipDoSprite()
@@ -189,8 +222,14 @@ public class Pistol : BaseWeapon
 
     public override void AtivarJackpot(Vector2 offset, float raio)
     {
+        Vector2 offsetFinal = offsetJackpot;
+        float raioFinal = raioGiroJackpot;
+
+        if (offset != Vector2.zero) offsetFinal = offset;
+        if (raio > 0f) raioFinal = raio;
+
         EstaEmModoJackpot = true;
-        StartCoroutine(RotinaJackpotPistola(offset, raio));
+        StartCoroutine(RotinaJackpotPistola(offsetFinal, raioFinal));
     }
 
     private IEnumerator RotinaJackpotPistola(Vector2 offset, float raio)
@@ -232,6 +271,7 @@ public class Pistol : BaseWeapon
 
         quantidadeBalas = quantidadeBalasOriginal;
         EstaEmModoJackpot = false;
+        testarJackpotNoInspector = false;
     }
 
     private void OnDrawGizmosSelected()

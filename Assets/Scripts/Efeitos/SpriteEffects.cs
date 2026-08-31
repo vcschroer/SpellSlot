@@ -5,22 +5,17 @@ public class SpriteEffects : MonoBehaviour
 {
     [Header("Componentes")]
     [SerializeField] private SpriteRenderer spriteRenderer;
-    [Tooltip("Arraste aqui o objeto FILHO que tem o Sprite e o Animator. Se deixar vazio, o script pegará o SpriteRenderer automaticamente.")]
     [SerializeField] private Transform transformVisual;
 
-    [Header("Configuração de Flash (Dano)")]
+    [Header("Configuração de Materiais")]
+    [SerializeField] private Material materialPadrao;
     [SerializeField] private Material materialFlashBranco;
-
-    [Header("Configurações RGB")]
-    [SerializeField] private float velocidadeRGB = 2f;
 
     private Vector3 escalaOriginal;
     private Color corOriginal;
-    private Material materialOriginal;
 
     private Coroutine coroutineSquash;
     private Coroutine coroutineFlash;
-    private bool executandoRGB = false;
 
     private Vector3 escalaAtualEfeito = Vector3.one;
     private bool aplicandoSquash = false;
@@ -45,17 +40,15 @@ public class SpriteEffects : MonoBehaviour
 
         escalaOriginal = transformVisual.localScale;
         corOriginal = spriteRenderer.color;
-        materialOriginal = spriteRenderer.material;
+
+        if (materialPadrao == null)
+        {
+            materialPadrao = spriteRenderer.material;
+        }
     }
 
     void LateUpdate()
     {
-        if (executandoRGB && spriteRenderer != null && !aplicandoFlash)
-        {
-            float h = (UnityEngine.Time.time * velocidadeRGB) % 1f;
-            spriteRenderer.color = Color.HSVToRGB(h, 0.8f, 1f);
-        }
-
         if (aplicandoSquash && transformVisual != null)
         {
             transformVisual.localScale = escalaAtualEfeito;
@@ -112,9 +105,8 @@ public class SpriteEffects : MonoBehaviour
 
     public void PlayFlash(float duracao)
     {
-        if (!gameObject.activeInHierarchy) return;
+        if (!gameObject.activeInHierarchy || spriteRenderer == null) return;
 
-        if (spriteRenderer == null) return;
         if (coroutineFlash != null) StopCoroutine(coroutineFlash);
         coroutineFlash = StartCoroutine(RotinaFlash(duracao));
     }
@@ -125,23 +117,20 @@ public class SpriteEffects : MonoBehaviour
         yield return new WaitForSeconds(duracao);
         aplicandoFlash = false;
 
+        AtualizarMaterial();
         if (spriteRenderer != null)
         {
-            spriteRenderer.material = materialOriginal;
             spriteRenderer.color = corOriginal;
         }
     }
 
-    public void DefinirRGB(bool ligado)
+    private void AtualizarMaterial()
     {
-        executandoRGB = ligado;
+        if (spriteRenderer == null || aplicandoFlash) return;
 
-        Debug.Log($"[SpriteEffects]: Estado RGB alterado para: {ligado} no objeto {gameObject.name}");
-
-        if (!ligado && spriteRenderer != null)
+        if (materialPadrao != null)
         {
-            spriteRenderer.material = materialOriginal;
-            spriteRenderer.color = corOriginal;
+            spriteRenderer.material = materialPadrao;
         }
     }
 }

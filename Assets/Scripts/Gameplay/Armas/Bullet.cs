@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -8,6 +9,10 @@ public class Bullet : MonoBehaviour
     [Header("Configuracoes de Ricochete")]
     [SerializeField] private int ricochetesRestantes = 0;
     [SerializeField] private float raioBuscaRicochete = 8f;
+
+    [Header("Configuracoes de Rastro (Trail)")]
+    [SerializeField] private TrailRenderer rastroBala;
+    [SerializeField] private float larguraBaseTrail = 0.2f;
 
     private Rigidbody2D rb;
     private float velocidadeOriginal;
@@ -25,6 +30,23 @@ public class Bullet : MonoBehaviour
         if (rb != null)
         {
             velocidadeOriginal = rb.linearVelocity.magnitude;
+        }
+
+        ConfigurarTrail();
+    }
+
+    private void ConfigurarTrail()
+    {
+        if (rastroBala == null)
+        {
+            rastroBala = GetComponentInChildren<TrailRenderer>();
+        }
+
+        if (rastroBala != null)
+        {
+            rastroBala.widthMultiplier = larguraBaseTrail;
+            rastroBala.Clear();
+            rastroBala.emitting = true;
         }
     }
 
@@ -44,12 +66,12 @@ public class Bullet : MonoBehaviour
 
                 if (!conseguiuRicochetear)
                 {
-                    Destroy(gameObject);
+                    DestruirComSeguranca();
                 }
             }
             else
             {
-                Destroy(gameObject);
+                DestruirComSeguranca();
             }
         }
     }
@@ -91,5 +113,17 @@ public class Bullet : MonoBehaviour
         }
 
         return false;
+    }
+
+    private void DestruirComSeguranca()
+    {
+        if (rastroBala != null)
+        {
+            rastroBala.transform.parent = null;
+            rastroBala.emitting = false;
+            Destroy(rastroBala.gameObject, rastroBala.time);
+        }
+
+        Destroy(gameObject);
     }
 }

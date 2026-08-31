@@ -113,13 +113,20 @@ MonoBehaviour:
   velocidadeProjetil: 12
   quantidadeBalas: 1
   anguloConeSpread: 30
-  centroDoPlayerOffset: {x: 0, y: 0.2}
-  raioPosicionamento: 0.8
-  multiplicadorComEspada: 2
+  centroDoPlayerOffset: {x: 0, y: 0}
+  raioPosicionamento: 1.4
   distanciaMaximaAlvo: 8
+  anguloMinimoSeparacaoEspada: 90
+  velocidadeSuavizacaoPosicao: 10
+  velocidadeSuavizacaoRotacao: 12
+  amplitudeFlutuacao: 0.08
+  velocidadeFlutuacao: 2.5
+  testarJackpotNoInspector: 0
   duracaoJackpot: 10
   velocidadeGiroJackpot: 720
   tempoEntreTirosJackpot: 0.08
+  offsetJackpot: {x: 0, y: 0}
+  raioGiroJackpot: 2
   quantidadeRicochetes: 0
 --- !u!1 &1865069431727333893
 GameObject:
