@@ -40,18 +40,23 @@ public class Sword : BaseWeapon
     [SerializeField] private GameObject prefabMeioLamina;
     [SerializeField] private GameObject prefabPontaLamina;
 
-    [Header("Configuracoes de Tamanho")]
+    [Header("Configuracoes de Tamanho e Engrossamento")]
     [SerializeField] private int quantidadeSegmentosMeio = 3;
     [SerializeField] private float tamanhoDoSegmentoY = 0.5f;
     [SerializeField] private float deslocamentoDaPonta = 0.5f;
+    [SerializeField] private float incrementoEngrossamentoPorSegmento = 0.15f;
 
     [Header("Configuracoes de Hitbox Global")]
-    [SerializeField] private float larguraDoCorte = 0.8f;
+    [SerializeField] private float larguraBaseDoCorte = 0.8f;
     [SerializeField] private LayerMask layerDosInimigos;
 
     [Header("Configuracoes de Jackpot")]
+    [SerializeField] private bool testarJackpotNoInspector = false;
     [SerializeField] public float duracaoJackpot = 5f;
     [SerializeField] public float velocidadeGiroJackpot = 360f;
+    [SerializeField] private Vector2 offsetJackpot = new Vector2(0f, 1f);
+    [SerializeField] private float raioGiroJackpot = 1.5f;
+    [SerializeField] private float tempoTransicaoJackpot = 0.4f;
 
     private float tempoJackpotRestante;
     private float anguloRotacaoJackpot = 0f;
@@ -60,7 +65,8 @@ public class Sword : BaseWeapon
     private bool deveReconstruir = false;
     private HashSet<Enemy> inimigosAtingidosNesteGolpe = new HashSet<Enemy>();
 
-    private Vector3 escalaOriginal;
+    private Vector3 escalaOriginal = new Vector3(0.8f, 0.8f, 0.8f);
+    private float larguraDoCorteCalculada;
 
     public int QuantidadeSegmentosMeio => quantidadeSegmentosMeio;
     public bool EstaAtacando => atacando;
@@ -71,19 +77,19 @@ public class Sword : BaseWeapon
         tipoArma = TipoArma.Espada;
         base.Start();
 
-        escalaOriginal = transform.localScale;
+        escalaOriginal = new Vector3(0.8f, 0.8f, 0.8f);
 
         ConstruirEspada();
 
-        if (rastroEspada != null)
-        {
-            rastroEspada.emitting = false;
-        }
+        DesativarRastro();
 
         if (layerDosInimigos == 0) layerDosInimigos = LayerMask.GetMask("Default");
     }
 
-    private void OnValidate() => deveReconstruir = true;
+    private void OnValidate()
+    {
+        deveReconstruir = true;
+    }
 
     protected override void Update()
     {
@@ -95,6 +101,14 @@ public class Sword : BaseWeapon
             ConstruirEspada();
         }
 
+        if (Application.isPlaying)
+        {
+            if (testarJackpotNoInspector && !EstaEmModoJackpot)
+            {
+                AtivarJackpot(offsetJackpot, raioGiroJackpot);
+            }
+        }
+
         if (!atacando && !EstaEmModoJackpot)
         {
             AtualizarPosicaoFixa();
@@ -103,7 +117,7 @@ public class Sword : BaseWeapon
 
     protected override void DispararAtaqueAutomatico()
     {
-        if (!atacando && player != null)
+        if (!atacando && !EstaEmModoJackpot && player != null)
         {
             if (MusicManager.Instance != null) MusicManager.Instance.PlaySFX("Atack espada");
 
@@ -212,11 +226,16 @@ public class Sword : BaseWeapon
         }
         segmentosCriados.Clear();
 
+        float multiplicadorLarguraLamina = 1f + (quantidadeSegmentosMeio * incrementoEngrossamentoPorSegmento);
+        Vector3 escalaLamina = new Vector3(multiplicadorLarguraLamina, 1f, 1f);
+
         float posY = 0f;
+
         if (prefabCabo != null)
         {
             GameObject cabo = Instantiate(prefabCabo, transform);
             cabo.transform.localPosition = new Vector3(0, posY, 0);
+            cabo.transform.localScale = Vector3.one;
             segmentosCriados.Add(cabo);
             posY += tamanhoDoSegmentoY;
         }
@@ -225,6 +244,7 @@ public class Sword : BaseWeapon
         {
             GameObject meio = Instantiate(prefabMeioLamina, transform);
             meio.transform.localPosition = new Vector3(0, posY, 0);
+            meio.transform.localScale = escalaLamina;
             segmentosCriados.Add(meio);
             posY += tamanhoDoSegmentoY;
         }
@@ -233,16 +253,24 @@ public class Sword : BaseWeapon
         {
             GameObject ponta = Instantiate(prefabPontaLamina, transform);
             ponta.transform.localPosition = new Vector3(0, (posY - tamanhoDoSegmentoY) + deslocamentoDaPonta, 0);
+            ponta.transform.localScale = escalaLamina;
             segmentosCriados.Add(ponta);
 
             TrailRenderer trailNaPonta = ponta.GetComponentInChildren<TrailRenderer>();
             if (trailNaPonta != null)
             {
                 rastroEspada = trailNaPonta;
-                rastroEspada.emitting = false;
+                DesativarRastro();
             }
         }
 
+        escalaOriginal = new Vector3(0.8f, 0.8f, 0.8f);
+        if (!atacando)
+        {
+            transform.localScale = escalaOriginal;
+        }
+
+        larguraDoCorteCalculada = larguraBaseDoCorte * multiplicadorLarguraLamina;
         AtualizarLarguraDoRastro();
     }
 
@@ -252,6 +280,26 @@ public class Sword : BaseWeapon
         {
             float larguraCalculada = larguraBaseTrail + (quantidadeSegmentosMeio * incrementoLarguraPorSegmento);
             rastroEspada.widthMultiplier = larguraCalculada;
+        }
+    }
+
+    private void AtivarRastro()
+    {
+        if (rastroEspada == null)
+            rastroEspada = GetComponentInChildren<TrailRenderer>();
+
+        if (rastroEspada != null)
+        {
+            rastroEspada.Clear();
+            rastroEspada.emitting = true;
+        }
+    }
+
+    private void DesativarRastro()
+    {
+        if (rastroEspada != null)
+        {
+            rastroEspada.emitting = false;
         }
     }
 
@@ -268,11 +316,7 @@ public class Sword : BaseWeapon
         float anguloLocalInicial = estaNaEsquerda ? (anguloBaseAtaque - anguloInicial) : (anguloBaseAtaque + anguloInicial);
         float anguloLocalFinal = estaNaEsquerda ? (anguloBaseAtaque - anguloFinal) : (anguloBaseAtaque + anguloFinal);
 
-        if (rastroEspada != null)
-        {
-            rastroEspada.Clear();
-            rastroEspada.emitting = true;
-        }
+        AtivarRastro();
 
         float progresso = 0f;
         while (progresso < 1f)
@@ -294,10 +338,7 @@ public class Sword : BaseWeapon
         transform.localRotation = Quaternion.Euler(0, 0, anguloLocalFinal);
         transform.localScale = new Vector3(escalaOriginal.x * direcaoX, escalaOriginal.y, escalaOriginal.z);
 
-        if (rastroEspada != null)
-        {
-            rastroEspada.emitting = false;
-        }
+        DesativarRastro();
 
         yield return new WaitForSeconds(0.05f / multiplicador);
 
@@ -321,13 +362,13 @@ public class Sword : BaseWeapon
     private void VerificarCorteEspada()
     {
         float comprimentoTotal = (1 + quantidadeSegmentosMeio) * tamanhoDoSegmentoY + deslocamentoDaPonta;
-        int pontosDeChecagem = Mathf.CeilToInt(comprimentoTotal / (larguraDoCorte * 0.4f));
+        int pontosDeChecagem = Mathf.CeilToInt(comprimentoTotal / (larguraDoCorteCalculada * 0.4f));
 
         for (int i = 0; i <= pontosDeChecagem; i++)
         {
             float dist = (comprimentoTotal / pontosDeChecagem) * i;
             Vector3 pos = transform.TransformPoint(new Vector3(0, dist, 0));
-            Collider2D[] colisores = Physics2D.OverlapCircleAll(pos, larguraDoCorte / 2f, layerDosInimigos);
+            Collider2D[] colisores = Physics2D.OverlapCircleAll(pos, larguraDoCorteCalculada / 2f, layerDosInimigos);
 
             foreach (Collider2D col in colisores)
             {
@@ -343,10 +384,18 @@ public class Sword : BaseWeapon
 
     public override void AtivarJackpot(Vector2 offset, float raio)
     {
+        Vector2 offsetFinal = offsetJackpot;
+        float raioFinal = raioGiroJackpot;
+
+        if (offset != Vector2.zero) offsetFinal = offset;
+        if (raio > 0f) raioFinal = raio;
+
         EstaEmModoJackpot = true;
         if (MusicManager.Instance != null) MusicManager.Instance.PlayJackpotSound(true);
         tempoJackpotRestante = duracaoJackpot;
-        StartCoroutine(RotinaJackpot(offset, raio));
+
+        StopCoroutine("RotinaJackpot");
+        StartCoroutine(RotinaJackpot(offsetFinal, raioFinal));
     }
 
     private IEnumerator RotinaJackpot(Vector2 offset, float raio)
@@ -355,11 +404,31 @@ public class Sword : BaseWeapon
         float intervaloParaRehit = 0.5f;
         float timerRehit = 0f;
 
-        if (rastroEspada != null)
+        transform.localScale = escalaOriginal;
+
+        Vector3 posInicialLocal = transform.localPosition;
+        Quaternion rotInicialLocal = transform.localRotation;
+
+        anguloRotacaoJackpot = 0f;
+        float radianosIniciais = anguloRotacaoJackpot * Mathf.Deg2Rad;
+        Vector3 posAlvoOrbitaInicial = new Vector3(offset.x, offset.y, 0f) +
+                                       (new Vector3(Mathf.Cos(radianosIniciais), Mathf.Sin(radianosIniciais), 0f) * raio);
+        Quaternion rotAlvoOrbitaInicial = Quaternion.Euler(0, 0, anguloRotacaoJackpot - 90f);
+
+        float tempoTrans = 0f;
+        while (tempoTrans < tempoTransicaoJackpot)
         {
-            rastroEspada.Clear();
-            rastroEspada.emitting = true;
+            tempoTrans += UnityEngine.Time.deltaTime;
+            float t = tempoTrans / tempoTransicaoJackpot;
+
+            transform.localPosition = Vector3.Lerp(posInicialLocal, posAlvoOrbitaInicial, t);
+            transform.localRotation = Quaternion.Lerp(rotInicialLocal, rotAlvoOrbitaInicial, t);
+
+            VerificarCorteEspada();
+            yield return null;
         }
+
+        AtivarRastro();
 
         while (tempoJackpotRestante > 0)
         {
@@ -383,15 +452,34 @@ public class Sword : BaseWeapon
             yield return null;
         }
 
-        if (rastroEspada != null)
+        DesativarRastro();
+
+        Vector3 posFimOrbita = transform.localPosition;
+        Quaternion rotFimOrbita = transform.localRotation;
+
+        float direcaoX = ObterLadoDoAlvo();
+        float distanciaAtual = direcaoX > 0 ? distanciaDireita : -distanciaEsquerda;
+        Vector3 posRetornoNormal = new Vector3(centroDoPlayerOffset.x + distanciaAtual, centroDoPlayerOffset.y, 0f);
+        Quaternion rotRetornoNormal = Quaternion.Euler(0, 0, direcaoX < 0 ? -anguloEmRepouso : anguloEmRepouso);
+
+        tempoTrans = 0f;
+        while (tempoTrans < tempoTransicaoJackpot)
         {
-            rastroEspada.emitting = false;
+            tempoTrans += UnityEngine.Time.deltaTime;
+            float t = tempoTrans / tempoTransicaoJackpot;
+
+            transform.localPosition = Vector3.Lerp(posFimOrbita, posRetornoNormal, t);
+            transform.localRotation = Quaternion.Lerp(rotFimOrbita, rotRetornoNormal, t);
+
+            yield return null;
         }
 
         atacando = false;
         EstaEmModoJackpot = false;
+        testarJackpotNoInspector = false;
+
         if (MusicManager.Instance != null) MusicManager.Instance.PlayJackpotSound(false);
-        transform.localRotation = Quaternion.identity;
+
         transform.localScale = escalaOriginal;
         inimigosAtingidosNesteGolpe.Clear();
     }
@@ -401,13 +489,13 @@ public class Sword : BaseWeapon
         if (!atacando) return;
         Gizmos.color = Color.red;
         float comprimentoTotal = (1 + quantidadeSegmentosMeio) * tamanhoDoSegmentoY + deslocamentoDaPonta;
-        int pontosDeChecagem = Mathf.CeilToInt(comprimentoTotal / (larguraDoCorte * 0.4f));
+        int pontosDeChecagem = Mathf.CeilToInt(comprimentoTotal / (larguraDoCorteCalculada * 0.4f));
 
         for (int i = 0; i <= pontosDeChecagem; i++)
         {
             float dist = (comprimentoTotal / pontosDeChecagem) * i;
             Vector3 pos = transform.TransformPoint(new Vector3(0, dist, 0));
-            Gizmos.DrawWireSphere(pos, larguraDoCorte / 2f);
+            Gizmos.DrawWireSphere(pos, larguraDoCorteCalculada / 2f);
         }
     }
 

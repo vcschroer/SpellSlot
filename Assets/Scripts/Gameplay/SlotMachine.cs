@@ -76,10 +76,6 @@ public class SlotMachine : MonoBehaviour
     [SerializeField] private int ricochetesAdicionaisPequeno = 1;
     [SerializeField] private int ricochetesAdicionaisGrande = 2;
 
-    [Header("Configuracoes do Jackpot")]
-    [SerializeField] private Vector2 centroDoPlayerOffset = Vector2.zero;
-    [SerializeField] private float raioDaOrbita = 2.0f;
-
     private float momentoProximoGiroPermitido = 0f;
     private bool menuAberto = false;
     private bool proximoGiroTemSorteGeral = false;
@@ -257,7 +253,7 @@ public class SlotMachine : MonoBehaviour
                 {
                     foreach (BaseWeapon arma in scriptPlayer.armasEquipadas)
                     {
-                        if (arma != null) arma.AtivarJackpot(centroDoPlayerOffset, raioDaOrbita);
+                        if (arma != null) arma.AtivarJackpot(Vector2.zero, 0f);
                     }
                 }
             }

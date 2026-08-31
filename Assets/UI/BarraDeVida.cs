@@ -21,10 +21,16 @@ public class BarraDeVida : MonoBehaviour
     [SerializeField] private float forcaShake = 8f;
     [SerializeField] private float duracaoShake = 0.2f;
 
+    [Header("Efeito Ondular (Wave / Respiro)")]
+    [SerializeField] private bool ativarEfeitoOndular = true;
+    [SerializeField] private float forcaoOnda = 5f;       // Amplitude do movimento vertical (pixels no Canvas)
+    [SerializeField] private float velocidadeOnda = 3f;  // Frequência/Velocidade da oscilação
+
     private float dinheiroAnterior;
     private Coroutine coroutineAtrasoBarra;
     private Coroutine coroutineShake;
     private Vector2 posicaoOriginalBarra;
+    private bool estaEmShake = false;
 
     void Awake()
     {
@@ -91,6 +97,22 @@ public class BarraDeVida : MonoBehaviour
                 sliderFantasma.value = sliderPrincipal.value;
             }
         }
+
+        // Aplica o Efeito Ondular constante caso a barra não esteja tremendo (Shake)
+        AplicarEfeitoOndular();
+    }
+
+    private void AplicarEfeitoOndular()
+    {
+        if (!ativarEfeitoOndular || containerBarra == null || estaEmShake) return;
+
+        // Calcula a oscilação vertical baseada no tempo
+        float deslocamentoY = Mathf.Sin(UnityEngine.Time.time * velocidadeOnda) * forcaoOnda;
+
+        containerBarra.anchoredPosition = new Vector2(
+            posicaoOriginalBarra.x,
+            posicaoOriginalBarra.y + deslocamentoY
+        );
     }
 
     private void IniciarAtrasoBarraFantasma()
@@ -124,7 +146,9 @@ public class BarraDeVida : MonoBehaviour
     {
         if (containerBarra == null) yield break;
 
+        estaEmShake = true;
         float tempo = 0f;
+
         while (tempo < duracaoShake)
         {
             tempo += UnityEngine.Time.deltaTime;
@@ -133,6 +157,7 @@ public class BarraDeVida : MonoBehaviour
             yield return null;
         }
 
+        estaEmShake = false;
         containerBarra.anchoredPosition = posicaoOriginalBarra;
     }
 

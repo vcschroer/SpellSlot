@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9008489062227046977}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0.004137046, w: -0.9999915}
+  m_LocalRotation: {x: 0, y: 0, z: 0.0041364175, w: 0.9999914}
   m_LocalPosition: {x: 1.07, y: -0.03, z: 0}
   m_LocalScale: {x: 0.22388066, y: 0.26041037, z: 0.19871227}
   m_ConstrainProportionsScale: 0
@@ -56,22 +56,30 @@ MonoBehaviour:
   velocidadeSuavizacaoRotacao: 12
   amplitudeFlutuacao: 0.12
   velocidadeFlutuacao: 3
-  stretchAtaqueY: 0.8
-  squashAtaqueX: 0.7
+  stretchAtaqueY: 1.5
+  squashAtaqueX: 1.5
   anguloInicial: -90
   anguloFinal: -200
   velocidadeAtaqueBase: 5
   velocidadeRetornoBase: 5
   anguloInicialMaximo: 360
+  rastroEspada: {fileID: 0}
+  larguraBaseTrail: 0.4
+  incrementoLarguraPorSegmento: 0.25
   prefabCabo: {fileID: 8627269263969308266, guid: b1672f68e696fb840bf50c7e329cd028, type: 3}
   prefabMeioLamina: {fileID: 9068567274452352512, guid: d0f0a795fb2692546ba6ea614175f738, type: 3}
   prefabPontaLamina: {fileID: 8372954289619658168, guid: ae08bb500050c9644be289a4d39ae42b, type: 3}
-  quantidadeSegmentosMeio: 2
-  tamanhoDoSegmentoY: 8.5
-  deslocamentoDaPonta: 13.6
-  larguraDoCorte: 0.8
+  quantidadeSegmentosMeio: 1
+  tamanhoDoSegmentoY: 3.73
+  deslocamentoDaPonta: 4.4
+  incrementoEngrossamentoPorSegmento: 0.05
+  larguraBaseDoCorte: 0.8
   layerDosInimigos:
     serializedVersion: 2
     m_Bits: 64
+  testarJackpotNoInspector: 0
   duracaoJackpot: 10
   velocidadeGiroJackpot: 1000
+  offsetJackpot: {x: 0, y: 1}
+  raioGiroJackpot: 8
+  tempoTransicaoJackpot: 0.2

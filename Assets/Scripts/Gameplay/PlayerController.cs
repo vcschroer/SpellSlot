@@ -9,6 +9,10 @@ public class PlayerController : MonoBehaviour
     [Header("Configurações de Movimento")]
     [SerializeField] private float velocidade = 5f;
 
+    [Header("Configurações de Knockback")]
+    [SerializeField] private float duracaoKnockback = 0.2f;
+    private bool estaEmKnockback = false;
+
     [Header("Scripts Auxiliares")]
     [SerializeField] private AnimPlayer scriptAnimacao;
     [SerializeField] private SpriteEffects scriptEfeitos;
@@ -95,11 +99,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (derrotaDisparada)
-        {
-            inputsMovimento = Vector2.zero;
-            return;
-        }
+        if (derrotaDisparada || estaEmKnockback) return;
 
         rb.MovePosition(rb.position + inputsMovimento * velocidade * UnityEngine.Time.fixedDeltaTime);
         VerificarFlip();
@@ -178,6 +178,11 @@ public class PlayerController : MonoBehaviour
 
     public void TomarDano(int dano)
     {
+        TomarDano(dano, Vector2.zero, 0f);
+    }
+
+    public void TomarDano(int dano, Vector2 direcaoKnockback, float forcaKnockback)
+    {
         if (JackpotAtivo) return;
         if (UnityEngine.Time.time < tempoProximoDano) return;
 
@@ -195,7 +200,24 @@ public class PlayerController : MonoBehaviour
             slotVisual.AtivarShakeDano();
         }
 
+        if (forcaKnockback > 0f && rb != null)
+        {
+            StartCoroutine(RotinaKnockback(direcaoKnockback, forcaKnockback));
+        }
+
         PerderDinheiro(dano);
+    }
+
+    private IEnumerator RotinaKnockback(Vector2 direcao, float forca)
+    {
+        estaEmKnockback = true;
+        rb.linearVelocity = Vector2.zero; 
+        rb.AddForce(direcao * forca, ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(duracaoKnockback);
+
+        rb.linearVelocity = Vector2.zero;
+        estaEmKnockback = false;
     }
 
     public void GanharDinheiro(int quantity)

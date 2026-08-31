@@ -9,6 +9,8 @@ public class Enemy : MonoBehaviour
 
     [Header("Configurações de Feedback de Dano")]
     [SerializeField] private GameObject prefabDamagePopup;
+    [SerializeField] private float duracaoShakeDano = 0.15f;
+    [SerializeField] private float intensidadeShakeDano = 0.1f;
 
     [Header("Configurações de Movimento")]
     [SerializeField] private float velocidade = 3f;
@@ -16,7 +18,12 @@ public class Enemy : MonoBehaviour
 
     [Header("Configurações de Ataque")]
     [SerializeField] public int danoNoPlayer = 20;
+    [SerializeField] private float forcaKnockbackNoPlayer = 8f; 
     [SerializeField] private float tempoAnimacaoMorte = 0.5f;
+
+    [Header("Configurações de Morte (Knockback e Rotação)")]
+    [SerializeField] private float forçaKnockbackMorte = 3f;
+    [SerializeField] private float velocidadeRotacaoMorte = 60;
 
     [Header("Componentes Visuais")]
     [SerializeField] private AnimEnemy scriptAnimacao;
@@ -70,13 +77,9 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (estaMorto)
-        {
-            rb.linearVelocity = Vector2.zero;
-            return;
-        }
+        if (estaMorto) return;
 
-        rb.MovePosition(rb.position + direcao * velocidade * UnityEngine.Time.fixedDeltaTime);
+        rb.linearVelocity = direcao * velocidade;
 
         if (scriptAnimacao != null)
         {
@@ -92,6 +95,11 @@ public class Enemy : MonoBehaviour
         tempoProximoDano = UnityEngine.Time.time + intervaloInvenclibilidade;
 
         CriarPopUpDano(quantidadeDano);
+
+        if (CameraShake.Instancia != null)
+        {
+            CameraShake.Instancia.Tremer(duracaoShakeDano, intensidadeShakeDano);
+        }
 
         if (MusicManager.Instance != null)
         {
@@ -133,17 +141,17 @@ public class Enemy : MonoBehaviour
             PlayerController player = collision.gameObject.GetComponent<PlayerController>();
             if (player != null)
             {
-                player.TomarDano(danoNoPlayer);
+                Vector2 direcaoEmpurrao = (player.transform.position - transform.position).normalized;
+
+                player.TomarDano(danoNoPlayer, direcaoEmpurrao, forcaKnockbackNoPlayer);
             }
 
-            Destroy(gameObject);
         }
     }
 
     protected virtual void IniciarProcessoMorte(bool deveDroparMoeda)
     {
         estaMorto = true;
-        direcao = Vector2.zero;
 
         if (MusicManager.Instance != null)
         {
@@ -160,12 +168,19 @@ public class Enemy : MonoBehaviour
 
         if (prefabExplosao != null)
         {
-            Instantiate(prefabExplosao, transform.position, Quaternion.identity);
+            Instantiate(prefabExplosao, transform.position, Quaternion.identity, transform);
         }
 
         if (deveDroparMoeda && prefabMoeda != null)
         {
             Instantiate(prefabMoeda, transform.position, Quaternion.identity);
+        }
+
+        if (rb != null && alvoPlayer != null)
+        {
+            Vector2 direcaoEmpurrao = (transform.position - alvoPlayer.position).normalized;
+            rb.linearVelocity = Vector2.zero;
+            rb.AddForce(direcaoEmpurrao * forçaKnockbackMorte, ForceMode2D.Impulse);
         }
 
         StartCoroutine(RotinaDestruição());
@@ -176,22 +191,25 @@ public class Enemy : MonoBehaviour
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if (sr == null) sr = GetComponentInChildren<SpriteRenderer>();
 
-        if (sr != null)
-        {
-            Color corInicial = sr.color;
-            float tempo = 0f;
+        Color corInicial = sr != null ? sr.color : Color.white;
+        float tempo = 0f;
 
-            while (tempo < tempoAnimacaoMorte)
-            {
-                tempo += UnityEngine.Time.deltaTime;
-                float alpha = Mathf.Lerp(corInicial.a, 0f, tempo / tempoAnimacaoMorte);
-                sr.color = new Color(corInicial.r, corInicial.g, corInicial.b, alpha);
-                yield return null;
-            }
-        }
-        else
+        float sentidoRotacao = Random.value > 0.5f ? 1f : -1f;
+
+        while (tempo < tempoAnimacaoMorte)
         {
-            yield return new WaitForSeconds(tempoAnimacaoMorte);
+            tempo += UnityEngine.Time.deltaTime;
+            float progresso = tempo / tempoAnimacaoMorte;
+
+            transform.Rotate(0f, 0f, sentidoRotacao * velocidadeRotacaoMorte * UnityEngine.Time.deltaTime);
+
+            if (sr != null)
+            {
+                float alpha = Mathf.Lerp(corInicial.a, 0f, progresso);
+                sr.color = new Color(corInicial.r, corInicial.g, corInicial.b, alpha);
+            }
+
+            yield return null;
         }
 
         Destroy(gameObject);
