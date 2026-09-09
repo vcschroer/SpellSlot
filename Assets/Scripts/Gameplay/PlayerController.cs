@@ -9,6 +9,9 @@ public class PlayerController : MonoBehaviour
     [Header("Configurações de Movimento")]
     [SerializeField] private float velocidade = 5f;
 
+    [Header("Configuração de Orientação do Sprite")]
+    [SerializeField] private bool spriteOlhaOriginalmenteParaDireita = true;
+
     [Header("Configurações de Knockback")]
     [SerializeField] private float duracaoKnockback = 0.2f;
     private bool estaEmKnockback = false;
@@ -106,17 +109,13 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // --- SISTEMA DE COR PASTEL E BRILHO (HDR) ---
+
         if (estavaEmJackpot && rastroRGB != null)
         {
-            // O segundo parâmetro (saturacaoRGB) é o que deixa a cor pastel
             Color corBase = Color.HSVToRGB(Mathf.Repeat(UnityEngine.Time.time * velocidadeTrocaCorRGB, 1f), saturacaoRGB, 1f);
-
-            // Multiplicamos a cor pela intensidade para gerar o efeito de HDR/Emissão
             Color corHDR = corBase * intensidadeBrilho;
 
             rastroRGB.startColor = corHDR;
-            // No final do trail, a cor perde o alpha (fica transparente)
             rastroRGB.endColor = new Color(corHDR.r, corHDR.g, corHDR.b, 0f);
         }
     }
@@ -265,7 +264,19 @@ public class PlayerController : MonoBehaviour
     private void Flipar()
     {
         olhandoParaDireita = !olhandoParaDireita;
-        if (spritePlayer != null) spritePlayer.flipX = !olhandoParaDireita;
+        if (spritePlayer != null)
+        {
+
+
+            if (spriteOlhaOriginalmenteParaDireita)
+            {
+                spritePlayer.flipX = !olhandoParaDireita;
+            }
+            else
+            {
+                spritePlayer.flipX = olhandoParaDireita;
+            }
+        }
     }
 
     public void AumentarVelocidade(float quantidade) => velocidade += quantidade;

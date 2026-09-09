@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Guerreiro
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   nomeDoPersonagem: Guerreiro
-  prefabDoPersonagem: {fileID: 8003146875235940519, guid: 107b9fa920f056a48ba90e36493ad106, type: 3}
+  prefabDoPersonagem: {fileID: 635425649338590311, guid: 741759372af5654418e6be8580a88a71, type: 3}
   prefabDaArmaInicial: {fileID: 9008489062227046977, guid: 44b058035b7eeb946a65fcedc02a2a47, type: 3}
   vidaMaxima: 120
   velocidadeMovimento: 4

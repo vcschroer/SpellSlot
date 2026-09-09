@@ -1,0 +1,473 @@
+fileFormatVersion: 2
+guid: deac8aaa6c662a94eb23b4d27587cb5a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7184500309675950861
+    second: spritesheet cavaleiro_0
+  - first:
+      213: 8163883908372311479
+    second: spritesheet cavaleiro_1
+  - first:
+      213: 5726625330542513855
+    second: spritesheet cavaleiro_2
+  - first:
+      213: -5107146635546829974
+    second: spritesheet cavaleiro_3
+  - first:
+      213: 3257787936458909710
+    second: spritesheet cavaleiro_4
+  - first:
+      213: 8100984494825108711
+    second: spritesheet cavaleiro_5
+  - first:
+      213: 2360103978815466223
+    second: spritesheet cavaleiro_6
+  - first:
+      213: 7936844017514918605
+    second: spritesheet cavaleiro_7
+  - first:
+      213: -6428050610575077795
+    second: spritesheet cavaleiro_8
+  - first:
+      213: 7264021192062308982
+    second: spritesheet cavaleiro_9
+  - first:
+      213: -4306685054598711582
+    second: spritesheet cavaleiro_10
+  - first:
+      213: -2230511075978448991
+    second: spritesheet cavaleiro_11
+  - first:
+      213: -212631682738559057
+    second: spritesheet cavaleiro_12
+  - first:
+      213: -5555910630223397838
+    second: spritesheet cavaleiro_13
+  - first:
+      213: -5110749049492708077
+    second: spritesheet cavaleiro_14
+  - first:
+      213: -3455199744028914898
+    second: spritesheet cavaleiro_15
+  - first:
+      213: -833047484843308328
+    second: spritesheet cavaleiro_16
+  - first:
+      213: 8627006164836532023
+    second: spritesheet cavaleiro_17
+  - first:
+      213: 7800017530180146847
+    second: spritesheet cavaleiro_18
+  - first:
+      213: 1376206422047138862
+    second: spritesheet cavaleiro_19
+  - first:
+      213: 1253060847410242343
+    second: spritesheet cavaleiro_20
+  - first:
+      213: -956577368483620041
+    second: spritesheet cavaleiro_21
+  - first:
+      213: 2571289107274846662
+    second: spritesheet cavaleiro_22
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: spritesheet cavaleiro_0
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 2537
+        width: 878
+        height: 1019
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d034bee67f874b360800000000000000
+      internalID: 7184500309675950861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet cavaleiro_2
+      rect:
+        serializedVersion: 2
+        x: 1517
+        y: 2499
+        width: 775
+        height: 1052
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fbe8dbca56f097f40800000000000000
+      internalID: 5726625330542513855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet cavaleiro_4
+      rect:
+        serializedVersion: 2
+        x: 2834
+        y: 2505
+        width: 679
+        height: 1076
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e08af222edcf53d20800000000000000
+      internalID: 3257787936458909710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet cavaleiro_5
+      rect:
+        serializedVersion: 2
+        x: 3961
+        y: 2496
+        width: 932
+        height: 1052
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e47ff82a7a7c6070800000000000000
+      internalID: 8100984494825108711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet cavaleiro_6
+      rect:
+        serializedVersion: 2
+        x: 131
+        y: 1302
+        width: 1109
+        height: 1065
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fea284a7016c0c020800000000000000
+      internalID: 2360103978815466223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet cavaleiro_7
+      rect:
+        serializedVersion: 2
+        x: 1639
+        y: 1305
+        width: 746
+        height: 1083
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc239ad2595552e60800000000000000
+      internalID: 7936844017514918605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet cavaleiro_9
+      rect:
+        serializedVersion: 2
+        x: 2654
+        y: 1300
+        width: 1080
+        height: 1090
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67298c9a9ccfec460800000000000000
+      internalID: 7264021192062308982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet cavaleiro_11
+      rect:
+        serializedVersion: 2
+        x: 3925
+        y: 1300
+        width: 979
+        height: 1090
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1afeab08ef1ab01e0800000000000000
+      internalID: -2230511075978448991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet cavaleiro_13
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 100
+        width: 1153
+        height: 1090
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23cb7b1e7b075e2b0800000000000000
+      internalID: -5555910630223397838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet cavaleiro_16
+      rect:
+        serializedVersion: 2
+        x: 1338
+        y: 20
+        width: 1190
+        height: 1117
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8dac1e8e9bb6074f0800000000000000
+      internalID: -833047484843308328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet cavaleiro_19
+      rect:
+        serializedVersion: 2
+        x: 2630
+        y: 17
+        width: 1141
+        height: 1124
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e242bbb0374491310800000000000000
+      internalID: 1376206422047138862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spritesheet cavaleiro_21
+      rect:
+        serializedVersion: 2
+        x: 3868
+        y: 0
+        width: 1171
+        height: 1203
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73b1b5793fd89b2f0800000000000000
+      internalID: -956577368483620041
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 4273bbb526736f045b97437555a3e82d
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      spritesheet cavaleiro_0: 7184500309675950861
+      spritesheet cavaleiro_1: 8163883908372311479
+      spritesheet cavaleiro_10: -4306685054598711582
+      spritesheet cavaleiro_11: -2230511075978448991
+      spritesheet cavaleiro_12: -212631682738559057
+      spritesheet cavaleiro_13: -5555910630223397838
+      spritesheet cavaleiro_14: -5110749049492708077
+      spritesheet cavaleiro_15: -3455199744028914898
+      spritesheet cavaleiro_16: -833047484843308328
+      spritesheet cavaleiro_17: 8627006164836532023
+      spritesheet cavaleiro_18: 7800017530180146847
+      spritesheet cavaleiro_19: 1376206422047138862
+      spritesheet cavaleiro_2: 5726625330542513855
+      spritesheet cavaleiro_20: 1253060847410242343
+      spritesheet cavaleiro_21: -956577368483620041
+      spritesheet cavaleiro_22: 2571289107274846662
+      spritesheet cavaleiro_3: -5107146635546829974
+      spritesheet cavaleiro_4: 3257787936458909710
+      spritesheet cavaleiro_5: 8100984494825108711
+      spritesheet cavaleiro_6: 2360103978815466223
+      spritesheet cavaleiro_7: 7936844017514918605
+      spritesheet cavaleiro_8: -6428050610575077795
+      spritesheet cavaleiro_9: 7264021192062308982
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
