@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3367599379878533288}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.9, y: -1.1203386, z: 0}
   m_LocalScale: {x: 3.8747559, y: 3.8747559, z: 3.8747559}
   m_ConstrainProportionsScale: 0
@@ -59,4 +59,6 @@ MonoBehaviour:
   tamanhoProjetil: 1
   centroDoPlayerOffset: {x: 0, y: 0.2}
   duracaoJackpot: 5
-  multiplicadorVelocidadeJackpot: 3
+  velocidadeGiroJackpot: 400
+  raioOrbitaJackpot: 5
+  tempoTransicaoJackpot: 0.5

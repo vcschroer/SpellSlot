@@ -13,7 +13,7 @@ public class SlotMachineVisual : MonoBehaviour
     [Header("Componente da Alavanca")]
     [SerializeField] private SlotMachineLever scriptAlavanca;
 
-    [Header("Sprites das Recompensas (Resultado Final)")]
+    [Header("Sprites das Recompensas (Armas Padrão e Player)")]
     [SerializeField] private Sprite spriteDinheiro;
     [SerializeField] private Sprite spriteTamanhoEspada;
     [SerializeField] private Sprite spriteVelAtaqueEspada;
@@ -23,6 +23,11 @@ public class SlotMachineVisual : MonoBehaviour
     [SerializeField] private Sprite spritePistolBalas;
     [SerializeField] private Sprite spritePistolRicochete;
     [SerializeField] private Sprite spriteVazio;
+
+    [Header("Sprites das Recompensas (Órbita)")]
+    [SerializeField] private Sprite spriteOrbitaProjeteis;
+    [SerializeField] private Sprite spriteOrbitaVelocidade;
+    [SerializeField] private Sprite spriteOrbitaRaio;
 
     [Header("Frames da Animacao de Giro")]
     [SerializeField] private List<Sprite> framesAnimacaoGiro = new List<Sprite>();
@@ -93,6 +98,8 @@ public class SlotMachineVisual : MonoBehaviour
 
     public void AtualizarVisualDosSlots(SlotMachine.TipoRecompensa s1, SlotMachine.TipoRecompensa s2, SlotMachine.TipoRecompensa s3)
     {
+        Debug.Log($"<color=yellow>[SLOT VISUAL] Inicio do Giro Sorteado -> Slot1: {s1} | Slot2: {s2} | Slot3: {s3}</color>");
+
         if (scriptAlavanca != null) scriptAlavanca.PuxarAlavanca();
 
         if (coroutineGiroAtual != null)
@@ -105,6 +112,7 @@ public class SlotMachineVisual : MonoBehaviour
 
         if (framesAnimacaoGiro == null || framesAnimacaoGiro.Count == 0)
         {
+            Debug.LogWarning("[SLOT VISUAL] Nenhum frame de animacao atribuido. Colocando sprites finais diretamente.");
             ColocarSpritesFinaisDireto(s1, s2, s3);
             return;
         }
@@ -212,7 +220,9 @@ public class SlotMachineVisual : MonoBehaviour
 
                 if (exibicaoSlot1 != null)
                 {
-                    exibicaoSlot1.sprite = RetornarSpriteCorrespondente(resultado1);
+                    Sprite spriteFinal1 = RetornarSpriteCorrespondente(resultado1);
+                    exibicaoSlot1.sprite = spriteFinal1;
+                    Debug.Log($"[SLOT VISUAL] Slot 1 Parou -> Recompensa: <b>{resultado1}</b> | Sprite Exibido: <b>{(spriteFinal1 != null ? spriteFinal1.name : "NULO (FALTANDO SPRITE!)")}</b>");
                     StartCoroutine(RotinaPulandoIcone(exibicaoSlot1));
                 }
             }
@@ -223,7 +233,9 @@ public class SlotMachineVisual : MonoBehaviour
 
                 if (exibicaoSlot2 != null)
                 {
-                    exibicaoSlot2.sprite = RetornarSpriteCorrespondente(resultado2);
+                    Sprite spriteFinal2 = RetornarSpriteCorrespondente(resultado2);
+                    exibicaoSlot2.sprite = spriteFinal2;
+                    Debug.Log($"[SLOT VISUAL] Slot 2 Parou -> Recompensa: <b>{resultado2}</b> | Sprite Exibido: <b>{(spriteFinal2 != null ? spriteFinal2.name : "NULO (FALTANDO SPRITE!)")}</b>");
                     StartCoroutine(RotinaPulandoIcone(exibicaoSlot2));
                 }
             }
@@ -234,7 +246,9 @@ public class SlotMachineVisual : MonoBehaviour
 
                 if (exibicaoSlot3 != null)
                 {
-                    exibicaoSlot3.sprite = RetornarSpriteCorrespondente(resultado3);
+                    Sprite spriteFinal3 = RetornarSpriteCorrespondente(resultado3);
+                    exibicaoSlot3.sprite = spriteFinal3;
+                    Debug.Log($"[SLOT VISUAL] Slot 3 Parou -> Recompensa: <b>{resultado3}</b> | Sprite Exibido: <b>{(spriteFinal3 != null ? spriteFinal3.name : "NULO (FALTANDO SPRITE!)")}</b>");
                     StartCoroutine(RotinaPulandoIcone(exibicaoSlot3));
                 }
             }
@@ -301,7 +315,7 @@ public class SlotMachineVisual : MonoBehaviour
 
     private Sprite RetornarSpriteCorrespondente(SlotMachine.TipoRecompensa tipo)
     {
-        return tipo switch
+        Sprite spriteCorrespondente = tipo switch
         {
             SlotMachine.TipoRecompensa.Dinheiro => spriteDinheiro,
             SlotMachine.TipoRecompensa.TamanhoEspada => spriteTamanhoEspada,
@@ -312,8 +326,18 @@ public class SlotMachineVisual : MonoBehaviour
             SlotMachine.TipoRecompensa.PistolBalas => spritePistolBalas,
             SlotMachine.TipoRecompensa.PistolRicochete => spritePistolRicochete,
             SlotMachine.TipoRecompensa.Vazio => spriteVazio,
+            SlotMachine.TipoRecompensa.OrbitaProjeteis => spriteOrbitaProjeteis,
+            SlotMachine.TipoRecompensa.OrbitaVelocidade => spriteOrbitaVelocidade,
+            SlotMachine.TipoRecompensa.OrbitaRaio => spriteOrbitaRaio,
             _ => null
         };
+
+        if (spriteCorrespondente == null)
+        {
+            Debug.LogError($"<color=red>[SLOT VISUAL] ERRO DE SPRITE: O tipo de recompensa '{tipo}' nao possui um Sprite atribuido no Inspector!</color>");
+        }
+
+        return spriteCorrespondente;
     }
 
     public void AtivarShakeDano()

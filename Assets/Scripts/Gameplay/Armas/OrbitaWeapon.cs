@@ -23,10 +23,14 @@ public class OrbitaWeapon : BaseWeapon
 
     [Header("Configurações de Jackpot")]
     [SerializeField] private float duracaoJackpot = 5f;
-    [SerializeField] private float multiplicadorVelocidadeJackpot = 3f;
+    [SerializeField] private float velocidadeGiroJackpot = 540f;
+    [SerializeField] private float raioOrbitaJackpot = 5f;
+    [SerializeField] private float tempoTransicaoJackpot = 0.5f; 
 
     private List<GameObject> projeteisAtivos = new List<GameObject>();
     private float anguloAtual = 0f;
+
+    #region Propriedades Públicas
 
     public int QuantidadeProjeteis
     {
@@ -49,10 +53,18 @@ public class OrbitaWeapon : BaseWeapon
         get => tamanhoProjetil;
         set
         {
-            tamanhoProjetil = value;
+            tamanhoProjetil = Mathf.Max(0.1f, value);
             AtualizarProjeteis();
         }
     }
+
+    public float RaioOrbita
+    {
+        get => raioOrbita;
+        set => raioOrbita = Mathf.Max(0.5f, value);
+    }
+
+    #endregion
 
     protected override void Start()
     {
@@ -130,21 +142,65 @@ public class OrbitaWeapon : BaseWeapon
         }
     }
 
+    #region Métodos de Power-Up para a SlotMachine
+
+    public void AumentarQuantidadeProjeteis(int valor)
+    {
+        QuantidadeProjeteis += valor;
+    }
+
+    public void AumentarVelocidadeGiro(float valor)
+    {
+        VelocidadeGiro += valor;
+    }
+
+    public void AumentarRaioOrbita(float valor)
+    {
+        RaioOrbita += valor;
+    }
+
+    #endregion
+
     public override void AtivarJackpot(Vector2 offset, float raio)
     {
         EstaEmModoJackpot = true;
-        StartCoroutine(RotinaJackpot(raio));
+
+        float raioAlvo = raioOrbitaJackpot > 0f ? raioOrbitaJackpot : raio;
+
+        StartCoroutine(RotinaJackpot(raioAlvo));
     }
 
-    private IEnumerator RotinaJackpot(float raio)
+    private IEnumerator RotinaJackpot(float raioAlvo)
     {
         float velOriginal = velocidadeGiro;
         float raioOriginal = raioOrbita;
 
-        velocidadeGiro *= multiplicadorVelocidadeJackpot;
-        raioOrbita = raio;
+        float tempo = 0f;
+        while (tempo < tempoTransicaoJackpot)
+        {
+            tempo += UnityEngine.Time.deltaTime;
+            float t = tempo / tempoTransicaoJackpot;
+
+            raioOrbita = Mathf.Lerp(raioOriginal, raioAlvo, t);
+            velocidadeGiro = Mathf.Lerp(velOriginal, velocidadeGiroJackpot, t);
+            yield return null;
+        }
+
+        raioOrbita = raioAlvo;
+        velocidadeGiro = velocidadeGiroJackpot;
 
         yield return new WaitForSeconds(duracaoJackpot);
+
+        tempo = 0f;
+        while (tempo < tempoTransicaoJackpot)
+        {
+            tempo += UnityEngine.Time.deltaTime;
+            float t = tempo / tempoTransicaoJackpot;
+
+            raioOrbita = Mathf.Lerp(raioAlvo, raioOriginal, t);
+            velocidadeGiro = Mathf.Lerp(velocidadeGiroJackpot, velOriginal, t);
+            yield return null;
+        }
 
         velocidadeGiro = velOriginal;
         raioOrbita = raioOriginal;
@@ -156,5 +212,8 @@ public class OrbitaWeapon : BaseWeapon
         Gizmos.color = Color.cyan;
         Vector3 centro = player != null ? player.transform.position + (Vector3)centroDoPlayerOffset : transform.position;
         Gizmos.DrawWireSphere(centro, raioOrbita);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(centro, raioOrbitaJackpot);
     }
 }

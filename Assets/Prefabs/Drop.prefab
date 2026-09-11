@@ -112,6 +112,9 @@ MonoBehaviour:
   - nomeArma: Pistola
     prefabArma: {fileID: 1641512455257383215, guid: c4024165bf6dbfc4e8f9de951df005c5, type: 3}
     spriteIcone: {fileID: -7842416569707274047, guid: 65f3a33946de2a4439765b605cad3a7b, type: 3}
+  - nomeArma: Orbita
+    prefabArma: {fileID: 3367599379878533288, guid: 831571eb410c8e846bac8fb46ebe16ee, type: 3}
+    spriteIcone: {fileID: -2413806693520163455, guid: 68e50513a79f25245a42541d6f272f89, type: 3}
   velocidadeFlutuar: 3
   alturaFlutuar: 0.15
   prefabEfeitoColeta: {fileID: 2081506102510133842, guid: ef9dd902c3a7e2841961418e230767f9, type: 3}

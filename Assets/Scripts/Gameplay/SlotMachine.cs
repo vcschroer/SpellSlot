@@ -15,7 +15,10 @@ public class SlotMachine : MonoBehaviour
         VelocidadePlayer,
         PistolBalas,
         PistolRicochete,
-        Vazio
+        Vazio,
+        OrbitaProjeteis,
+        OrbitaVelocidade,
+        OrbitaRaio
     }
 
     [Header("Referencias do Player")]
@@ -76,12 +79,24 @@ public class SlotMachine : MonoBehaviour
     [SerializeField] private int ricochetesAdicionaisPequeno = 1;
     [SerializeField] private int ricochetesAdicionaisGrande = 2;
 
+    [Header("Valores dos Bonus - UPGRADES DA ORBITA")]
+    [SerializeField] private int projeteisOrbitaPequeno = 1;
+    [SerializeField] private int projeteisOrbitaGrande = 2;
+    [SerializeField] private float velGiroOrbitaPequeno = 30f;
+    [SerializeField] private float velGiroOrbitaGrande = 90f;
+    [SerializeField] private float raioOrbitaPequeno = 0.5f;
+    [SerializeField] private float raioOrbitaGrande = 1.5f;
+
     private int totalTamanhoEspadaGanho = 0;
     private float totalVelAtaqueEspadaGanho = 0f;
     private float totalAnguloEspadaGanho = 0f;
     private float totalVelAtaquePistolaGanho = 0f;
     private int totalPistolBalasGanho = 0;
     private int totalPistolRicocheteGanho = 0;
+
+    private int totalOrbitaProjeteisGanho = 0;
+    private float totalOrbitaVelocidadeGanho = 0f;
+    private float totalOrbitaRaioGanho = 0f;
 
     private float momentoProximoGiroPermitido = 0f;
     private bool menuAberto = false;
@@ -159,7 +174,7 @@ public class SlotMachine : MonoBehaviour
 
         bool temEspada = ObterArmaDoPlayer<Sword>(TipoArma.Espada) != null;
         bool temPistola = ObterArmaDoPlayer<Pistol>(TipoArma.Pistola) != null;
-
+        bool temOrbita = ObterArmaDoPlayer<OrbitaWeapon>(TipoArma.Orbita) != null;
 
         if (temEspada)
         {
@@ -183,6 +198,18 @@ public class SlotMachine : MonoBehaviour
 
             if (totalVelAtaquePistolaGanho < (velAtaquePistolaGrande * 3f) - 0.001f)
                 poolValido.Add(TipoRecompensa.VelocidadeAtaquePistola);
+        }
+
+        if (temOrbita)
+        {
+            if (totalOrbitaProjeteisGanho < (projeteisOrbitaGrande * 3))
+                poolValido.Add(TipoRecompensa.OrbitaProjeteis);
+
+            if (totalOrbitaVelocidadeGanho < (velGiroOrbitaGrande * 3f) - 0.001f)
+                poolValido.Add(TipoRecompensa.OrbitaVelocidade);
+
+            if (totalOrbitaRaioGanho < (raioOrbitaGrande * 3f) - 0.001f)
+                poolValido.Add(TipoRecompensa.OrbitaRaio);
         }
 
         return poolValido;
@@ -249,14 +276,16 @@ public class SlotMachine : MonoBehaviour
         }
 
         int din = 0, tam = 0, velAEspada = 0, angEspada = 0, velAPistola = 0, velP = 0, pBalas = 0, pRico = 0;
-        ContarSlot(slot1, ref din, ref tam, ref velAEspada, ref angEspada, ref velAPistola, ref velP, ref pBalas, ref pRico);
-        ContarSlot(slot2, ref din, ref tam, ref velAEspada, ref angEspada, ref velAPistola, ref velP, ref pBalas, ref pRico);
-        ContarSlot(slot3, ref din, ref tam, ref velAEspada, ref angEspada, ref velAPistola, ref velP, ref pBalas, ref pRico);
+        int oProj = 0, oVel = 0, oRaio = 0;
 
-        bool houveVitoria = (din >= 2 || tam >= 2 || velAEspada >= 2 || angEspada >= 2 || velAPistola >= 2 || velP >= 2 || pBalas >= 2 || pRico >= 2);
+        ContarSlot(slot1, ref din, ref tam, ref velAEspada, ref angEspada, ref velAPistola, ref velP, ref pBalas, ref pRico, ref oProj, ref oVel, ref oRaio);
+        ContarSlot(slot2, ref din, ref tam, ref velAEspada, ref angEspada, ref velAPistola, ref velP, ref pBalas, ref pRico, ref oProj, ref oVel, ref oRaio);
+        ContarSlot(slot3, ref din, ref tam, ref velAEspada, ref angEspada, ref velAPistola, ref velP, ref pBalas, ref pRico, ref oProj, ref oVel, ref oRaio);
+
+        bool houveVitoria = (din >= 2 || tam >= 2 || velAEspada >= 2 || angEspada >= 2 || velAPistola >= 2 || velP >= 2 || pBalas >= 2 || pRico >= 2 || oProj >= 2 || oVel >= 2 || oRaio >= 2);
         contadorGirosPerdidos = houveVitoria ? 0 : contadorGirosPerdidos + 1;
 
-        if (din == 3 || tam == 3 || velAEspada == 3 || angEspada == 3 || velAPistola == 3 || velP == 3 || pBalas == 3 || pRico == 3)
+        if (din == 3 || tam == 3 || velAEspada == 3 || angEspada == 3 || velAPistola == 3 || velP == 3 || pBalas == 3 || pRico == 3 || oProj == 3 || oVel == 3 || oRaio == 3)
         {
             girosSemJackpotRestantes = girosBloqueadosPosJackpot;
 
@@ -268,7 +297,7 @@ public class SlotMachine : MonoBehaviour
                 }
             }
         }
-        else if (din == 2 || tam == 2 || velAEspada == 2 || angEspada == 2 || velAPistola == 2 || velP == 2 || pBalas == 2 || pRico == 2)
+        else if (din == 2 || tam == 2 || velAEspada == 2 || angEspada == 2 || velAPistola == 2 || velP == 2 || pBalas == 2 || pRico == 2 || oProj == 2 || oVel == 2 || oRaio == 2)
         {
             if (girosSemJackpotRestantes <= 0) proximoGiroTemSorteGeral = true;
         }
@@ -281,6 +310,10 @@ public class SlotMachine : MonoBehaviour
         AplicarRecompensaVelocidadePlayer(velP);
         AplicarRecompensaPistolBalas(pBalas);
         AplicarRecompensaPistolRicochete(pRico);
+
+        AplicarRecompensaOrbitaProjeteis(oProj);
+        AplicarRecompensaOrbitaVelocidade(oVel);
+        AplicarRecompensaOrbitaRaio(oRaio);
 
         menuAberto = false;
         estaProcessandoGiro = false;
@@ -339,7 +372,7 @@ public class SlotMachine : MonoBehaviour
         if (rectLixo != null) Destroy(rectLixo.gameObject);
     }
 
-    private void ContarSlot(TipoRecompensa slot, ref int din, ref int tam, ref int velAE, ref int angE, ref int velAP, ref int velP, ref int pBalas, ref int pRico)
+    private void ContarSlot(TipoRecompensa slot, ref int din, ref int tam, ref int velAE, ref int angE, ref int velAP, ref int velP, ref int pBalas, ref int pRico, ref int oProj, ref int oVel, ref int oRaio)
     {
         switch (slot)
         {
@@ -351,6 +384,9 @@ public class SlotMachine : MonoBehaviour
             case TipoRecompensa.VelocidadePlayer: velP++; break;
             case TipoRecompensa.PistolBalas: pBalas++; break;
             case TipoRecompensa.PistolRicochete: pRico++; break;
+            case TipoRecompensa.OrbitaProjeteis: oProj++; break;
+            case TipoRecompensa.OrbitaVelocidade: oVel++; break;
+            case TipoRecompensa.OrbitaRaio: oRaio++; break;
         }
     }
 
@@ -368,7 +404,7 @@ public class SlotMachine : MonoBehaviour
         if (espadaEquipada != null)
         {
             int gomos = quantidade switch { 2 => gomosPequeno, 3 => gomosGrande, _ => 0 };
-            totalTamanhoEspadaGanho += gomos; 
+            totalTamanhoEspadaGanho += gomos;
             espadaEquipada.MudarQuantidadeSegmentos(espadaEquipada.QuantidadeSegmentosMeio + gomos);
         }
     }
@@ -407,7 +443,7 @@ public class SlotMachine : MonoBehaviour
         Pistol pistola = ObterArmaDoPlayer<Pistol>(TipoArma.Pistola);
         if (pistola != null)
         {
-            totalVelAtaquePistolaGanho += vel; 
+            totalVelAtaquePistolaGanho += vel;
             pistola.weaponAttackSpeed += vel;
         }
     }
@@ -426,7 +462,7 @@ public class SlotMachine : MonoBehaviour
         if (pistola != null)
         {
             int adicionais = quantidade switch { 2 => balasAdicionaisPequeno, 3 => balasAdicionaisGrande, _ => 0 };
-            totalPistolBalasGanho += adicionais; 
+            totalPistolBalasGanho += adicionais;
             pistola.QuantidadeBalas += adicionais;
         }
     }
@@ -438,8 +474,44 @@ public class SlotMachine : MonoBehaviour
         if (pistola != null)
         {
             int adicionais = quantidade switch { 2 => ricochetesAdicionaisPequeno, 3 => ricochetesAdicionaisGrande, _ => 0 };
-            totalPistolRicocheteGanho += adicionais; 
+            totalPistolRicocheteGanho += adicionais;
             pistola.QuantidadeRicochetes += adicionais;
+        }
+    }
+
+    private void AplicarRecompensaOrbitaProjeteis(int quantidade)
+    {
+        if (quantidade < 2) return;
+        OrbitaWeapon orbita = ObterArmaDoPlayer<OrbitaWeapon>(TipoArma.Orbita);
+        if (orbita != null)
+        {
+            int adicionais = quantidade switch { 2 => projeteisOrbitaPequeno, 3 => projeteisOrbitaGrande, _ => 0 };
+            totalOrbitaProjeteisGanho += adicionais;
+            orbita.AumentarQuantidadeProjeteis(adicionais);
+        }
+    }
+
+    private void AplicarRecompensaOrbitaVelocidade(int quantidade)
+    {
+        if (quantidade < 2) return;
+        OrbitaWeapon orbita = ObterArmaDoPlayer<OrbitaWeapon>(TipoArma.Orbita);
+        if (orbita != null)
+        {
+            float bonus = quantidade switch { 2 => velGiroOrbitaPequeno, 3 => velGiroOrbitaGrande, _ => 0f };
+            totalOrbitaVelocidadeGanho += bonus;
+            orbita.AumentarVelocidadeGiro(bonus);
+        }
+    }
+
+    private void AplicarRecompensaOrbitaRaio(int quantidade)
+    {
+        if (quantidade < 2) return;
+        OrbitaWeapon orbita = ObterArmaDoPlayer<OrbitaWeapon>(TipoArma.Orbita);
+        if (orbita != null)
+        {
+            float bonus = quantidade switch { 2 => raioOrbitaPequeno, 3 => raioOrbitaGrande, _ => 0f };
+            totalOrbitaRaioGanho += bonus;
+            orbita.AumentarRaioOrbita(bonus);
         }
     }
 }
