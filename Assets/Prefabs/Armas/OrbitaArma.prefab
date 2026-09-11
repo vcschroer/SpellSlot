@@ -56,7 +56,7 @@ MonoBehaviour:
   quantidadeProjeteis: 3
   velocidadeGiro: 180
   raioOrbita: 2.5
-  tamanhoProjetil: 1
+  tamanhoProjetil: 0.2
   centroDoPlayerOffset: {x: 0, y: 0.2}
   duracaoJackpot: 5
   velocidadeGiroJackpot: 400

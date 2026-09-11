@@ -25,7 +25,7 @@ public class OrbitaWeapon : BaseWeapon
     [SerializeField] private float duracaoJackpot = 5f;
     [SerializeField] private float velocidadeGiroJackpot = 540f;
     [SerializeField] private float raioOrbitaJackpot = 5f;
-    [SerializeField] private float tempoTransicaoJackpot = 0.5f; 
+    [SerializeField] private float tempoTransicaoJackpot = 0.5f;
 
     private List<GameObject> projeteisAtivos = new List<GameObject>();
     private float anguloAtual = 0f;
@@ -102,6 +102,8 @@ public class OrbitaWeapon : BaseWeapon
 
         if (prefabProjetil == null) return;
 
+        Transform playerAlvo = player != null ? player.transform : transform;
+
         for (int i = 0; i < quantidadeProjeteis; i++)
         {
             GameObject novoProjetil = Instantiate(prefabProjetil, transform);
@@ -109,7 +111,7 @@ public class OrbitaWeapon : BaseWeapon
 
             if (scriptProj != null)
             {
-                scriptProj.Inicializar(dano, tamanhoProjetil, raioProjetil, layerInimigos);
+                scriptProj.Inicializar(dano, tamanhoProjetil, raioProjetil, layerInimigos, playerAlvo);
             }
 
             projeteisAtivos.Add(novoProjetil);
@@ -164,9 +166,7 @@ public class OrbitaWeapon : BaseWeapon
     public override void AtivarJackpot(Vector2 offset, float raio)
     {
         EstaEmModoJackpot = true;
-
         float raioAlvo = raioOrbitaJackpot > 0f ? raioOrbitaJackpot : raio;
-
         StartCoroutine(RotinaJackpot(raioAlvo));
     }
 
